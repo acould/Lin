@@ -1,0 +1,422 @@
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+textarea {
+  resize: none !important;
+}
+
+//解决闪烁
+[v-cloak] {
+  display: none !important;
+}
+
+#app {
+  font-family: "Microsoft YaHei", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  line-height: 1.2;
+  font-size: 16px;
+  color: @color-black;
+  background-color: @bd-bg; // -webkit-user-select: none;
+  // user-select: none;
+  overflow-x: hidden;
+  padding-left: @sidebar-width;
+  position: relative;
+}
+
+.view {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+//清除浮动
+.clearfix {
+  display: block;
+  zoom: 1;
+  &:after {
+    content: " ";
+    display: block;
+    font-size: 0;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+}
+
+// 按钮基本样式
+.btn {
+  display: block;
+  color: @bg-white;
+  background-color: @theme-color;
+  font-size: @fontsize-large;
+  height: 32px;
+  cursor: pointer;
+  line-height: 32px;
+  text-align: center;
+  border-radius: 4px;
+  outline: none;
+  &-disabled {
+    // 禁用
+    color: rgba(0, 0, 0, 0.3);
+    background-color: #f7f7f7;
+    cursor: not-allowed;
+  }
+  &-bg {
+    background-color: @theme-color !important;
+    color: #fff !important;
+    border: none !important;
+  }
+  &-nobg {
+    background-color: transparent;
+    border: 1px solid #999;
+    color: #333;
+    &-theme {
+      color: @theme-color;
+      border-color: @theme-color;
+    }
+  }
+  &-fffbg {
+    background-color: #fff !important;
+    border: 1px solid #ebebeb !important;
+    color: #999 !important;
+  }
+}
+
+//
+.takespace {
+  height: 10px;
+  background-color: @bg-grey;
+}
+
+// 头部
+.main-header {
+  height: @header-height;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.27);
+  background-color: @bg-white;
+  padding-left: 25px;
+  .single-tt {
+    line-height: @header-height;
+    color: @color-dark-grey;
+    font-size: @fontsize-large;
+  }
+  .tab-wrap,
+  .tab-wraps {
+    .el-tabs__nav-wrap::after {
+      background-color: transparent;
+    }
+    .el-tabs__item {
+      height: @header-height;
+      line-height: @header-height;
+      font-size: @fontsize-large;
+    }
+  }
+  .tab-wrap {
+    .el-tabs__header {
+      margin: 0;
+    }
+    .el-tabs__item {
+      width: 76px;
+      text-align: center;
+      padding: 0;
+      margin-right: 20px;
+    }
+    .el-tabs__active-bar {
+      min-width: 76px !important;
+    }
+  }
+  .breadcrumb-wrap {
+    min-width: @min-main-width;
+    .el-breadcrumb {
+      display: inline-block;
+    }
+    .el-breadcrumb__item {
+      line-height: @header-height;
+      font-size: @fontsize-large;
+      .el-breadcrumb__inner {
+        color: @color-dark-grey;
+      }
+    }
+    .back {
+      display: inline-block;
+      vertical-align: top;
+      font-size: @fontsize-large;
+      color: @color-dark-grey;
+      line-height: @header-height;
+      cursor: pointer;
+      margin-right: 20px;
+    }
+  }
+}
+
+::-webkit-input-placeholder {
+  color: @placeholder-color !important;
+  font-family: @placeholder-fontfamily;
+}
+
+:-ms-input-placeholder {
+  color: @placeholder-color !important;
+  font-family: @placeholder-fontfamily;
+}
+
+::-ms-input-placeholder {
+  color: @placeholder-color !important;
+  font-family: @placeholder-fontfamily;
+}
+
+::placeholder {
+  color: @placeholder-color !important;
+  font-family: @placeholder-fontfamily;
+}
+
+@handle-btn-height: 32px;
+.hanlde-mixin-css {
+  float: left;
+  margin-left: 25px;
+  margin-bottom: 10px;
+}
+
+.handle-wrap,
+.customerOrigin .table-top{
+  min-height: 50px;
+  background-color: #f5f5f5;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding-top: 9px;
+  min-width: @min-main-width;
+  .inp-wrap {
+    width: 222px;
+    height: @handle-btn-height;
+    position: relative;
+    &:extend(.hanlde-mixin-css);
+    .iconfont-search {
+      position: absolute;
+      left: 6px;
+      top: 6px;
+      color: #838383;
+      font-size: @fontsize-large-x;
+      z-index: 9;
+    }
+    .inp-search {
+      box-sizing: border-box;
+      .el-input__inner {
+        padding-left: 30px;
+        height: @handle-btn-height;
+        line-height: @handle-btn-height;
+      }
+    }
+  }
+  .btn-search {
+    height: @handle-btn-height;
+    line-height: calc(~"@{handle-btn-height} - 2px");
+    width: 60px;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 4px;
+    color: @color-dark-grey;
+    font-size: @fontsize-medium;
+    border: 1px solid #999;
+    &:extend(.hanlde-mixin-css);
+  }
+  .btn-wrap {
+    width: 100px;
+    &:extend(.hanlde-mixin-css);
+  }
+}
+
+.main-content {
+  .contacts-details,
+  .car-details {
+    table,
+    tr,
+    td {
+      border: 1px solid #eee;
+    }
+    .table-con {
+      width: 100%;
+      tr {
+        height: 42px;
+      }
+      td {
+        vertical-align: middle;
+        color: @color-dark-grey;
+        font-size: @fontsize-medium;
+        box-sizing: border-box;
+        &:first-child {
+          width: 154px;
+          text-align: right;
+          padding-right: 30px;
+        }
+        &:last-child {
+          padding-left: 30px;
+        }
+      }
+    }
+    .btn-wrap {
+      margin: 25px 0 0 176px;
+      .btn {
+        line-height: 36px;
+        width: 126px;
+        height: 36px;
+        float: left;
+      }
+      .btn:last-of-type {
+        margin-left: 20px;
+        box-sizing: border-box;
+        background-color: transparent;
+        border: 1px solid #999;
+        color: @color-dark-grey;
+      }
+    }
+  }
+  .table {
+    .el-table {
+      min-width: @min-main-width;
+      width: 100%;
+      margin-bottom: 60px;
+      &.fix-bottom {
+        margin-bottom: 114px;
+      }
+    }
+    thead.is-group th {
+      background-color: transparent;
+    }
+    .el-table__row td:first-child,
+    .has-gutter th:first-child {
+      padding-left: 15px;
+    }
+  }
+  .btns {
+    overflow: hidden;
+    .btn {
+      float: left;
+      width: 80px;
+      margin-right: 20px;
+      font-size: @fontsize-medium;
+      margin-bottom: 10px;
+      &:not(:first-child):nth-child(2) {
+        background-color: transparent;
+        color: @color-dark-grey;
+        border: 1px solid @color-light-grey;
+      }
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.status {
+  &-ok {
+    color: @theme-color;
+  }
+  &-wait {
+    color: @yellow;
+  }
+  &-fail {
+    color: @red;
+  }
+}
+
+.color {
+  &-red {
+    color: @red;
+  }
+  &-green {
+    color: @theme-color;
+  }
+  &-balck {
+    color: #000;
+  }
+  &-orange {
+    color: @yellow
+  }
+}
+
+// 页脚
+.pages-wrap {
+  position: fixed;
+  bottom: 0;
+  left: @sidebar-width;
+  height: 54px;
+  z-index: 9;
+  width: calc(~"100% - @{sidebar-width}");
+  text-align: center;
+  background-color: @bg-white;
+  box-shadow: 2px 0px 2px rgba(0, 0, 0, 0.27);
+  z-index: 100;
+}
+
+.btn-select-wrap {
+  position: relative;
+  line-height: 32px;
+  width: 80px;
+  height: 32px;
+  background-color: @theme-color;
+  text-align: center;
+  border-radius: 4px;
+  .btn-txt {
+    color: #fff;
+  }
+  .hid-select {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+    opacity: 0;
+  }
+}
+
+.c-sort-wrap {
+  float: left;
+  .sort-line {
+    float: left;
+    width: 124px;
+    height: 34px;
+    line-height: 34px;
+    border: 1px solid #919191;
+    border-radius:6px;
+    box-sizing: border-box;
+    margin-left: 30px;
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+    background-color: #fff;
+    cursor: pointer;
+    &.selected {
+      background-color: @theme-color;
+      border-color: transparent;
+      color: #fff;
+      .arrow-list .iconfont {
+        color: #fff;
+      }
+    }
+    .arrow-list {
+      display: inline-block;
+      line-height: 16px;
+      width: 20px;
+      vertical-align: middle;
+      .iconfont {
+        display: inline-block;
+        position: relative;
+        color: #5d5d5d;
+        &:nth-child(2n + 1) {
+          transform: rotate(180deg);
+          top: 5px;
+        }
+        &:nth-child(2n) {
+          top: -5px;
+        }
+      }
+    }
+  }
+}

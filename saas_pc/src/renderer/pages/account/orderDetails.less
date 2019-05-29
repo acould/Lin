@@ -1,0 +1,103 @@
+.section-container {
+  padding: 0 20px;
+  .section-line {
+    position: relative;
+    margin: 10px 0;
+    .path {
+      position: absolute;
+      right: 10px;
+      top: 5px;
+    }
+    .section-tt {
+      height: 30px;
+      line-height: 30px;
+      background-color: @bg-grey;
+      font-weight: bold;
+      color: @color-dark-grey;
+      font-size: @fontsize-large;
+      padding-left: 18px;
+    }
+    .section-con {
+      border: 1px solid #f1f1f1;
+      border-top: none;
+      padding: 0 18px;
+      .line {
+        margin: 10px 0;
+        overflow: hidden;
+        word-break: break-all;
+        &:first-child {
+          margin-top: 0;
+          padding-top: 10px;
+        }
+        &.center {
+          margin-top: -10px;
+        }
+        .block {
+          float: left;
+          width: 33.33%;
+          position: relative;
+          &.mg {
+            margin-top: 10px;
+          }
+          &>div {
+            vertical-align: middle;
+          }
+          .custom-img {
+            width: 33px;
+            height: 33px;
+            vertical-align: top;
+            margin-right: 10px;
+          }
+          .custom-block {
+            line-height: 34px;
+            margin-bottom: 5px;
+          }
+          // 11.16图片查看标签
+          .lookImg{
+            color:#0db592; 
+            cursor: pointer;
+          }
+          .source-sign {
+            position: absolute;
+            left: 170px;
+            top: 0;
+            padding: 2px 9px;
+            background-color: #ffb320;
+            font-size: 11px;
+            color: #fff;
+            border-radius: 2px;
+          }
+        }
+        &.trip-info {
+          .block {
+            width: auto;
+          }
+          p {
+            margin-left: 48px;
+          }
+        }
+      }
+    }
+  }
+  .btn-wrap {
+    margin-top: 30px;
+    .btn {
+      width: 152px;
+      height: 40px;
+      line-height: 40px;
+      margin-right: 23px;
+      float: left;
+      &.btn-right {
+        background-color: transparent;
+        border: 1px solid #999;
+        color: @color-dark-grey;
+      }
+    }
+  }
+  .red {
+    color: @red
+  }
+  .green {
+    color: @theme-color;
+  }
+}

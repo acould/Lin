@@ -1,0 +1,173 @@
+/* 拖拽 */
+body {
+  .login-container {
+    -webkit-app-region: drag;
+    cursor: pointer;
+  }
+  .iconfont-back,
+  .login-box,
+  .icon-close {
+    -webkit-app-region: no-drag;
+    cursor: default;
+  }
+}
+
+.login-container {
+  & /deep/ .el-form-item__error {
+    left: 30px;
+  }
+  & /deep/ .el-input__suffix {
+    right: 100px;
+  }
+}
+
+.login-container {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #fefefe;
+  text-align: center;
+  .top-icon {
+    position: absolute;
+    top: -10px;
+    font-size: 20px;
+    color: #666;
+    padding: 20px;
+    cursor: pointer;
+  }
+  .icon-close {
+    right: 0;
+  }
+  .iconfont-back {
+    left: 0;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .logo {
+    display: block;
+    width: 83px;
+    height: 83px;
+    margin: 25px auto 13px;
+  }
+  .logo-tt {
+    font-size: 21px;
+    color: @color-dark-grey;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  .account-handler {
+    margin-top: 10px;
+    overflow: hidden;
+    .a-btn {
+      font-size: 14px;
+      margin: 0 10px;
+      &:first-of-type {
+        float: left;
+        color: @theme-color;
+      }
+      &:last-of-type {
+        float: right;
+        color: #555;
+      }
+    }
+  }
+  .login-box {
+    width: 300px;
+    margin: 0 auto;
+    .tabs-wrap {
+      margin: 40px auto 25px;
+      overflow: hidden;
+      .btn-tab {
+        font-size: 14px;
+        color: #888;
+        padding: 10px;
+        &.selected {
+          color: @theme-color;
+          border-bottom: 2px solid @theme-color;
+        }
+        &:first-of-type {
+          float: left;
+        }
+        &:last-of-type {
+          float: right;
+        }
+      }
+    }
+    .el-form-item {
+      margin-bottom: 18px;
+    }
+    .btn-wrap-item {
+      margin-bottom: 0;
+    }
+    .agreement-wrap-item {
+      margin-bottom: 10px;
+    }
+    .inp-wrap {
+      padding-left: 30px;
+      position: relative;
+      .iconfont {
+        position: absolute;
+        left: 2px;
+        top: 4px;
+        font-size: @fontsize-large-x;
+        color: @color-light-grey;
+        &.iconfont-mobile {
+          font-size: 22px;
+          left: 0px;
+        }
+      }
+      .el-input {
+        & /deep/ .el-input__inner {
+          border: none;
+          border-radius: 0;
+          border-bottom: 1px solid #cacaca;
+          padding: 0 90px 0 8px;
+          color: @color-grey;
+        }
+      }
+
+      &.inp-wrap-code {
+        position: relative;
+        .code {
+          position: absolute;
+          right: 10px;
+          top: 2px;
+          color: @theme-color;
+          z-index: 9;
+          font-size: @fontsize-medium;
+          cursor: pointer;
+          &::before {
+            content: "";
+            position: absolute;
+            left: -12px;
+            top: 6px;
+            width: 1px;
+            height: 26px;
+            background-color: @color-light-grey;
+          }
+        }
+      }
+    }
+    .agreement-wrap {
+      margin-top: 12px;
+      font-size: @fontsize-medium;
+      line-height: 1;
+      & /deep/ .el-checkbox__label {
+        color: #777;
+      }
+      .protocol {
+        color: @theme-color;
+      }
+    }
+    .btn-wrap {
+      margin-top: 16px;
+      .btn {
+        height: 36px;
+        line-height: 1;
+        width: 100%;
+      }
+    }
+  }
+}

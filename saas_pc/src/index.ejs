@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>车队助手 - 智能又好用的车队管理系统</title>
+  <meta name="keywords" content="车队管理,车辆调度,车队管理系统,调度管理软件,车队管理软件,调度管理软件,司机管理系统,司机管理软件,车辆调度软件,车辆调度系统,车调软件,车调系统,车队助手,管理车队,车辆管理,管理车辆,管理司机,司机管理,车队调度,调度车队,调度车辆,司机调度,司机车辆">
+  <meta name="description" content="车队助手是立刻公司推出的一款车队管理服务产品，为车队提供在线快速调度、自动通知司机、智慧账单、车辆管理等服务。车队助手已经超过5000家车队使用。">
+  <link rel="icon" type="image/x-icon" href="icon.ico" />
+  <!-- <link rel="stylesheet" href="//at.alicdn.com/t/font_700784_r4n107mqq9i.css"> -->
+  <% if (htmlWebpackPlugin.options.nodeModules) { %>
+    <!-- Add `node_modules/` to global paths so `require` works properly in development -->
+    <script>
+      require('module').globalPaths.push('<%= htmlWebpackPlugin.options.nodeModules.replace(/\\/g, '\\\\') %>')
+    </script>
+    <% } %>
+</head>
+
+<body>
+  <div id="app"></div>
+  <div style="text-align:center;display:none;">
+    <div style="display:none">
+      车队管理,车辆调度
+    </div>
+    Keywords:
+    <a href="http://www.cheduizhushou.com/" title="车队管理" target="_blank"><strong>车队管理</strong></a>
+
+    <a href="http://www.cheduizhushou.com/" title="车辆调度" target="_blank"><strong>车辆调度</strong></a>
+  </div>
+  <!-- Set `__static` path to static files in production -->
+  <script>
+    if (process.env.NODE_ENV !== 'development') window.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+  </script>
+
+  <!-- webpack builds are automatically injected -->
+</body>
+
+<script>
+
+</script>
+
+</html>

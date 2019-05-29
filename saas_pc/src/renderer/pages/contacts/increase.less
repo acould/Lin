@@ -1,0 +1,48 @@
+@input-width: 218px; 
+@input-height: 32px;
+@textarea-width: 308px;
+@textarea-height: 88px;
+.contacts-main {
+  width: 100%;
+  min-height: 100%;
+  background-color: @bg-grey;
+}
+.contacts-form {
+  margin-top: 22px;
+  padding-bottom: 20px;
+  .btn-wrap {
+    width: 176px;
+    margin-top: 17px;   
+    .btn {
+      height: 36px;
+      line-height: 36px;
+      font-size: @fontsize-large;     
+    }
+  }
+  .el-form-item {
+    margin-bottom: 13px;
+    & /deep/ .el-form-item__error {
+      padding-top: 0;
+    }
+    & /deep/ .el-form-item__label {
+      color: @color-dark-grey;   
+    }
+  }
+  .el-input,
+  .el-autocomplete {
+    width: @input-width; 
+    & /deep/ .el-input__inner {
+      height: @input-height;
+      line-height: @input-height;
+      border-color: #dadada; 
+    } 
+  } 
+  .el-textarea {
+    width: @textarea-width;
+    & /deep/ .el-textarea__inner {
+      font-family: Arial;
+      height: @textarea-height;
+    }   
+  }
+}
+
