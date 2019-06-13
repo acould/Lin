@@ -1,0 +1,7 @@
+#canvas-holder,
+.report,canvas{width:290px;height:290px;}
+#canvas-holder{margin:20px auto;}
+.report{;position:relative; }
+.list{position:absolute;bottom:-42px;left:50%;margin-left:-90px;float:left;background:#fff   }
+.list li{line-height:30px;color:#444;font-family:'微软雅黑';width:90px;font-size:14px;text-align:center;float:left       }
+.list li span{display:block;line-height:22px;color:#fff;font-size:12px;}

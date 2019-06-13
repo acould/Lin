@@ -1,0 +1,26 @@
+.cate-wrap {height: 300px; width: 725px; border: 1px solid #d5e4fa; background-color: #f8fafe; position: relative; overflow: hidden; line-height: 1.5; } 
+.cate-con { padding:20px } 
+.cc-listwrap {height:259px; border: 1px solid #E5EEFC; position: relative; overflow: hidden; z-index: 11;background-color:#fff  } 
+.cc-list-item {float: left; display: none; width: 227px; height: 100%; border-right:1px solid #d5e4fa; background: #fff; }
+li.cc-hasChild-item{background: url(http://img02.taobaocdn.com/tps/i2/T13PGlXfdfXXXXXXXX-261-188.png) no-repeat right -137px transparent; } 
+
+.cc-tree, .cc-cbox {overflow-x: hidden; overflow-y: auto; position: relative; left: 0; top: 0; height: 100%; } 
+.cc-tree-cont, .cc-cbox-cont {padding: 0 3px; margin-top: 6px; } 
+.cc-cbox-group {position: relative; *zoom: 1; } 
+.cc-cbox-gname {float: left; background: none repeat scroll 0 0 #AAAAAA; color: #FFFFFF; display: inline-block; font-style: normal; height: 13px; line-height: 13px; text-align: center; text-transform: uppercase; width: 13px; position: absolute; margin-left: 16px; margin-top: 5px; overflow: hidden; } 
+/*tree{{{*/ .cc-tree-group {padding: 3px 0; border-bottom: 1px dashed #ccc; zoom: 1; } 
+.cc-tree .cc-tree-last {border: none; } 
+.cc-tree-gname {color: #3366cc; display: inline-block; *display: inline; *zoom: 1; margin: 2px 0; cursor: default; background: url(http://img02.taobaocdn.com/tps/i2/T13PGlXfdfXXXXXXXX-261-188.png) no-repeat right -107px transparent; } 
+.cc-tree-expanded .cc-tree-gname {background-position: right -123px; }
+ /*tree-content*/ .cc-cbox-item, .cc-tree-item, .cc-listbox-item {background-color: #FFFFFF; border: 1px solid #FFFFFF; height: 20px; line-height: 20px; overflow: hidden; cursor: pointer; padding-left: 20px; } 
+.cc-cbox-item {padding-right: 16px; } 
+.cc-tree-gname, .cc-tree-item, .cc-listbox-item {padding: 0 16px 0 14px; } 
+.cc-tree-gcont {display: none; } 
+.cc-tree-expanded .cc-tree-gcont {display: block; }
+/*select*/ 
+li.cc-selected {border: 1px dotted #82bce0; background-color: #dff1fb; }
+li:last-child{border-bottom:none;}
+.cc-list-item:last-child{border-right:none;}
+ div.cc-focused {outline: #9cd7fc dotted 1px; *border: #9cd7fc dotted 1px; *margin: 1px 0; *padding: 0 16px 0 13px; /*text-decoration: underline;*/ } 
+.curCate-box {line-height:30px;color:#999  }
+#circuit {}

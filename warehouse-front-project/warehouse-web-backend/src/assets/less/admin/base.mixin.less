@@ -1,0 +1,89 @@
+@Url: "../..";
+.width(@value:100%){width:@value;}
+.height(@value:100%){height:@value;}
+/*margin  padding 边距*/
+.edge (@value: 0) {
+	margin: @value;
+	padding: @value;
+}
+/*margin 边距*/
+.margin-top(@value:0){
+	margin-top:@value;
+}
+.margin-right(@value:0){
+	margin-right:@value;
+}
+.margin-bottom(@value:0){
+	margin-bottom:@value;
+}
+.margin-left(@value:0){
+	margin-left:@value;
+}
+/*padding 内边距*/
+.padding-top(@value:0){
+	padding-top:@value;
+}
+.padding-right(@value:0){
+	padding-right:@value;
+}
+.padding-bottom(@value:0){
+	padding-bottom:@value;
+}
+.padding-left(@value:0){
+	padding-left:@value;
+}
+.padding(@value:0){
+	padding:@value;
+}
+/*font-size 大小*/
+.font-size(@value:12px){font-size:@value;}
+/*color 颜色*/
+.color(@value:#fff){color:@value;}
+
+/*border*/
+.border(@value:0){
+	border:@value;
+};
+/*display*/
+.display(@value:block){
+	display:@value;
+}
+/*background*/
+.background(@value:#fff){
+	background:@value;
+}
+/*position*/
+.position(@value:relative){
+	position:@value;
+}
+/*圆角*/
+.radius(@radius:0,@radius:0,@radius:0,@radius:0 ) {
+	-webkit-border-radius: @radius @radius @radius @radius;
+	-khtml-border-radius:@radius @radius @radius @radius;
+	-moz-border-radius: @radius @radius @radius @radius;
+		border-radius: @radius @radius @radius @radius;
+}
+.radius_t(@radius:0) {
+	-webkit-border-radius:@radius @radius 0 0;
+	-khtml-border-radius:@radius @radius 0 0;
+	-moz-border-radius: @radius @radius 0 0;
+		border-radius: @radius @radius 0 0;
+}
+.radius_b(@radius:0) {
+	-webkit-border-radius: 0 0 @radius @radius;
+	-khtml-border-radius: 0 0 @radius @radius;
+	-moz-border-radius:  0 0 @radius @radius;
+		border-radius:  0 0 @radius @radius;
+}
+/*鼠标样式*/
+.cursor(@value:pointer){
+	cursor:@value
+}
+/*浮动*/
+.float(@value:left){
+	float:@value;
+}
+/*字体*/
+.yahei() {
+	font-family: Microsoft YaHei, YaHei, Simhei, Hei, Tahoma, Helvetica, arial, sans-serif;
+}

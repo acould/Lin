@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <script charset="utf-8" src="ueditor.config.js"></script>
+    <script charset="utf-8" src="ueditor.all.min.js"></script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script charset="utf-8" src="lang/zh-cn/zh-cn.js"></script>
+</head>
+
+<body>
+    <script id="editor" type="text/plain" style="width:100%;"></script>
+    <script>
+    //实例化编辑器
+    //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+    var ue = UE.getEditor('editor', {
+        toolbars: [
+            [
+                'fullscreen', 'source', '|', 'undo', 'redo', '|',
+                'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+                'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+                'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+                'directionalityltr', 'directionalityrtl', 'indent', '|',
+                'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+                'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+                'insertimage', 'emotion', 'map', 'pagebreak', 'template', 'background', '|',
+                'horizontal', 'date', 'time', 'spechars', 'wordimage', '|',
+                'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts', '|', 'searchreplace', 'help', '|', 'preview'
+            ]
+        ],
+        autoHeightEnabled: false,
+        initialFrameHeight: (window.screen.width > 1350 ? 430 : 400)
+    });
+
+    // 初始化接收
+    window.addEventListener('message', function(e) {
+        var data = JSON.parse(e.data);
+
+        switch (data.ret) {
+            case 'init':
+                ue.setContent(data.content);
+                break;
+            case 'sendFile':
+                // 接收上传文件，调用子窗口的渲染方法
+                document.getElementsByTagName('iframe')[2].contentWindow.renderFileList(data.list)
+                break;
+            default:
+                break;
+        }
+    }, false);
+
+    // 实时传送数据
+    ue.addListener('contentChange', function() {
+        var data = {
+            ret: 'change',
+            content: ue.getContent()
+        }
+        window.parent.postMessage(JSON.stringify(data), '*');
+    }.bind(this));
+    </script>
+</body>
+
+</html>

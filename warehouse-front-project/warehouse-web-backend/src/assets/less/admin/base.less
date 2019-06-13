@@ -1,0 +1,177 @@
+@import 'base.mixin.less';
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote,
+dl, dt, dd, ul, ol, li,
+pre,
+form, fieldset, legend, button, input, textarea,
+th, td {.edge}
+body,
+button, input, select, textarea {font: 12px Arial,Helvetica,sans-serif;}
+h1, h2, h3, h4, h5, h6 {.font-size(100%);.color(#333);}
+address, cite, dfn, em, var { font-style: normal; }
+code, kbd, pre, samp { font-family: courier new, courier, monospace; }
+small {.font-size(12px);}
+ul, ol,li { list-style: none; }
+a {.color(#55aadd);text-decoration:none; }
+a:hover { text-decoration:underline; }
+sup { vertical-align: text-top; }
+sub { vertical-align: text-bottom; }
+legend {.color(#333); }
+fieldset, img {.border(0); }
+button, input, select, textarea {.font-size(100%); }
+button, input,textarea { *overflow:visible;outline:none }
+img{vertical-align:top;display:inline-block;}
+article, aside, details, figcaption, figure, footer,header, hgroup, menu, nav, section,
+summary, time, mark, audio, video{.display;.edge}
+mark{.background(#ff0);}
+object,embed { outline:none;}
+
+table { border-collapse:collapse;border-spacing:0;}
+.fl{float:left }
+.fr{float:right }
+.block{.display;}
+.tac{text-align:center;}
+.tar{text-align:right;}
+.tal{text-align:left;}
+.dn{.display(none);}
+.pr{.position;}
+.bigfs{font-family:'Microsoft YaHei','SimHei','Hei',Tahoma,Helvetica,arial,sans-serif;}
+.ofh{white-space:nowrap;word-wrap:normal;word-break:normal;text-overflow:ellipsis;-o-text-overflow:ellipsis;overflow:hidden;}
+.w{.width}
+.h{.height}
+
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    zoom: 1;
+}
+
+.dib {display: inline-block;}
+.hide {display: none;}
+.vt {vertical-align: top;}
+.vm {vertical-align: middle;}
+.vb {vertical-align: bottom;}
+.fwb{font-weight:bold;}
+.fs12{.font-size(12px);}
+.fs14{.font-size(14px);}
+.fs16{.font-size(16px);}
+.fs18{.font-size(18px);}
+
+/* 圆角 */
+.r2{.radius(2px)}
+.r3{.radius(3px)}
+.r4{.radius(4px)}
+.r5{.radius(5px)}
+.rt2{.radius_t(2px)}
+.rt3{.radius_t(3px)}
+.rt4{.radius_t(4px)}
+.rt5{.radius_t(5px)}
+.rb2{.radius_b(2px)}
+.rb3{.radius_b(3px)}
+.rb4{.radius_b(4px)}
+.rb5{.radius_b(5px)}
+
+/* margin 边距 */
+.mt5{.margin-top(5px)}
+.mt10{.margin-top(10px)}
+.mt15{.margin-top(15px)}
+.mt20{.margin-top(20px)}
+.mt25{.margin-top(25px)}
+.mt30{.margin-top(30px)}
+
+.mr5{.margin-right(5px)}
+.mr10{.margin-right(10px)}
+.mr15{.margin-right(15px)}
+.mr20{.margin-right(20px)}
+.mr25{.margin-right(25px)}
+.mr30{.margin-right(30px)}
+.mr40{.margin-right(40px)}
+.mr50{.margin-right(50px)}
+.mr60{.margin-right(60px)}
+.mr70{.margin-right(70px)}
+.mr80{.margin-right(80px)}
+
+.mb5{.margin-bottom(5px)}
+.mb10{.margin-bottom(10px)}
+.mb15{.margin-bottom(15px)}
+.mb20{.margin-bottom(20px)}
+.mb25{.margin-bottom(25px)}
+.mb30{.margin-bottom(30px)}
+
+.ml5{.margin-left(5px)}
+.ml10{.margin-left(10px)}
+.ml15{.margin-left(15px)}
+.ml20{.margin-left(20px)}
+.ml25{.margin-left(25px)}
+.ml30{.margin-left(30px)}
+.ml40{.margin-left(40px)}
+.ml50{.margin-left(50px)}
+.ml60 {.margin-left(60px)}
+.ml70 {.margin-left(70px)}
+.ml80 {.margin-left(80px)}
+
+/* padding 边距 */
+.pt5{.padding-top(5px)}
+.pt10{.padding-top(10px)}
+.pt15{.padding-top(15px)}
+.pt20{.padding-top(20px)}
+.pt25{.padding-top(25px)}
+.pt30{.padding-top(30px)}
+.pt40{.padding-top(40px)}
+
+.pr5{.padding-right(5px)}
+.pr10{.padding-right(10px)}
+.pr15{.padding-right(15px)}
+.pr20{.padding-right(20px)}
+.pr25{.padding-right(25px)}
+.pr30{.padding-right(30px)}
+
+.pb5{.padding-bottom(5px)}
+.pb10{.padding-bottom(10px)}
+.pb15{.padding-bottom(15px)}
+.pb20{.padding-bottom(20px)}
+.pb25{.padding-bottom(25px)}
+.pb30{.padding-bottom(30px)}
+
+.pl5{.padding-left(5px)}
+.pl10{.padding-left(10px)}
+.pl15{.padding-left(15px)}
+.pl20{.padding-left(20px)}
+.pl25{.padding-left(25px)}
+.pl30{.padding-left(30px)}
+
+.p30{.padding(30px)}
+
+input:disabled{
+	background-color:#ccc;
+}
+#propertytagContainer{
+  width: 90%;
+  height: 300px;
+  overflow: scroll;
+}
+#propertytagContainer ul li{
+  font-size: 14px;
+  margin-left: 52px;
+  line-height: 39px;
+  float: left;
+  width: 100%;
+}
+#propertytagContainer::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+body {
+  width: 100vw;
+  overflow: hidden;
+}

@@ -1,0 +1,142 @@
+@import 'base.mixin.less';
+
+.table {
+    width: 100%;
+
+    th {
+        padding: 0 5px;
+        background-color: #f5f5f5;
+        border-bottom: 2px solid #999;
+        line-height: 38px;
+        white-space: nowrap;
+    }
+
+    td {
+        padding: 10px 5px;
+        border-bottom: 1px solid #e8e8e8;
+        line-height: 22px;
+        text-align: center;
+        color: #666;
+        word-wrap: break-word;
+        word-break: break-word;
+    }
+
+    td:last-child {
+        border-right: none;
+    }
+
+    tbody {
+        tr:first {
+            .arrow_up {
+                display: none;
+            }
+        }
+
+        tr:last {
+            .arrow_down {
+                display: none;
+            }
+        }
+    }
+
+    tfoot {
+        td {
+            border-bottom: none
+        }
+    }
+
+    .data th,
+    .data td {
+        text-align: left;
+        text-indent: 10px;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 8px 15px;
+        border-width: 1px;
+        border-style: solid;
+        line-height: 1;
+        color: #fff;
+        .radius(4px);
+
+        &.default {
+            background-color: #1fbf86;
+            border: 1px solid #00ad6f;
+            &:hover {
+                background-color: #2fc891;
+            }
+        }
+
+        &.editor {
+            background-color: #ff8800;
+            border: 1px solid #e37900;
+            &:hover {
+                background-color: #ff9a27;
+            }
+        }
+
+        &.del {
+            background-color: #999;
+            border: 1px solid #888;
+            &:hover {
+                background-color: #9e9e9e;
+            }
+        }
+
+        &.czred {
+            background-color: #ef0000;
+            border: 1px solid #c00;
+            &:hover {
+                background-color: #ff1313;
+            }
+        }
+
+        &.czblue {
+            background-color: #00b4d5;
+            border: 1px solid #009bb7;
+            &:hover {
+                background-color: #08c1e3;
+            }
+        }
+
+        &.price {
+            background-color: #ff8800;
+            border: 1px solid #e37900;
+            line-height: 26px;
+            text-indent: 0;
+            .radius(0 3px 3px 0);
+            &:hover {
+                background-color: #ff9a27;
+            }
+        }
+    }
+
+    .tal {
+        text-align: left;
+    }
+
+    .tac {
+        text-align: center;
+    }
+
+    .tar {
+        text-align: right;
+    }
+
+    .odd {
+        background-color: #f9f9f9;
+    }
+}
+
+.table table {
+    .edge();
+    width: 100%;
+    background-color: #fff
+}
+
+table.align-left {
+    td {
+        text-align: left;
+    }
+}

@@ -1,0 +1,102 @@
+@import 'base.mixin.less';
+#header{.background(#444);.height(50px)}
+body{.background(#2f343a)!important}
+.login{
+	position:absolute;
+	left:50%;
+	top:45%;
+    transform: translate(-50%, -50%);
+	.logo{
+		background:url("@{Url}/images/admin/ui/login-logo.png") no-repeat 0 0;
+		.width(141px);
+		.height(80px);
+		margin:0 auto;
+	}
+	.row{
+		.height(40px);
+		.margin-bottom(12px);
+		.background(#fff);
+		.radius(4px);
+	}
+	.btn{background:none }
+	.box{
+		.message{
+			.height(50px);
+			line-height:50px;
+			.color(red);
+			text-align:center;
+			.font-size(14px);
+		}
+		p{
+			text-align:center;
+			.color(#8e97a2);
+		}
+
+	}
+	.submit{
+		.width(278px);
+		.height(40px);
+		text-align:center;
+		.color(#fff);
+		.background(#212631);
+		.border;
+		.display;
+		.radius(4px);
+		.font-size(16px);
+		.cursor;
+	}
+	.accounts,
+	.pass,
+	.code{
+		.width(228px);
+		.height(40px);
+		.padding-left(50px);
+		.radius(4px);
+		background:url("@{Url}/images/admin/login/import.png") no-repeat 12px 7px;
+		input{
+			.border;
+			.width(225px);
+			.height(30px);
+			.margin-top(5px);
+			.font-size(16px);
+			color:#999;
+			background:transparent;
+			font-family:'微软雅黑','YaHei','黑体','Hei',Tahoma,Helvetica,arial,sans-serif;
+		}
+		input::-webkit-input-placeholder,
+		textarea::-webkit-input-placeholder {
+		    color: #ccc;
+		}
+
+	}
+	.code{
+		.width(150px);
+		background:url("@{Url}/images/admin/login/import.png") no-repeat 12px -96px;
+		input{
+			.width(148px);
+		}
+	}
+	.pass{
+		background:url("@{Url}/images/admin/login/import.png") no-repeat 12px -46px;
+	}
+	.vcode{
+		.background(#fff);
+		.width(80px);
+		.height(40px);
+		position:absolute;
+		right:0;
+		top:0;
+		z-index: 100;
+		.radius(0 4px 4px 0);
+	img{
+		.width(60px);
+		.height(20px);
+		.margin-top(10px);
+		.margin-left(10px);
+		.cursor;
+		}
+	}
+}
+input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0px 40px #fff inset;
+}
