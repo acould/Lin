@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<bean id="sysProperty" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:/baseconfig.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!--freemarker 拦截器-->
+	<bean id="freemarkerInterceptor" class="star.fw.web.interceptor.FreemarkerInterceptor">
+		<property name="componentMap">
+			<map>
+				<entry key="webVM" value-ref="webComponent" />
+				<entry key="sysStaticUrl" value="${sys.static.url}" />
+				<entry key="sysAceStaticUrl" value="${sys.ace.static.url}" />
+				<entry key="sysZtreeStaticUrl" value="${sys.ztree.static.url}" />
+			</map>
+		</property>
+	</bean>
+
+	<mvc:interceptors>
+		
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="star.fw.web.interceptor.ParameterInterceptor" />
+		</mvc:interceptor>
+
+		<mvc:interceptor>
+			<mvc:mapping path="/**" /> 
+			<mvc:exclude-mapping path="/login*"/> 
+			<mvc:exclude-mapping path="/vcode"/> 
+			<mvc:exclude-mapping path="/doLogin"/>
+			
+			<!--<mvc:exclude-mapping path="/appconsole/messageSet/initSet.html"/> -->
+			<bean class="star.webtool.interceptor.LoginInterceptor" /> 
+		</mvc:interceptor> 
+		
+		<mvc:interceptor>
+			<mvc:mapping path="/**" /> 
+			<mvc:exclude-mapping path="/login*"/> 
+			<mvc:exclude-mapping path="/vcode"/> 
+			<mvc:exclude-mapping path="/show"/>
+			<mvc:exclude-mapping path="/doLogin"/>
+	        <!-- 省市县加载 -->
+			<mvc:exclude-mapping path="/common/**"/>
+			<bean class="star.webtool.interceptor.PermissionInterceptor" />
+		</mvc:interceptor>
+
+		<mvc:interceptor> 
+			<mvc:mapping path="/**" />
+			<ref bean="freemarkerInterceptor" />
+		</mvc:interceptor>
+		
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/doLogin"/> 
+			<bean class="star.webtool.interceptor.MenuInterceptor" />
+		</mvc:interceptor>
+
+	</mvc:interceptors>
+
+</beans>
+

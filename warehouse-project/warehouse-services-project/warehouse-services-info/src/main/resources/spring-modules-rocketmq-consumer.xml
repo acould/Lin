@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+
+	<!--消费者注入-->
+	<bean id="testMqConsumer" class="star.warehouse.rocketmq.test.TestMqConsumer" />
+
+	<bean id="mqConsumer" class="star.mq.consumer.ClusterDefaultPushConsumer" init-method="init">
+		<property name="group">
+			<value>${rocketmq.producer.group.factory}</value>
+		</property>
+		<property name="nameServerAddress">
+			<value>${rocketmq.namesrvaddr.factory}</value>
+		</property>
+		<property name="interest">
+			<map>
+				<entry key="TestGroupMq_Topic" value-ref="testMqConsumer"/>
+			</map>
+		</property>
+		<property name="notify" value="${rocketmq.notify.factory}"/>
+	</bean>
+
+
+</beans>

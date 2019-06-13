@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="star.warehouse.mapper.StorageAreaMapper" >
+	<resultMap id="StorageArea" type="star.warehouse.po.StorageArea" >
+		<!--
+		  @haoxz11MyBatis
+		  存储区表（可以多级：一货架多货位等）表
+		-->
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="merchant_id" property="merchantId" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="storage_area_type" property="storageAreaType" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="orderby" property="orderby" jdbcType="INTEGER" />
+		<result column="creater_mid" property="createrMid" jdbcType="BIGINT" />
+		<result column="updater_mid" property="updaterMid" jdbcType="BIGINT" />
+		<result column="is_more" property="isMore" jdbcType="CHAR" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	<insert id="insertStorageArea" parameterType="star.warehouse.po.StorageArea" useGeneratedKeys="true" >
+		<!--
+		  @haoxz11MyBatis
+		  插入存储区表（可以多级：一货架多货位等）记录
+		-->
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		<![CDATA[
+		insert into storage_area (merchant_id, `status`, warehouse_id, 
+			create_time, modify_time, storage_area_type, `name`, 
+			code, orderby, creater_mid, 
+			updater_mid, is_more, parent_id, 
+			remark)
+		values (#{merchantId,jdbcType=BIGINT}, #{status,jdbcType=CHAR}, #{warehouseId,jdbcType=BIGINT}, 
+			sysdate(), sysdate(), #{storageAreaType,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+			#{code,jdbcType=VARCHAR}, #{orderby,jdbcType=INTEGER}, #{createrMid,jdbcType=BIGINT}, 
+			#{updaterMid,jdbcType=BIGINT}, #{isMore,jdbcType=CHAR}, #{parentId,jdbcType=BIGINT}, 
+			#{remark,jdbcType=VARCHAR})
+		]]>
+	</insert>
+	<update id="updateStorageArea" parameterType="star.warehouse.po.StorageArea" >
+		<!--
+		  @haoxz11MyBatis
+		  更新存储区表（可以多级：一货架多货位等）记录
+		-->
+		update storage_area
+		<set >
+			<if test="merchantId != null" >
+				merchant_id = #{merchantId,jdbcType=BIGINT},
+			</if>
+			<if test="status != null" >
+				`status` = #{status,jdbcType=CHAR},
+			</if>
+			<if test="warehouseId != null" >
+				warehouse_id = #{warehouseId,jdbcType=BIGINT},
+			</if>
+			modify_time = sysdate(),
+			<if test="storageAreaType != null" >
+				storage_area_type = #{storageAreaType,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null" >
+				`name` = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="code != null" >
+				code = #{code,jdbcType=VARCHAR},
+			</if>
+			<if test="orderby != null" >
+				orderby = #{orderby,jdbcType=INTEGER},
+			</if>
+			<if test="createrMid != null" >
+				creater_mid = #{createrMid,jdbcType=BIGINT},
+			</if>
+			<if test="updaterMid != null" >
+				updater_mid = #{updaterMid,jdbcType=BIGINT},
+			</if>
+			<if test="isMore != null" >
+				is_more = #{isMore,jdbcType=CHAR},
+			</if>
+			<if test="parentId != null" >
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="remark != null" >
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="getByPrimaryKey" resultMap="StorageArea" parameterType="java.lang.Long" >
+		<!--
+		  @haoxz11MyBatis
+		  根据主键查询存储区表（可以多级：一货架多货位等）记录
+		-->
+		select  * from storage_area where id = #{id,jdbcType=BIGINT}
+	</select>
+	<sql id="whereSQL" >
+		<!--
+		
+		  搜索存储区表（可以多级：一货架多货位等）记录，可修改
+		-->
+		<where >
+			<if test="id != null" >
+				<![CDATA[ AND id = #{id,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="merchantId != null" >
+				<![CDATA[ AND merchant_id = #{merchantId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="status != null" >
+				<![CDATA[ AND `status` = #{status,jdbcType=CHAR} ]]> 
+			</if>
+			<if test="warehouseId != null" >
+				<![CDATA[ AND warehouse_id = #{warehouseId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="storageAreaType != null" >
+				<![CDATA[ AND storage_area_type = #{storageAreaType,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="name != null" >
+				<![CDATA[ AND `name` = #{name,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="code != null" >
+				<![CDATA[ AND code = #{code,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="orderby != null" >
+				<![CDATA[ AND orderby = #{orderby,jdbcType=INTEGER} ]]> 
+			</if>
+			<if test="createrMid != null" >
+				<![CDATA[ AND creater_mid = #{createrMid,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="updaterMid != null" >
+				<![CDATA[ AND updater_mid = #{updaterMid,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="isMore != null" >
+				<![CDATA[ AND is_more = #{isMore,jdbcType=CHAR} ]]> 
+			</if>
+			<if test="parentId != null" >
+				<![CDATA[ AND parent_id = #{parentId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="remark != null" >
+				<![CDATA[ AND remark = #{remark,jdbcType=VARCHAR} ]]> 
+			</if>
+		</where>
+	</sql>
+	<select id="getListByWhere" resultMap="StorageArea" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  搜索存储区表（可以多级：一货架多货位等）列表
+		-->
+		select
+		<if test="FIELDS != null" >
+			${FIELDS}
+		</if>
+		<if test="FIELDS == null" >
+			*
+		</if>
+		from storage_area
+		<include refid="whereSQL" />
+		<if test="ORDERLIST != null" >
+			 ORDER BY ${ORDERLIST}
+		</if>
+	</select>
+	<select id="getCountByWhere" resultType="java.lang.Integer" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  得到搜索存储区表（可以多级：一货架多货位等）的记录数量
+		-->
+		select count(*) from storage_area
+		<include refid="whereSQL" />
+	</select>
+	
+	
+	
+	<!-- user xxh -->
+	
+	
+	
+	
+	
+	
+</mapper>

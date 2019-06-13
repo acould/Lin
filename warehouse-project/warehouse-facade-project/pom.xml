@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>star.warehouse</groupId>
+    <artifactId>warehouse-project</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  <groupId>star.warehouse.facade</groupId>
+  <artifactId>warehouse-facade-project</artifactId>
+  <packaging>pom</packaging>
+  <name>warehouse-facade-project</name>
+  
+  
+  <modules>
+  	<module>warehouse-facade-info</module>
+  </modules>
+  
+  <dependencies>
+		<dependency>
+			<groupId>star.common</groupId>
+			<artifactId>star-common-util</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>star.common</groupId>
+			<artifactId>star-common-framework</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		
+		 <!-- star-lib-bizbase -->
+		<dependency>
+			<groupId>star.common.lib.bizbase</groupId>
+ 			<artifactId>star-lib-bizbase</artifactId>
+		</dependency>
+	
+	</dependencies>
+	
+</project>

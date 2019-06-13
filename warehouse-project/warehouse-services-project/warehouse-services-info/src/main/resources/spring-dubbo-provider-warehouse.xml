@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        ">
+
+
+	<bean id="productXyzcodeStorageFacadeImpl" class="${star-dubbo-warehouse-productxyzcodestorage-impl}" />
+	<dubbo:service registry="servicesRegistry" interface="${star-dubbo-warehouse-productxyzcodestorage-facade}"
+		ref="productXyzcodeStorageFacadeImpl" version="${star-dubbo-warehouse-productxyzcodestorage-version}" delay="-1" />
+		
+	<bean id="storageAreaFacadeImpl" class="${star-dubbo-warehouse-storagearea-impl}" />
+	<dubbo:service registry="servicesRegistry" interface="${star-dubbo-warehouse-storagearea-facade}"
+		ref="storageAreaFacadeImpl" version="${star-dubbo-warehouse-storagearea-version}" delay="-1" />
+	
+	<bean id="storageAreaXyzcodeFacadeImpl" class="${star-dubbo-warehouse-storageareaxyzcode-impl}" />
+	<dubbo:service registry="servicesRegistry" interface="${star-dubbo-warehouse-storageareaxyzcode-facade}"
+		ref="storageAreaXyzcodeFacadeImpl" version="${star-dubbo-warehouse-storageareaxyzcode-version}" delay="-1" />
+		
+	<bean id="storeInFacadeImpl" class="${star-dubbo-warehouse-storein-impl}" />
+	<dubbo:service registry="servicesRegistry" interface="${star-dubbo-warehouse-storein-facade}"
+		ref="storeInFacadeImpl" version="${star-dubbo-warehouse-storein-version}" delay="-1" />
+		
+	<bean id="storeInOutCheckFacadeImpl" class="${star-dubbo-warehouse-storeinoutcheck-impl}" />
+	<dubbo:service registry="servicesRegistry" interface="${star-dubbo-warehouse-storeinoutcheck-facade}"
+		ref="storeInOutCheckFacadeImpl" version="${star-dubbo-warehouse-storeinoutcheck-version}" delay="-1" />
+		
+	<bean id="storeOutFacadeImpl" class="${star-dubbo-warehouse-storeout-impl}" />
+	<dubbo:service registry="servicesRegistry" interface="${star-dubbo-warehouse-storeout-facade}"
+		ref="storeOutFacadeImpl" version="${star-dubbo-warehouse-storeout-version}" delay="-1" />
+		
+	<bean id="warehouseFacadeImpl" class="${star-dubbo-warehouse-warehouse-impl}" />
+	<dubbo:service registry="servicesRegistry" interface="${star-dubbo-warehouse-warehouse-facade}"
+		ref="warehouseFacadeImpl" version="${star-dubbo-warehouse-warehouse-version}" delay="-1" />
+		
+	<bean id="warehouseProductInfoFacadeImpl" class="${star-dubbo-warehouse-warehouseproductinfo-impl}" />
+	<dubbo:service registry="servicesRegistry" interface="${star-dubbo-warehouse-warehouseproductinfo-facade}"
+		ref="warehouseProductInfoFacadeImpl" version="${star-dubbo-warehouse-warehouseproductinfo-version}" delay="-1" />
+		
+	<bean id="warehouseProductWarnFacadeImpl" class="${star-dubbo-warehouse-warehouseproductwarn-impl}" />
+	<dubbo:service registry="servicesRegistry" interface="${star-dubbo-warehouse-warehouseproductwarn-facade}"
+		ref="warehouseProductWarnFacadeImpl" version="${star-dubbo-warehouse-warehouseproductwarn-version}" delay="-1" />
+	
+	<bean id="warehouseXyzcodeFacadeImpl" class="${star-dubbo-warehouse-warehousexyzcode-impl}" />
+	<dubbo:service registry="servicesRegistry" interface="${star-dubbo-warehouse-warehousexyzcode-facade}"
+		ref="warehouseXyzcodeFacadeImpl" version="${star-dubbo-warehouse-warehousexyzcode-version}" delay="-1" />
+	
+	<bean id="warehouseClassFacadeImpl" class="${star-dubbo-warehouse-warehouseclass-impl}" />
+	<dubbo:service registry="servicesRegistry" interface="${star-dubbo-warehouse-warehouseclass-facade}"
+		ref="warehouseClassFacadeImpl" version="${star-dubbo-warehouse-warehouseclass-version}" delay="-1" />
+		
+	<!-- user chenhang -->
+	<bean id="warehouseAddressFacadeImpl" class="${star-dubbo-warehouse-warehouseAddress-impl}" />
+	<dubbo:service registry="servicesRegistry" interface="${star-dubbo-warehouse-warehouseAddress-facade}"
+		ref="warehouseAddressFacadeImpl" version="${star-dubbo-warehouse-warehouseAddress-version}" delay="-1" />
+		
+		
+</beans>

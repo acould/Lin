@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="star.warehouse.mapper.StoreOutDetailXyzcodeMapper" >
+	<resultMap id="StoreOutDetailXyzcode" type="star.warehouse.po.StoreOutDetailXyzcode" >
+		<!--
+		  @haoxz11MyBatis
+		  出库单明细sku编码明细表表
+		-->
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="merchant_id" property="merchantId" jdbcType="BIGINT" />
+		<result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
+		<result column="store_out_id" property="storeOutId" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="product_sku_id" property="productSkuId" jdbcType="BIGINT" />
+		<result column="psku_xyzcodes" property="pskuXyzcodes" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<insert id="insertStoreOutDetailXyzcode" parameterType="star.warehouse.po.StoreOutDetailXyzcode" useGeneratedKeys="true" >
+		<!--
+		  @haoxz11MyBatis
+		  插入出库单明细sku编码明细表记录
+		-->
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		<![CDATA[
+		insert into store_out_detail_xyzcode (merchant_id, warehouse_id, store_out_id, 
+			create_time, modify_time, product_sku_id, psku_xyzcodes
+			)
+		values (#{merchantId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT}, #{storeOutId,jdbcType=BIGINT}, 
+			sysdate(), sysdate(), #{productSkuId,jdbcType=BIGINT}, #{pskuXyzcodes,jdbcType=LONGVARCHAR}
+			)
+		]]>
+	</insert>
+	<update id="updateStoreOutDetailXyzcode" parameterType="star.warehouse.po.StoreOutDetailXyzcode" >
+		<!--
+		  @haoxz11MyBatis
+		  更新出库单明细sku编码明细表记录
+		-->
+		update store_out_detail_xyzcode
+		<set >
+			<if test="merchantId != null" >
+				merchant_id = #{merchantId,jdbcType=BIGINT},
+			</if>
+			<if test="warehouseId != null" >
+				warehouse_id = #{warehouseId,jdbcType=BIGINT},
+			</if>
+			<if test="storeOutId != null" >
+				store_out_id = #{storeOutId,jdbcType=BIGINT},
+			</if>
+			modify_time = sysdate(),
+			<if test="productSkuId != null" >
+				product_sku_id = #{productSkuId,jdbcType=BIGINT},
+			</if>
+			<if test="pskuXyzcodes != null" >
+				psku_xyzcodes = #{pskuXyzcodes,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="getByPrimaryKey" resultMap="StoreOutDetailXyzcode" parameterType="java.lang.Long" >
+		<!--
+		  @haoxz11MyBatis
+		  根据主键查询出库单明细sku编码明细表记录
+		-->
+		select  * from store_out_detail_xyzcode where id = #{id,jdbcType=BIGINT}
+	</select>
+	<sql id="whereSQL" >
+		<!--
+		
+		  搜索出库单明细sku编码明细表记录，可修改
+		-->
+		<where >
+			<if test="id != null" >
+				<![CDATA[ AND id = #{id,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="merchantId != null" >
+				<![CDATA[ AND merchant_id = #{merchantId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="warehouseId != null" >
+				<![CDATA[ AND warehouse_id = #{warehouseId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="storeOutId != null" >
+				<![CDATA[ AND store_out_id = #{storeOutId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="productSkuId != null" >
+				<![CDATA[ AND product_sku_id = #{productSkuId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="pskuXyzcodes != null" >
+				<![CDATA[ AND psku_xyzcodes = #{pskuXyzcodes,jdbcType=LONGVARCHAR} ]]> 
+			</if>
+		</where>
+	</sql>
+	<select id="getListByWhere" resultMap="StoreOutDetailXyzcode" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  搜索出库单明细sku编码明细表列表
+		-->
+		select
+		<if test="FIELDS != null" >
+			${FIELDS}
+		</if>
+		<if test="FIELDS == null" >
+			*
+		</if>
+		from store_out_detail_xyzcode
+		<include refid="whereSQL" />
+		<if test="ORDERLIST != null" >
+			 ORDER BY ${ORDERLIST}
+		</if>
+	</select>
+	<select id="getCountByWhere" resultType="java.lang.Integer" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  得到搜索出库单明细sku编码明细表的记录数量
+		-->
+		select count(*) from store_out_detail_xyzcode
+		<include refid="whereSQL" />
+	</select>
+</mapper>

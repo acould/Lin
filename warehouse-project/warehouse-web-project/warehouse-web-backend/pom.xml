@@ -1,0 +1,149 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>star.warehouse.web</groupId>
+  	<artifactId>warehouse-web-project</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>warehouse-web-backend</artifactId>
+  <name>warehouse-web-backend</name>
+  
+   <dependencies>
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>star.common</groupId>
+			<artifactId>star-common-cache</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>star.common</groupId>
+			<artifactId>star-common-util</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>star.common</groupId>
+			<artifactId>star-common-framework-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>star.common</groupId>
+			<artifactId>star-common-mq</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+		</dependency>
+		
+		<!-- facade -->
+		<dependency>
+			<groupId>com.star.ecmanager.facade</groupId>
+			<artifactId>ecmanager-facade-info</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.star.ecmanager.facade</groupId>
+			<artifactId>ecmanager-facade-user</artifactId>
+		</dependency>
+		<dependency>
+	         <groupId>star.warehouse.facade</groupId>
+			 <artifactId>warehouse-facade-info</artifactId>
+	    </dependency>
+		
+		
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>fr.opensagres.xdocreport</groupId>
+			<artifactId>org.apache.poi.xwpf.converter.xhtml</artifactId>
+		</dependency>
+		
+		<!-- resources -->
+		<dependency>
+	         <groupId>star.resources.facade</groupId>
+		     <artifactId>resources-facade-info</artifactId>
+	    </dependency>
+	     <dependency>
+	         <groupId>star.resources.facade</groupId>
+ 			 <artifactId>resources-facade-server</artifactId>
+	    </dependency>
+	    
+	     <!-- ecbmerchant -->
+	    <dependency>
+			<groupId>star.ecbmerchant.facade</groupId>
+			<artifactId>ecbmerchant-facade-info</artifactId>
+		</dependency>
+		<!-- libs -->
+		<dependency>
+			<groupId>com.star.ecmanager.libs</groupId>
+			<artifactId>ecmanager-libs-web</artifactId>
+		</dependency>
+		
+		<dependency>
+			 <groupId>star.task.libs.component</groupId>
+			 <artifactId>task-libs-component</artifactId>
+		</dependency>
+		
+		
+    </dependencies>
+
+	<build>
+		<filters>
+			<filter>../../filter/dubbo.properties</filter>
+		</filters>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<configuration>
+					<httpConnector>
+						<port>11060</port>
+					</httpConnector>
+				</configuration>
+			</plugin>
+		</plugins>
+		
+	</build>
+	<profiles>
+		<profile>
+			<id>publish</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<configuration>
+							<descriptors>
+								<descriptor>assembly.xml</descriptor>
+							</descriptors>
+						</configuration>
+						<executions>
+							<execution>
+								<id>make-assembly</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
+</project>

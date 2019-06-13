@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        ">
+		
+	<dubbo:reference id="managerFacade"
+		interface="${star-dubbo-ecmanager-manager-facade}" version="${star-dubbo-ecmanager-manager-version}" />
+
+	<dubbo:reference id="purviewFacade"
+		interface="${star-dubbo-ecmanager-purview-facade}" version="${star-dubbo-ecmanager-purview-version}" />
+	
+	<!-- 菜单服务 -->
+	<dubbo:reference id="menuFacade"
+		interface="${star-dubbo-ecmanager-menu-facade}" version="${star-dubbo-ecmanager-menu-version}" />
+
+
+	<dubbo:reference id="sysPlatformFacade"
+		interface="${star-dubbo-platform-facade}" version="${star-dubbo-platform-version}" />
+		
+	<!-- 平台授权服务 -->
+	<dubbo:reference id="merchantPlatformFacade"
+		interface="${star-dubbo-ecmanager-merchantplatform-facade}" version="${star-dubbo-ecmanager-merchantplatform-version}" />
+	
+</beans>

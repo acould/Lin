@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="star.warehouse.mapper.StoreInCheckMapper" >
+	<resultMap id="StoreInCheck" type="star.warehouse.po.StoreInCheck" >
+		<!--
+		  @haoxz11MyBatis
+		  验货确认单表表
+		-->
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="merchant_id" property="merchantId" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="check_status" property="checkStatus" jdbcType="CHAR" />
+		<result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
+		<result column="store_in_id" property="storeInId" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="product_id" property="productId" jdbcType="BIGINT" />
+		<result column="product_sku_id" property="productSkuId" jdbcType="BIGINT" />
+		<result column="product_name" property="productName" jdbcType="VARCHAR" />
+		<result column="product_sku_name" property="productSkuName" jdbcType="VARCHAR" />
+		<result column="num_real" property="numReal" jdbcType="BIGINT" />
+		<result column="num_need" property="numNeed" jdbcType="BIGINT" />
+		<result column="unit_name" property="unitName" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	<insert id="insertStoreInCheck" parameterType="star.warehouse.po.StoreInCheck" useGeneratedKeys="true" >
+		<!--
+		  @haoxz11MyBatis
+		  插入验货确认单表记录
+		-->
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		<![CDATA[
+		insert into store_in_check (merchant_id, `status`, check_status, 
+			warehouse_id, store_in_id, create_time, modify_time, 
+			product_id, product_sku_id, product_name, 
+			product_sku_name, num_real, num_need, 
+			unit_name, remark)
+		values (#{merchantId,jdbcType=BIGINT}, #{status,jdbcType=CHAR}, #{checkStatus,jdbcType=CHAR}, 
+			#{warehouseId,jdbcType=BIGINT}, #{storeInId,jdbcType=BIGINT}, sysdate(), sysdate(), 
+			#{productId,jdbcType=BIGINT}, #{productSkuId,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR}, 
+			#{productSkuName,jdbcType=VARCHAR}, #{numReal,jdbcType=BIGINT}, #{numNeed,jdbcType=BIGINT}, 
+			#{unitName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+		]]>
+	</insert>
+	<update id="updateStoreInCheck" parameterType="star.warehouse.po.StoreInCheck" >
+		<!--
+		  @haoxz11MyBatis
+		  更新验货确认单表记录
+		-->
+		update store_in_check
+		<set >
+			<if test="merchantId != null" >
+				merchant_id = #{merchantId,jdbcType=BIGINT},
+			</if>
+			<if test="status != null" >
+				`status` = #{status,jdbcType=CHAR},
+			</if>
+			<if test="checkStatus != null" >
+				check_status = #{checkStatus,jdbcType=CHAR},
+			</if>
+			<if test="warehouseId != null" >
+				warehouse_id = #{warehouseId,jdbcType=BIGINT},
+			</if>
+			<if test="storeInId != null" >
+				store_in_id = #{storeInId,jdbcType=BIGINT},
+			</if>
+			modify_time = sysdate(),
+			<if test="productId != null" >
+				product_id = #{productId,jdbcType=BIGINT},
+			</if>
+			<if test="productSkuId != null" >
+				product_sku_id = #{productSkuId,jdbcType=BIGINT},
+			</if>
+			<if test="productName != null" >
+				product_name = #{productName,jdbcType=VARCHAR},
+			</if>
+			<if test="productSkuName != null" >
+				product_sku_name = #{productSkuName,jdbcType=VARCHAR},
+			</if>
+			<if test="numReal != null" >
+				num_real = #{numReal,jdbcType=BIGINT},
+			</if>
+			<if test="numNeed != null" >
+				num_need = #{numNeed,jdbcType=BIGINT},
+			</if>
+			<if test="unitName != null" >
+				unit_name = #{unitName,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null" >
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="getByPrimaryKey" resultMap="StoreInCheck" parameterType="java.lang.Long" >
+		<!--
+		  @haoxz11MyBatis
+		  根据主键查询验货确认单表记录
+		-->
+		select  * from store_in_check where id = #{id,jdbcType=BIGINT}
+	</select>
+	<sql id="whereSQL" >
+		<!--
+		
+		  搜索验货确认单表记录，可修改
+		-->
+		<where >
+			<if test="id != null" >
+				<![CDATA[ AND id = #{id,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="merchantId != null" >
+				<![CDATA[ AND merchant_id = #{merchantId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="status != null" >
+				<![CDATA[ AND `status` = #{status,jdbcType=CHAR} ]]> 
+			</if>
+			<if test="checkStatus != null" >
+				<![CDATA[ AND check_status = #{checkStatus,jdbcType=CHAR} ]]> 
+			</if>
+			<if test="warehouseId != null" >
+				<![CDATA[ AND warehouse_id = #{warehouseId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="storeInId != null" >
+				<![CDATA[ AND store_in_id = #{storeInId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="productId != null" >
+				<![CDATA[ AND product_id = #{productId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="productSkuId != null" >
+				<![CDATA[ AND product_sku_id = #{productSkuId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="productName != null" >
+				<![CDATA[ AND product_name = #{productName,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="productSkuName != null" >
+				<![CDATA[ AND product_sku_name = #{productSkuName,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="numReal != null" >
+				<![CDATA[ AND num_real = #{numReal,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="numNeed != null" >
+				<![CDATA[ AND num_need = #{numNeed,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="unitName != null" >
+				<![CDATA[ AND unit_name = #{unitName,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="remark != null" >
+				<![CDATA[ AND remark = #{remark,jdbcType=VARCHAR} ]]> 
+			</if>
+		</where>
+	</sql>
+	<select id="getListByWhere" resultMap="StoreInCheck" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  搜索验货确认单表列表
+		-->
+		select
+		<if test="FIELDS != null" >
+			${FIELDS}
+		</if>
+		<if test="FIELDS == null" >
+			*
+		</if>
+		from store_in_check
+		<include refid="whereSQL" />
+		<if test="ORDERLIST != null" >
+			 ORDER BY ${ORDERLIST}
+		</if>
+	</select>
+	<select id="getCountByWhere" resultType="java.lang.Integer" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  得到搜索验货确认单表的记录数量
+		-->
+		select count(*) from store_in_check
+		<include refid="whereSQL" />
+	</select>
+</mapper>

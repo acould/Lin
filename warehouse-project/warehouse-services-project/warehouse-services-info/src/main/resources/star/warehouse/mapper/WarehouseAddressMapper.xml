@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="star.warehouse.mapper.WarehouseAddressMapper" >
+	<resultMap id="WarehouseAddress" type="star.warehouse.po.WarehouseAddress" >
+		<!--
+		  @haoxz11MyBatis
+		  仓库位置表表
+		-->
+		<id column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="merchant_id" property="merchantId" jdbcType="BIGINT" />
+		<result column="country" property="country" jdbcType="VARCHAR" />
+		<result column="province" property="province" jdbcType="VARCHAR" />
+		<result column="city" property="city" jdbcType="VARCHAR" />
+		<result column="county" property="county" jdbcType="VARCHAR" />
+		<result column="street" property="street" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="manager" property="manager" jdbcType="VARCHAR" />
+		<result column="manager_id" property="managerId" jdbcType="BIGINT" />
+		<result column="post_code" property="postCode" jdbcType="VARCHAR" />
+		<result column="telphone" property="telphone" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="CHAR" />
+	</resultMap>
+	<insert id="insertWarehouseAddress" parameterType="star.warehouse.po.WarehouseAddress" >
+		<!--
+		  @haoxz11MyBatis
+		  插入仓库位置表记录
+		-->
+		<![CDATA[
+		insert into warehouse_address (warehouse_id, create_time, modify_time, merchant_id, 
+			country, province, city, 
+			county, street, address, 
+			manager, manager_id, post_code, 
+			telphone, `status`)
+		values (#{warehouseId,jdbcType=BIGINT}, sysdate(), sysdate(), #{merchantId,jdbcType=BIGINT}, 
+			#{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+			#{county,jdbcType=VARCHAR}, #{street,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+			#{manager,jdbcType=VARCHAR}, #{managerId,jdbcType=BIGINT}, #{postCode,jdbcType=VARCHAR}, 
+			#{telphone,jdbcType=VARCHAR}, #{status,jdbcType=CHAR})
+		]]>
+	</insert>
+	<update id="updateWarehouseAddress" parameterType="star.warehouse.po.WarehouseAddress" >
+		<!--
+		  @haoxz11MyBatis
+		  更新仓库位置表记录
+		-->
+		update warehouse_address
+		<set >
+			modify_time = sysdate(),
+			<if test="merchantId != null" >
+				merchant_id = #{merchantId,jdbcType=BIGINT},
+			</if>
+			<if test="country != null" >
+				country = #{country,jdbcType=VARCHAR},
+			</if>
+			<if test="province != null" >
+				province = #{province,jdbcType=VARCHAR},
+			</if>
+			<if test="city != null" >
+				city = #{city,jdbcType=VARCHAR},
+			</if>
+			<if test="county != null" >
+				county = #{county,jdbcType=VARCHAR},
+			</if>
+			<if test="street != null" >
+				street = #{street,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null" >
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="manager != null" >
+				manager = #{manager,jdbcType=VARCHAR},
+			</if>
+			<if test="managerId != null" >
+				manager_id = #{managerId,jdbcType=BIGINT},
+			</if>
+			<if test="postCode != null" >
+				post_code = #{postCode,jdbcType=VARCHAR},
+			</if>
+			<if test="telphone != null" >
+				telphone = #{telphone,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null" >
+				`status` = #{status,jdbcType=CHAR},
+			</if>
+		</set>
+		where warehouse_id = #{warehouseId,jdbcType=BIGINT}
+	</update>
+	<select id="getByPrimaryKey" resultMap="WarehouseAddress" parameterType="java.lang.Long" >
+		<!--
+		  @haoxz11MyBatis
+		  根据主键查询仓库位置表记录
+		-->
+		select  * from warehouse_address where warehouse_id = #{warehouseId,jdbcType=BIGINT}
+	</select>
+	<sql id="whereSQL" >
+		<!--
+		
+		  搜索仓库位置表记录，可修改
+		-->
+		<where >
+			<if test="warehouseId != null" >
+				<![CDATA[ AND warehouse_id = #{warehouseId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="merchantId != null" >
+				<![CDATA[ AND merchant_id = #{merchantId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="country != null" >
+				<![CDATA[ AND country = #{country,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="province != null" >
+				<![CDATA[ AND province = #{province,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="city != null" >
+				<![CDATA[ AND city = #{city,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="county != null" >
+				<![CDATA[ AND county = #{county,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="street != null" >
+				<![CDATA[ AND street = #{street,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="address != null" >
+				<![CDATA[ AND address = #{address,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="manager != null" >
+				<![CDATA[ AND manager = #{manager,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="managerId != null" >
+				<![CDATA[ AND manager_id = #{managerId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="postCode != null" >
+				<![CDATA[ AND post_code = #{postCode,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="telphone != null" >
+				<![CDATA[ AND telphone = #{telphone,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="status != null" >
+				<![CDATA[ AND `status` = #{status,jdbcType=CHAR} ]]> 
+			</if>
+		</where>
+	</sql>
+	<select id="getListByWhere" resultMap="WarehouseAddress" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  搜索仓库位置表列表
+		-->
+		select
+		<if test="FIELDS != null" >
+			${FIELDS}
+		</if>
+		<if test="FIELDS == null" >
+			*
+		</if>
+		from warehouse_address
+		<include refid="whereSQL" />
+		<if test="ORDERLIST != null" >
+			 ORDER BY ${ORDERLIST}
+		</if>
+	</select>
+	<select id="getCountByWhere" resultType="java.lang.Integer" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  得到搜索仓库位置表的记录数量
+		-->
+		select count(*) from warehouse_address
+		<include refid="whereSQL" />
+	</select>
+</mapper>

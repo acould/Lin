@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        ">
+		
+	<dubbo:reference id="warehouseFacade"
+		interface="${star-dubbo-warehouse-warehouse-facade}" version="${star-dubbo-warehouse-warehouse-version}" />
+	
+	<dubbo:reference id="productXyzcodeStorageFacade"
+		interface="${star-dubbo-warehouse-productxyzcodestorage-facade}" version="${star-dubbo-warehouse-productxyzcodestorage-version}" />
+	
+	<dubbo:reference id="storageAreaFacade"
+		interface="${star-dubbo-warehouse-storagearea-facade}" version="${star-dubbo-warehouse-storagearea-version}" />
+
+
+	<dubbo:reference id="warehouseClassFacade"
+		interface="${star-dubbo-warehouse-warehouseclass-facade}" version="${star-dubbo-warehouse-warehouseclass-version}" />
+	
+	<dubbo:reference id="storeInFacade"
+		interface="${star-dubbo-warehouse-storein-facade}" version="${star-dubbo-warehouse-storein-version}" />
+	
+	<dubbo:reference id="storeOutFacade"
+		interface="${star-dubbo-warehouse-storeout-facade}" version="${star-dubbo-warehouse-storeout-version}" />
+	
+	<!-- user chenhang -->
+	<dubbo:reference id="warehouseAddressFacade"
+		interface="${star-dubbo-warehouse-warehouseAddress-facade}" version="${star-dubbo-warehouse-warehouseAddress-version}" />
+		
+
+	
+</beans>

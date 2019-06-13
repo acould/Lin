@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="star.warehouse.mapper.WarehouseProductWarnInfoMapper" >
+	<resultMap id="WarehouseProductWarnInfo" type="star.warehouse.po.WarehouseProductWarnInfo" >
+		<!--
+		  @haoxz11MyBatis
+		  仓库里商品存放多少警戒信息表表
+		-->
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="merchant_id" property="merchantId" jdbcType="BIGINT" />
+		<result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="product_id" property="productId" jdbcType="BIGINT" />
+		<result column="product_sku_id" property="productSkuId" jdbcType="BIGINT" />
+		<result column="product_num_warn1" property="productNumWarn1" jdbcType="INTEGER" />
+		<result column="product_num_warn2" property="productNumWarn2" jdbcType="INTEGER" />
+		<result column="product_sku_num_warn1" property="productSkuNumWarn1" jdbcType="INTEGER" />
+		<result column="product_sku_num_warn2" property="productSkuNumWarn2" jdbcType="INTEGER" />
+		<result column="unit_name" property="unitName" jdbcType="VARCHAR" />
+	</resultMap>
+	<insert id="insertWarehouseProductWarnInfo" parameterType="star.warehouse.po.WarehouseProductWarnInfo" useGeneratedKeys="true" >
+		<!--
+		  @haoxz11MyBatis
+		  插入仓库里商品存放多少警戒信息表记录
+		-->
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		<![CDATA[
+		insert into warehouse_product_warn_info (merchant_id, warehouse_id, `status`, 
+			create_time, modify_time, product_id, product_sku_id, 
+			product_num_warn1, product_num_warn2, product_sku_num_warn1, 
+			product_sku_num_warn2, unit_name)
+		values (#{merchantId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT}, #{status,jdbcType=CHAR}, 
+			sysdate(), sysdate(), #{productId,jdbcType=BIGINT}, #{productSkuId,jdbcType=BIGINT}, 
+			#{productNumWarn1,jdbcType=INTEGER}, #{productNumWarn2,jdbcType=INTEGER}, #{productSkuNumWarn1,jdbcType=INTEGER}, 
+			#{productSkuNumWarn2,jdbcType=INTEGER}, #{unitName,jdbcType=VARCHAR})
+		]]>
+	</insert>
+	<update id="updateWarehouseProductWarnInfo" parameterType="star.warehouse.po.WarehouseProductWarnInfo" >
+		<!--
+		  @haoxz11MyBatis
+		  更新仓库里商品存放多少警戒信息表记录
+		-->
+		update warehouse_product_warn_info
+		<set >
+			<if test="merchantId != null" >
+				merchant_id = #{merchantId,jdbcType=BIGINT},
+			</if>
+			<if test="warehouseId != null" >
+				warehouse_id = #{warehouseId,jdbcType=BIGINT},
+			</if>
+			<if test="status != null" >
+				`status` = #{status,jdbcType=CHAR},
+			</if>
+			modify_time = sysdate(),
+			<if test="productId != null" >
+				product_id = #{productId,jdbcType=BIGINT},
+			</if>
+			<if test="productSkuId != null" >
+				product_sku_id = #{productSkuId,jdbcType=BIGINT},
+			</if>
+			<if test="productNumWarn1 != null" >
+				product_num_warn1 = #{productNumWarn1,jdbcType=INTEGER},
+			</if>
+			<if test="productNumWarn2 != null" >
+				product_num_warn2 = #{productNumWarn2,jdbcType=INTEGER},
+			</if>
+			<if test="productSkuNumWarn1 != null" >
+				product_sku_num_warn1 = #{productSkuNumWarn1,jdbcType=INTEGER},
+			</if>
+			<if test="productSkuNumWarn2 != null" >
+				product_sku_num_warn2 = #{productSkuNumWarn2,jdbcType=INTEGER},
+			</if>
+			<if test="unitName != null" >
+				unit_name = #{unitName,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="getByPrimaryKey" resultMap="WarehouseProductWarnInfo" parameterType="java.lang.Long" >
+		<!--
+		  @haoxz11MyBatis
+		  根据主键查询仓库里商品存放多少警戒信息表记录
+		-->
+		select  * from warehouse_product_warn_info where id = #{id,jdbcType=BIGINT}
+	</select>
+	<sql id="whereSQL" >
+		<!--
+		
+		  搜索仓库里商品存放多少警戒信息表记录，可修改
+		-->
+		<where >
+			<if test="id != null" >
+				<![CDATA[ AND id = #{id,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="merchantId != null" >
+				<![CDATA[ AND merchant_id = #{merchantId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="warehouseId != null" >
+				<![CDATA[ AND warehouse_id = #{warehouseId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="status != null" >
+				<![CDATA[ AND `status` = #{status,jdbcType=CHAR} ]]> 
+			</if>
+			<if test="productId != null" >
+				<![CDATA[ AND product_id = #{productId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="productSkuId != null" >
+				<![CDATA[ AND product_sku_id = #{productSkuId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="productNumWarn1 != null" >
+				<![CDATA[ AND product_num_warn1 = #{productNumWarn1,jdbcType=INTEGER} ]]> 
+			</if>
+			<if test="productNumWarn2 != null" >
+				<![CDATA[ AND product_num_warn2 = #{productNumWarn2,jdbcType=INTEGER} ]]> 
+			</if>
+			<if test="productSkuNumWarn1 != null" >
+				<![CDATA[ AND product_sku_num_warn1 = #{productSkuNumWarn1,jdbcType=INTEGER} ]]> 
+			</if>
+			<if test="productSkuNumWarn2 != null" >
+				<![CDATA[ AND product_sku_num_warn2 = #{productSkuNumWarn2,jdbcType=INTEGER} ]]> 
+			</if>
+			<if test="unitName != null" >
+				<![CDATA[ AND unit_name = #{unitName,jdbcType=VARCHAR} ]]> 
+			</if>
+		</where>
+	</sql>
+	<select id="getListByWhere" resultMap="WarehouseProductWarnInfo" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  搜索仓库里商品存放多少警戒信息表列表
+		-->
+		select
+		<if test="FIELDS != null" >
+			${FIELDS}
+		</if>
+		<if test="FIELDS == null" >
+			*
+		</if>
+		from warehouse_product_warn_info
+		<include refid="whereSQL" />
+		<if test="ORDERLIST != null" >
+			 ORDER BY ${ORDERLIST}
+		</if>
+	</select>
+	<select id="getCountByWhere" resultType="java.lang.Integer" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  得到搜索仓库里商品存放多少警戒信息表的记录数量
+		-->
+		select count(*) from warehouse_product_warn_info
+		<include refid="whereSQL" />
+	</select>
+</mapper>

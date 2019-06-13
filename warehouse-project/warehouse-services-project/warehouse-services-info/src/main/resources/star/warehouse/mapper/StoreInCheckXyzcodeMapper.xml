@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="star.warehouse.mapper.StoreInCheckXyzcodeMapper" >
+	<resultMap id="StoreInCheckXyzcode" type="star.warehouse.po.StoreInCheckXyzcode" >
+		<!--
+		  @haoxz11MyBatis
+		  验货单明细表或扫码明细log表表
+		-->
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="merchant_id" property="merchantId" jdbcType="BIGINT" />
+		<result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
+		<result column="store_in_check_id" property="storeInCheckId" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="product_sku_id" property="productSkuId" jdbcType="BIGINT" />
+		<result column="psku_xyzcodes" property="pskuXyzcodes" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<insert id="insertStoreInCheckXyzcode" parameterType="star.warehouse.po.StoreInCheckXyzcode" useGeneratedKeys="true" >
+		<!--
+		  @haoxz11MyBatis
+		  插入验货单明细表或扫码明细log表记录
+		-->
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		<![CDATA[
+		insert into store_in_check_xyzcode (merchant_id, warehouse_id, store_in_check_id, 
+			create_time, modify_time, product_sku_id, psku_xyzcodes
+			)
+		values (#{merchantId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT}, #{storeInCheckId,jdbcType=BIGINT}, 
+			sysdate(), sysdate(), #{productSkuId,jdbcType=BIGINT}, #{pskuXyzcodes,jdbcType=LONGVARCHAR}
+			)
+		]]>
+	</insert>
+	<update id="updateStoreInCheckXyzcode" parameterType="star.warehouse.po.StoreInCheckXyzcode" >
+		<!--
+		  @haoxz11MyBatis
+		  更新验货单明细表或扫码明细log表记录
+		-->
+		update store_in_check_xyzcode
+		<set >
+			<if test="merchantId != null" >
+				merchant_id = #{merchantId,jdbcType=BIGINT},
+			</if>
+			<if test="warehouseId != null" >
+				warehouse_id = #{warehouseId,jdbcType=BIGINT},
+			</if>
+			<if test="storeInCheckId != null" >
+				store_in_check_id = #{storeInCheckId,jdbcType=BIGINT},
+			</if>
+			modify_time = sysdate(),
+			<if test="productSkuId != null" >
+				product_sku_id = #{productSkuId,jdbcType=BIGINT},
+			</if>
+			<if test="pskuXyzcodes != null" >
+				psku_xyzcodes = #{pskuXyzcodes,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="getByPrimaryKey" resultMap="StoreInCheckXyzcode" parameterType="java.lang.Long" >
+		<!--
+		  @haoxz11MyBatis
+		  根据主键查询验货单明细表或扫码明细log表记录
+		-->
+		select  * from store_in_check_xyzcode where id = #{id,jdbcType=BIGINT}
+	</select>
+	<sql id="whereSQL" >
+		<!--
+		
+		  搜索验货单明细表或扫码明细log表记录，可修改
+		-->
+		<where >
+			<if test="id != null" >
+				<![CDATA[ AND id = #{id,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="merchantId != null" >
+				<![CDATA[ AND merchant_id = #{merchantId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="warehouseId != null" >
+				<![CDATA[ AND warehouse_id = #{warehouseId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="storeInCheckId != null" >
+				<![CDATA[ AND store_in_check_id = #{storeInCheckId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="productSkuId != null" >
+				<![CDATA[ AND product_sku_id = #{productSkuId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="pskuXyzcodes != null" >
+				<![CDATA[ AND psku_xyzcodes = #{pskuXyzcodes,jdbcType=LONGVARCHAR} ]]> 
+			</if>
+		</where>
+	</sql>
+	<select id="getListByWhere" resultMap="StoreInCheckXyzcode" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  搜索验货单明细表或扫码明细log表列表
+		-->
+		select
+		<if test="FIELDS != null" >
+			${FIELDS}
+		</if>
+		<if test="FIELDS == null" >
+			*
+		</if>
+		from store_in_check_xyzcode
+		<include refid="whereSQL" />
+		<if test="ORDERLIST != null" >
+			 ORDER BY ${ORDERLIST}
+		</if>
+	</select>
+	<select id="getCountByWhere" resultType="java.lang.Integer" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  得到搜索验货单明细表或扫码明细log表的记录数量
+		-->
+		select count(*) from store_in_check_xyzcode
+		<include refid="whereSQL" />
+	</select>
+</mapper>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="star.warehouse.mapper.StorageAreaXyzcodeMapper" >
+	<resultMap id="StorageAreaXyzcode" type="star.warehouse.po.StorageAreaXyzcode" >
+		<!--
+		  @haoxz11MyBatis
+		  存储区编码表表
+		-->
+		<id column="storage_area_id" property="storageAreaId" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="merchant_id" property="merchantId" jdbcType="BIGINT" />
+		<result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
+		<result column="x" property="x" jdbcType="INTEGER" />
+		<result column="y" property="y" jdbcType="INTEGER" />
+		<result column="z" property="z" jdbcType="INTEGER" />
+		<result column="xyz_code" property="xyzCode" jdbcType="VARCHAR" />
+	</resultMap>
+	<insert id="insertStorageAreaXyzcode" parameterType="star.warehouse.po.StorageAreaXyzcode" >
+		<!--
+		  @haoxz11MyBatis
+		  插入存储区编码表记录
+		-->
+		<![CDATA[
+		insert into storage_area_xyzcode (storage_area_id, create_time, modify_time, merchant_id, 
+			warehouse_id, x, y, z, 
+			xyz_code)
+		values (#{storageAreaId,jdbcType=BIGINT}, sysdate(), sysdate(), #{merchantId,jdbcType=BIGINT}, 
+			#{warehouseId,jdbcType=BIGINT}, #{x,jdbcType=INTEGER}, #{y,jdbcType=INTEGER}, #{z,jdbcType=INTEGER}, 
+			#{xyzCode,jdbcType=VARCHAR})
+		]]>
+	</insert>
+	<update id="updateStorageAreaXyzcode" parameterType="star.warehouse.po.StorageAreaXyzcode" >
+		<!--
+		  @haoxz11MyBatis
+		  更新存储区编码表记录
+		-->
+		update storage_area_xyzcode
+		<set >
+			modify_time = sysdate(),
+			<if test="merchantId != null" >
+				merchant_id = #{merchantId,jdbcType=BIGINT},
+			</if>
+			<if test="warehouseId != null" >
+				warehouse_id = #{warehouseId,jdbcType=BIGINT},
+			</if>
+			<if test="x != null" >
+				x = #{x,jdbcType=INTEGER},
+			</if>
+			<if test="y != null" >
+				y = #{y,jdbcType=INTEGER},
+			</if>
+			<if test="z != null" >
+				z = #{z,jdbcType=INTEGER},
+			</if>
+			<if test="xyzCode != null" >
+				xyz_code = #{xyzCode,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where storage_area_id = #{storageAreaId,jdbcType=BIGINT}
+	</update>
+	<select id="getByPrimaryKey" resultMap="StorageAreaXyzcode" parameterType="java.lang.Long" >
+		<!--
+		  @haoxz11MyBatis
+		  根据主键查询存储区编码表记录
+		-->
+		select  * from storage_area_xyzcode where storage_area_id = #{storageAreaId,jdbcType=BIGINT}
+	</select>
+	<sql id="whereSQL" >
+		<!--
+		
+		  搜索存储区编码表记录，可修改
+		-->
+		<where >
+			<if test="storageAreaId != null" >
+				<![CDATA[ AND storage_area_id = #{storageAreaId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="merchantId != null" >
+				<![CDATA[ AND merchant_id = #{merchantId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="warehouseId != null" >
+				<![CDATA[ AND warehouse_id = #{warehouseId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="x != null" >
+				<![CDATA[ AND x = #{x,jdbcType=INTEGER} ]]> 
+			</if>
+			<if test="y != null" >
+				<![CDATA[ AND y = #{y,jdbcType=INTEGER} ]]> 
+			</if>
+			<if test="z != null" >
+				<![CDATA[ AND z = #{z,jdbcType=INTEGER} ]]> 
+			</if>
+			<if test="xyzCode != null" >
+				<![CDATA[ AND xyz_code = #{xyzCode,jdbcType=VARCHAR} ]]> 
+			</if>
+		</where>
+	</sql>
+	<select id="getListByWhere" resultMap="StorageAreaXyzcode" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  搜索存储区编码表列表
+		-->
+		select
+		<if test="FIELDS != null" >
+			${FIELDS}
+		</if>
+		<if test="FIELDS == null" >
+			*
+		</if>
+		from storage_area_xyzcode
+		<include refid="whereSQL" />
+		<if test="ORDERLIST != null" >
+			 ORDER BY ${ORDERLIST}
+		</if>
+	</select>
+	<select id="getCountByWhere" resultType="java.lang.Integer" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  得到搜索存储区编码表的记录数量
+		-->
+		select count(*) from storage_area_xyzcode
+		<include refid="whereSQL" />
+	</select>
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE generatorConfiguration
+PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<!--驱动包的绝对路径 -->
+	<classPathEntry location="/home/chistar/maven/mysql-connector-java-5.1.30.jar" />
+	<!--生成映射的类型，也可以生成ibatis的。具体参看mybatis-generator -->
+	<context id="DB2Tables" targetRuntime="MyBatis3">
+		<!--数据库连接信息。具体参看mybatis-generator -->
+		<jdbcConnection includeFile="target/conf/jdbc.properties"/>
+
+		<!--具体参看mybatis-generator -->
+		<commentGenerator>
+			<property name="suppressDate" value="true" />
+		</commentGenerator>
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<!--以下三个标签主要解析targetPackage和targetProject。其它的具体参看mybatis-generator -->
+
+		<!--targetPackage，是生成文件所在的包路径 -->
+		<!--targetProject，是相对于本xml配置文件的相对路径，是targetPackage包路径的父级目录。 -->
+		<javaModelGenerator targetPackage="star.warehouse.po" targetProject="/src/main/java">
+			<property name="enableSubPackages" value="true" />
+		</javaModelGenerator>
+		<sqlMapGenerator targetPackage="star.warehouse.mapper" targetProject="/src/main/resources">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<javaClientGenerator type="XMLMAPPER" targetPackage="star.warehouse.mapper" targetProject="/src/main/java">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+
+	</context>
+</generatorConfiguration>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="star.warehouse.mapper.ProductXyzcodeStorageMapper" >
+	<resultMap id="ProductXyzcodeStorage" type="star.warehouse.po.ProductXyzcodeStorage" >
+		<!--
+		  @haoxz11MyBatis
+		  商品与仓库空间关联表表
+		-->
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="merchant_id" property="merchantId" jdbcType="BIGINT" />
+		<result column="product_id" property="productId" jdbcType="BIGINT" />
+		<result column="product_sku_id" property="productSkuId" jdbcType="BIGINT" />
+		<result column="product_sku_xyzcode" property="productSkuXyzcode" jdbcType="VARCHAR" />
+		<result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
+		<result column="warehouse_xyzcode" property="warehouseXyzcode" jdbcType="VARCHAR" />
+		<result column="storage_area_id" property="storageAreaId" jdbcType="BIGINT" />
+		<result column="storage_area_xyzcode" property="storageAreaXyzcode" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<insert id="insertProductXyzcodeStorage" parameterType="star.warehouse.po.ProductXyzcodeStorage" useGeneratedKeys="true" >
+		<!--
+		  @haoxz11MyBatis
+		  插入商品与仓库空间关联表记录
+		-->
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		<![CDATA[
+		insert into product_xyzcode_storage (merchant_id, product_id, product_sku_id, 
+			product_sku_xyzcode, warehouse_id, warehouse_xyzcode, 
+			storage_area_id, storage_area_xyzcode, `status`, 
+			create_time, modify_time)
+		values (#{merchantId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{productSkuId,jdbcType=BIGINT}, 
+			#{productSkuXyzcode,jdbcType=VARCHAR}, #{warehouseId,jdbcType=BIGINT}, #{warehouseXyzcode,jdbcType=VARCHAR}, 
+			#{storageAreaId,jdbcType=BIGINT}, #{storageAreaXyzcode,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
+			sysdate(), sysdate())
+		]]>
+	</insert>
+	<update id="updateProductXyzcodeStorage" parameterType="star.warehouse.po.ProductXyzcodeStorage" >
+		<!--
+		  @haoxz11MyBatis
+		  更新商品与仓库空间关联表记录
+		-->
+		update product_xyzcode_storage
+		<set >
+			<if test="merchantId != null" >
+				merchant_id = #{merchantId,jdbcType=BIGINT},
+			</if>
+			<if test="productId != null" >
+				product_id = #{productId,jdbcType=BIGINT},
+			</if>
+			<if test="productSkuId != null" >
+				product_sku_id = #{productSkuId,jdbcType=BIGINT},
+			</if>
+			<if test="productSkuXyzcode != null" >
+				product_sku_xyzcode = #{productSkuXyzcode,jdbcType=VARCHAR},
+			</if>
+			<if test="warehouseId != null" >
+				warehouse_id = #{warehouseId,jdbcType=BIGINT},
+			</if>
+			<if test="warehouseXyzcode != null" >
+				warehouse_xyzcode = #{warehouseXyzcode,jdbcType=VARCHAR},
+			</if>
+			<if test="storageAreaId != null" >
+				storage_area_id = #{storageAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="storageAreaXyzcode != null" >
+				storage_area_xyzcode = #{storageAreaXyzcode,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null" >
+				`status` = #{status,jdbcType=CHAR},
+			</if>
+			modify_time = sysdate()
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="getByPrimaryKey" resultMap="ProductXyzcodeStorage" parameterType="java.lang.Long" >
+		<!--
+		  @haoxz11MyBatis
+		  根据主键查询商品与仓库空间关联表记录
+		-->
+		select  * from product_xyzcode_storage where id = #{id,jdbcType=BIGINT}
+	</select>
+	<sql id="whereSQL" >
+		<!--
+		
+		  搜索商品与仓库空间关联表记录，可修改
+		-->
+		<where >
+			<if test="id != null" >
+				<![CDATA[ AND id = #{id,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="merchantId != null" >
+				<![CDATA[ AND merchant_id = #{merchantId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="productId != null" >
+				<![CDATA[ AND product_id = #{productId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="productSkuId != null" >
+				<![CDATA[ AND product_sku_id = #{productSkuId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="productSkuXyzcode != null" >
+				<![CDATA[ AND product_sku_xyzcode = #{productSkuXyzcode,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="warehouseId != null" >
+				<![CDATA[ AND warehouse_id = #{warehouseId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="warehouseXyzcode != null" >
+				<![CDATA[ AND warehouse_xyzcode = #{warehouseXyzcode,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="storageAreaId != null" >
+				<![CDATA[ AND storage_area_id = #{storageAreaId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="storageAreaXyzcode != null" >
+				<![CDATA[ AND storage_area_xyzcode = #{storageAreaXyzcode,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="status != null" >
+				<![CDATA[ AND `status` = #{status,jdbcType=CHAR} ]]> 
+			</if>
+		</where>
+	</sql>
+	<select id="getListByWhere" resultMap="ProductXyzcodeStorage" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  搜索商品与仓库空间关联表列表
+		-->
+		select
+		<if test="FIELDS != null" >
+			${FIELDS}
+		</if>
+		<if test="FIELDS == null" >
+			*
+		</if>
+		from product_xyzcode_storage
+		<include refid="whereSQL" />
+		<if test="ORDERLIST != null" >
+			 ORDER BY ${ORDERLIST}
+		</if>
+	</select>
+	<select id="getCountByWhere" resultType="java.lang.Integer" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  得到搜索商品与仓库空间关联表的记录数量
+		-->
+		select count(*) from product_xyzcode_storage
+		<include refid="whereSQL" />
+	</select>
+</mapper>

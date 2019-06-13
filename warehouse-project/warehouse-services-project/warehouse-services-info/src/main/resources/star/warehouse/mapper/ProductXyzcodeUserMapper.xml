@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="star.warehouse.mapper.ProductXyzcodeUserMapper" >
+	<resultMap id="ProductXyzcodeUser" type="star.warehouse.po.ProductXyzcodeUser" >
+		<!--
+		  @haoxz11MyBatis
+		  广义仓库：商品与销售终端用户关联表表
+		-->
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="merchant_id" property="merchantId" jdbcType="BIGINT" />
+		<result column="product_id" property="productId" jdbcType="BIGINT" />
+		<result column="product_sku_id" property="productSkuId" jdbcType="BIGINT" />
+		<result column="product_sku_xyzcode" property="productSkuXyzcode" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="deliver_id" property="deliverId" jdbcType="BIGINT" />
+		<result column="deliver_address" property="deliverAddress" jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="mobilephone" property="mobilephone" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<insert id="insertProductXyzcodeUser" parameterType="star.warehouse.po.ProductXyzcodeUser" useGeneratedKeys="true" >
+		<!--
+		  @haoxz11MyBatis
+		  插入广义仓库：商品与销售终端用户关联表记录
+		-->
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		<![CDATA[
+		insert into product_xyzcode_user (merchant_id, product_id, product_sku_id, 
+			product_sku_xyzcode, user_id, deliver_id, 
+			deliver_address, user_name, mobilephone, 
+			create_time, modify_time)
+		values (#{merchantId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{productSkuId,jdbcType=BIGINT}, 
+			#{productSkuXyzcode,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, #{deliverId,jdbcType=BIGINT}, 
+			#{deliverAddress,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{mobilephone,jdbcType=VARCHAR}, 
+			sysdate(), sysdate())
+		]]>
+	</insert>
+	<update id="updateProductXyzcodeUser" parameterType="star.warehouse.po.ProductXyzcodeUser" >
+		<!--
+		  @haoxz11MyBatis
+		  更新广义仓库：商品与销售终端用户关联表记录
+		-->
+		update product_xyzcode_user
+		<set >
+			<if test="merchantId != null" >
+				merchant_id = #{merchantId,jdbcType=BIGINT},
+			</if>
+			<if test="productId != null" >
+				product_id = #{productId,jdbcType=BIGINT},
+			</if>
+			<if test="productSkuId != null" >
+				product_sku_id = #{productSkuId,jdbcType=BIGINT},
+			</if>
+			<if test="productSkuXyzcode != null" >
+				product_sku_xyzcode = #{productSkuXyzcode,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null" >
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="deliverId != null" >
+				deliver_id = #{deliverId,jdbcType=BIGINT},
+			</if>
+			<if test="deliverAddress != null" >
+				deliver_address = #{deliverAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null" >
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="mobilephone != null" >
+				mobilephone = #{mobilephone,jdbcType=VARCHAR},
+			</if>
+			modify_time = sysdate()
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="getByPrimaryKey" resultMap="ProductXyzcodeUser" parameterType="java.lang.Long" >
+		<!--
+		  @haoxz11MyBatis
+		  根据主键查询广义仓库：商品与销售终端用户关联表记录
+		-->
+		select  * from product_xyzcode_user where id = #{id,jdbcType=BIGINT}
+	</select>
+	<sql id="whereSQL" >
+		<!--
+		
+		  搜索广义仓库：商品与销售终端用户关联表记录，可修改
+		-->
+		<where >
+			<if test="id != null" >
+				<![CDATA[ AND id = #{id,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="merchantId != null" >
+				<![CDATA[ AND merchant_id = #{merchantId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="productId != null" >
+				<![CDATA[ AND product_id = #{productId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="productSkuId != null" >
+				<![CDATA[ AND product_sku_id = #{productSkuId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="productSkuXyzcode != null" >
+				<![CDATA[ AND product_sku_xyzcode = #{productSkuXyzcode,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="userId != null" >
+				<![CDATA[ AND user_id = #{userId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="deliverId != null" >
+				<![CDATA[ AND deliver_id = #{deliverId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="deliverAddress != null" >
+				<![CDATA[ AND deliver_address = #{deliverAddress,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="userName != null" >
+				<![CDATA[ AND user_name = #{userName,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="mobilephone != null" >
+				<![CDATA[ AND mobilephone = #{mobilephone,jdbcType=VARCHAR} ]]> 
+			</if>
+		</where>
+	</sql>
+	<select id="getListByWhere" resultMap="ProductXyzcodeUser" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  搜索广义仓库：商品与销售终端用户关联表列表
+		-->
+		select
+		<if test="FIELDS != null" >
+			${FIELDS}
+		</if>
+		<if test="FIELDS == null" >
+			*
+		</if>
+		from product_xyzcode_user
+		<include refid="whereSQL" />
+		<if test="ORDERLIST != null" >
+			 ORDER BY ${ORDERLIST}
+		</if>
+	</select>
+	<select id="getCountByWhere" resultType="java.lang.Integer" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  得到搜索广义仓库：商品与销售终端用户关联表的记录数量
+		-->
+		select count(*) from product_xyzcode_user
+		<include refid="whereSQL" />
+	</select>
+</mapper>

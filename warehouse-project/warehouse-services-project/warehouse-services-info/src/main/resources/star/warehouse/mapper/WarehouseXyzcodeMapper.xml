@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="star.warehouse.mapper.WarehouseXyzcodeMapper" >
+	<resultMap id="WarehouseXyzcode" type="star.warehouse.po.WarehouseXyzcode" >
+		<!--
+		  @haoxz11MyBatis
+		  仓库空间编码表表
+		-->
+		<id column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="merchant_id" property="merchantId" jdbcType="BIGINT" />
+		<result column="longitude" property="longitude" jdbcType="DECIMAL" />
+		<result column="latitude" property="latitude" jdbcType="DECIMAL" />
+		<result column="altitude" property="altitude" jdbcType="DECIMAL" />
+		<result column="xyz_code" property="xyzCode" jdbcType="VARCHAR" />
+	</resultMap>
+	<insert id="insertWarehouseXyzcode" parameterType="star.warehouse.po.WarehouseXyzcode" >
+		<!--
+		  @haoxz11MyBatis
+		  插入仓库空间编码表记录
+		-->
+		<![CDATA[
+		insert into warehouse_xyzcode (warehouse_id, create_time, modify_time, merchant_id, 
+			longitude, latitude, altitude, 
+			xyz_code)
+		values (#{warehouseId,jdbcType=BIGINT}, sysdate(), sysdate(), #{merchantId,jdbcType=BIGINT}, 
+			#{longitude,jdbcType=DECIMAL}, #{latitude,jdbcType=DECIMAL}, #{altitude,jdbcType=DECIMAL}, 
+			#{xyzCode,jdbcType=VARCHAR})
+		]]>
+	</insert>
+	<update id="updateWarehouseXyzcode" parameterType="star.warehouse.po.WarehouseXyzcode" >
+		<!--
+		  @haoxz11MyBatis
+		  更新仓库空间编码表记录
+		-->
+		update warehouse_xyzcode
+		<set >
+			modify_time = sysdate(),
+			<if test="merchantId != null" >
+				merchant_id = #{merchantId,jdbcType=BIGINT},
+			</if>
+			<if test="longitude != null" >
+				longitude = #{longitude,jdbcType=DECIMAL},
+			</if>
+			<if test="latitude != null" >
+				latitude = #{latitude,jdbcType=DECIMAL},
+			</if>
+			<if test="altitude != null" >
+				altitude = #{altitude,jdbcType=DECIMAL},
+			</if>
+			<if test="xyzCode != null" >
+				xyz_code = #{xyzCode,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where warehouse_id = #{warehouseId,jdbcType=BIGINT}
+	</update>
+	<select id="getByPrimaryKey" resultMap="WarehouseXyzcode" parameterType="java.lang.Long" >
+		<!--
+		  @haoxz11MyBatis
+		  根据主键查询仓库空间编码表记录
+		-->
+		select  * from warehouse_xyzcode where warehouse_id = #{warehouseId,jdbcType=BIGINT}
+	</select>
+	<sql id="whereSQL" >
+		<!--
+		
+		  搜索仓库空间编码表记录，可修改
+		-->
+		<where >
+			<if test="warehouseId != null" >
+				<![CDATA[ AND warehouse_id = #{warehouseId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="merchantId != null" >
+				<![CDATA[ AND merchant_id = #{merchantId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="longitude != null" >
+				<![CDATA[ AND longitude = #{longitude,jdbcType=DECIMAL} ]]> 
+			</if>
+			<if test="latitude != null" >
+				<![CDATA[ AND latitude = #{latitude,jdbcType=DECIMAL} ]]> 
+			</if>
+			<if test="altitude != null" >
+				<![CDATA[ AND altitude = #{altitude,jdbcType=DECIMAL} ]]> 
+			</if>
+			<if test="xyzCode != null" >
+				<![CDATA[ AND xyz_code = #{xyzCode,jdbcType=VARCHAR} ]]> 
+			</if>
+		</where>
+	</sql>
+	<select id="getListByWhere" resultMap="WarehouseXyzcode" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  搜索仓库空间编码表列表
+		-->
+		select
+		<if test="FIELDS != null" >
+			${FIELDS}
+		</if>
+		<if test="FIELDS == null" >
+			*
+		</if>
+		from warehouse_xyzcode
+		<include refid="whereSQL" />
+		<if test="ORDERLIST != null" >
+			 ORDER BY ${ORDERLIST}
+		</if>
+	</select>
+	<select id="getCountByWhere" resultType="java.lang.Integer" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  得到搜索仓库空间编码表的记录数量
+		-->
+		select count(*) from warehouse_xyzcode
+		<include refid="whereSQL" />
+	</select>
+</mapper>

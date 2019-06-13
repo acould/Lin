@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="star.warehouse.mapper.WarehouseProductInfoMapper" >
+	<resultMap id="WarehouseProductInfo" type="star.warehouse.po.WarehouseProductInfo" >
+		<!--
+		  @haoxz11MyBatis
+		  仓库产品数据信息表表
+		-->
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="merchant_id" property="merchantId" jdbcType="BIGINT" />
+		<result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="product_id" property="productId" jdbcType="BIGINT" />
+		<result column="product_sku_id" property="productSkuId" jdbcType="BIGINT" />
+		<result column="product_sku_name" property="productSkuName" jdbcType="VARCHAR" />
+		<result column="price_buy" property="priceBuy" jdbcType="BIGINT" />
+		<result column="price_cost" property="priceCost" jdbcType="BIGINT" />
+		<result column="price_unit" property="priceUnit" jdbcType="BIGINT" />
+		<result column="num_total" property="numTotal" jdbcType="BIGINT" />
+		<result column="num_sale_occupy" property="numSaleOccupy" jdbcType="BIGINT" />
+		<result column="num_real" property="numReal" jdbcType="BIGINT" />
+		<result column="unit_name" property="unitName" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	<insert id="insertWarehouseProductInfo" parameterType="star.warehouse.po.WarehouseProductInfo" useGeneratedKeys="true" >
+		<!--
+		  @haoxz11MyBatis
+		  插入仓库产品数据信息表记录
+		-->
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		<![CDATA[
+		insert into warehouse_product_info (merchant_id, warehouse_id, `status`, 
+			create_time, modify_time, product_id, product_sku_id, 
+			product_sku_name, price_buy, price_cost, 
+			price_unit, num_total, num_sale_occupy, 
+			num_real, unit_name, remark
+			)
+		values (#{merchantId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT}, #{status,jdbcType=CHAR}, 
+			sysdate(), sysdate(), #{productId,jdbcType=BIGINT}, #{productSkuId,jdbcType=BIGINT}, 
+			#{productSkuName,jdbcType=VARCHAR}, #{priceBuy,jdbcType=BIGINT}, #{priceCost,jdbcType=BIGINT}, 
+			#{priceUnit,jdbcType=BIGINT}, #{numTotal,jdbcType=BIGINT}, #{numSaleOccupy,jdbcType=BIGINT}, 
+			#{numReal,jdbcType=BIGINT}, #{unitName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+			)
+		]]>
+	</insert>
+	<update id="updateWarehouseProductInfo" parameterType="star.warehouse.po.WarehouseProductInfo" >
+		<!--
+		  @haoxz11MyBatis
+		  更新仓库产品数据信息表记录
+		-->
+		update warehouse_product_info
+		<set >
+			<if test="merchantId != null" >
+				merchant_id = #{merchantId,jdbcType=BIGINT},
+			</if>
+			<if test="warehouseId != null" >
+				warehouse_id = #{warehouseId,jdbcType=BIGINT},
+			</if>
+			<if test="status != null" >
+				`status` = #{status,jdbcType=CHAR},
+			</if>
+			modify_time = sysdate(),
+			<if test="productId != null" >
+				product_id = #{productId,jdbcType=BIGINT},
+			</if>
+			<if test="productSkuId != null" >
+				product_sku_id = #{productSkuId,jdbcType=BIGINT},
+			</if>
+			<if test="productSkuName != null" >
+				product_sku_name = #{productSkuName,jdbcType=VARCHAR},
+			</if>
+			<if test="priceBuy != null" >
+				price_buy = #{priceBuy,jdbcType=BIGINT},
+			</if>
+			<if test="priceCost != null" >
+				price_cost = #{priceCost,jdbcType=BIGINT},
+			</if>
+			<if test="priceUnit != null" >
+				price_unit = #{priceUnit,jdbcType=BIGINT},
+			</if>
+			<if test="numTotal != null" >
+				num_total = #{numTotal,jdbcType=BIGINT},
+			</if>
+			<if test="numSaleOccupy != null" >
+				num_sale_occupy = #{numSaleOccupy,jdbcType=BIGINT},
+			</if>
+			<if test="numReal != null" >
+				num_real = #{numReal,jdbcType=BIGINT},
+			</if>
+			<if test="unitName != null" >
+				unit_name = #{unitName,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null" >
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="getByPrimaryKey" resultMap="WarehouseProductInfo" parameterType="java.lang.Long" >
+		<!--
+		  @haoxz11MyBatis
+		  根据主键查询仓库产品数据信息表记录
+		-->
+		select  * from warehouse_product_info where id = #{id,jdbcType=BIGINT}
+	</select>
+	<sql id="whereSQL" >
+		<!--
+		
+		  搜索仓库产品数据信息表记录，可修改
+		-->
+		<where >
+			<if test="id != null" >
+				<![CDATA[ AND id = #{id,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="merchantId != null" >
+				<![CDATA[ AND merchant_id = #{merchantId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="warehouseId != null" >
+				<![CDATA[ AND warehouse_id = #{warehouseId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="status != null" >
+				<![CDATA[ AND `status` = #{status,jdbcType=CHAR} ]]> 
+			</if>
+			<if test="productId != null" >
+				<![CDATA[ AND product_id = #{productId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="productSkuId != null" >
+				<![CDATA[ AND product_sku_id = #{productSkuId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="productSkuName != null" >
+				<![CDATA[ AND product_sku_name = #{productSkuName,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="priceBuy != null" >
+				<![CDATA[ AND price_buy = #{priceBuy,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="priceCost != null" >
+				<![CDATA[ AND price_cost = #{priceCost,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="priceUnit != null" >
+				<![CDATA[ AND price_unit = #{priceUnit,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="numTotal != null" >
+				<![CDATA[ AND num_total = #{numTotal,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="numSaleOccupy != null" >
+				<![CDATA[ AND num_sale_occupy = #{numSaleOccupy,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="numReal != null" >
+				<![CDATA[ AND num_real = #{numReal,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="unitName != null" >
+				<![CDATA[ AND unit_name = #{unitName,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="remark != null" >
+				<![CDATA[ AND remark = #{remark,jdbcType=VARCHAR} ]]> 
+			</if>
+		</where>
+	</sql>
+	<select id="getListByWhere" resultMap="WarehouseProductInfo" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  搜索仓库产品数据信息表列表
+		-->
+		select
+		<if test="FIELDS != null" >
+			${FIELDS}
+		</if>
+		<if test="FIELDS == null" >
+			*
+		</if>
+		from warehouse_product_info
+		<include refid="whereSQL" />
+		<if test="ORDERLIST != null" >
+			 ORDER BY ${ORDERLIST}
+		</if>
+	</select>
+	<select id="getCountByWhere" resultType="java.lang.Integer" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  得到搜索仓库产品数据信息表的记录数量
+		-->
+		select count(*) from warehouse_product_info
+		<include refid="whereSQL" />
+	</select>
+</mapper>

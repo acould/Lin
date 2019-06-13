@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>star</groupId>
+		<artifactId>star-parent</artifactId>
+		<version>1.0.3</version>
+		<relativePath></relativePath>
+	</parent>
+	
+	<groupId>star.warehouse</groupId>
+	<version>1.0.0-SNAPSHOT</version>
+	<artifactId>warehouse-project</artifactId>
+	<packaging>pom</packaging>
+
+	<name>warehouse-project</name>
+
+	<modules>
+		<module>warehouse-facade-project</module>
+		<module>warehouse-services-project</module>
+
+		<module>warehouse-web-project</module>
+		<module>warehouse-libs-project</module>
+	</modules>
+	
+	<dependencyManagement>
+		<dependencies>
+		  <!-- star-lib-bizbase -->
+			<dependency>
+				<groupId>star.common.lib.bizbase</groupId>
+  				<artifactId>star-lib-bizbase</artifactId>
+				<version>1.0.18-SNAPSHOT</version>
+			</dependency>
+			
+			<dependency>
+		         <groupId>star.warehouse.facade</groupId>
+ 			      <artifactId>warehouse-facade-info</artifactId>
+	  			<version>1.0.0-SNAPSHOT</version>
+		    </dependency>
+		    <dependency>
+		        <groupId>star.warehouse.libs.base</groupId>
+  				<artifactId>warehouse-libs-base</artifactId>
+	  			<version>1.0.0-SNAPSHOT</version>
+		    </dependency>
+		   
+			<!-- facade -->
+			<dependency>
+				<groupId>com.star.ecmanager.facade</groupId>
+				<artifactId>ecmanager-facade-info</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.star.ecmanager.facade</groupId>
+				<artifactId>ecmanager-facade-user</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>star.ecbproduct.facade</groupId>
+				<artifactId>ecbproduct-facade-info</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
+			</dependency>
+			
+			<!-- resources -->
+			<dependency>
+		         <groupId>star.resources.facade</groupId>
+ 			      <artifactId>resources-facade-info</artifactId>
+	  			<version>1.0.0-SNAPSHOT</version>
+		    </dependency>
+		     <dependency>
+		         <groupId>star.resources.facade</groupId>
+  				 <artifactId>resources-facade-server</artifactId>
+	  			<version>1.0.0-SNAPSHOT</version>
+		    </dependency>
+		    
+		    <!-- ecbmerchant -->
+		    <dependency>
+				<groupId>star.ecbmerchant.facade</groupId>
+				<artifactId>ecbmerchant-facade-info</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
+			</dependency>
+			<!-- libs -->
+			<dependency>
+				<groupId>com.star.ecmanager.libs</groupId>
+				<artifactId>ecmanager-libs-web</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
+			</dependency>
+			
+			<dependency>
+				 <groupId>star.task.libs.component</groupId>
+ 				 <artifactId>task-libs-component</artifactId>
+				 <version>1.0.0-SNAPSHOT</version>
+			</dependency>
+		    
+			
+			
+		</dependencies>
+	</dependencyManagement>
+	
+	
+		<profiles>
+		<profile>
+			<id>dev-mac</id>
+			<properties>
+				<env>dev</env>
+			</properties>
+			<activation>
+				<os>
+					<family>Mac</family>
+				</os>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+					</plugin>
+				</plugins>
+				<filters>
+					<filter>../../filter/filter-dev-mac.properties</filter>
+				</filters>
+			</build>
+		</profile>
+		<profile>
+			<id>performance</id>
+			<properties>
+				<env>performance</env>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<!-- 打包校验插件 -->
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.12.4</version>
+						<configuration>
+							<forkMode>once</forkMode>
+							<argLine>-Dfile.encoding=UTF-8</argLine>
+							<!-- 是否跳过校验 -->
+							<skip>true</skip>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>test2</id>
+			<properties>
+				<env>test2</env>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<!-- 打包校验插件 -->
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.12.4</version>
+						<configuration>
+							<forkMode>once</forkMode>
+							<argLine>-Dfile.encoding=UTF-8</argLine>
+							<!-- 是否跳过校验 -->
+							<skip>true</skip>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>test3</id>
+			<properties>
+				<env>test3</env>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<!-- 打包校验插件 -->
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.12.4</version>
+						<configuration>
+							<forkMode>once</forkMode>
+							<argLine>-Dfile.encoding=UTF-8</argLine>
+							<!-- 是否跳过校验 -->
+							<skip>true</skip>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
+	
+</project>

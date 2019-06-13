@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        ">
+		
+	<dubbo:reference id="resourceFacade"
+		interface="${star-dubbo-common-resources-facade}" version="${star-dubbo-common-resources-version}" />
+		
+	<dubbo:reference id="mresourceFacade"
+		interface="${star-dubbo-common-mresources-facade}" version="${star-dubbo-common-mresources-version}" />
+	
+	<dubbo:reference id="mresourceTextFacade"
+		interface="${star-dubbo-common-mresourcestext-facade}" version="${star-dubbo-common-mresourcestext-version}" />
+		
+	<dubbo:reference id="mresourceTreeFacade"
+		interface="${star-dubbo-common-mresourcestree-facade}" version="${star-dubbo-common-mresourcestree-version}" />
+
+
+	
+</beans>

@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="star.warehouse.mapper.StoreInMapper" >
+	<resultMap id="StoreIn" type="star.warehouse.po.StoreIn" >
+		<!--
+		  @haoxz11MyBatis
+		  入库单表表
+		-->
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="merchant_id" property="merchantId" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="check_status" property="checkStatus" jdbcType="CHAR" />
+		<result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="creater_mid" property="createrMid" jdbcType="BIGINT" />
+		<result column="updater_mid" property="updaterMid" jdbcType="BIGINT" />
+		<result column="out_type" property="outType" jdbcType="VARCHAR" />
+		<result column="out_id" property="outId" jdbcType="BIGINT" />
+		<result column="out_code" property="outCode" jdbcType="VARCHAR" />
+		<result column="operator_id" property="operatorId" jdbcType="BIGINT" />
+		<result column="operator_name" property="operatorName" jdbcType="VARCHAR" />
+		<result column="operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+		<result column="checker_id" property="checkerId" jdbcType="BIGINT" />
+		<result column="checker_name" property="checkerName" jdbcType="VARCHAR" />
+		<result column="check_time" property="checkTime" jdbcType="TIMESTAMP" />
+		<result column="supplier_id" property="supplierId" jdbcType="BIGINT" />
+		<result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+		<result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+		<result column="cause" property="cause" jdbcType="VARCHAR" />
+		<result column="flag_no" property="flagNo" jdbcType="VARCHAR" />
+		<result column="total_amount" property="totalAmount" jdbcType="BIGINT" />
+		<result column="other_fee" property="otherFee" jdbcType="BIGINT" />
+		<result column="write_off_status" property="writeOffStatus" jdbcType="VARCHAR" />
+		<result column="write_off_no" property="writeOffNo" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="logistic_code" property="logisticCode" jdbcType="BIGINT" />
+		<result column="logistic_number" property="logisticNumber" jdbcType="VARCHAR" />
+		<result column="logistic_fee" property="logisticFee" jdbcType="BIGINT" />
+		<result column="oid_acctno" property="oidAcctno" jdbcType="BIGINT" />
+		<result column="currency_code" property="currencyCode" jdbcType="VARCHAR" />
+		<result column="currency_rate" property="currencyRate" jdbcType="DOUBLE" />
+		<result column="paid_amont" property="paidAmont" jdbcType="BIGINT" />
+		<result column="price_spec_code" property="priceSpecCode" jdbcType="VARCHAR" />
+		<result column="price_dis" property="priceDis" jdbcType="DOUBLE" />
+	</resultMap>
+	<insert id="insertStoreIn" parameterType="star.warehouse.po.StoreIn" useGeneratedKeys="true" >
+		<!--
+		  @haoxz11MyBatis
+		  插入入库单表记录
+		-->
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		<![CDATA[
+		insert into store_in (merchant_id, `status`, check_status, 
+			warehouse_id, code, create_time, modify_time, 
+			creater_mid, updater_mid, out_type, 
+			out_id, out_code, operator_id, 
+			operator_name, operate_time, checker_id, 
+			checker_name, check_time, supplier_id, 
+			supplier_name, warehouse_name, cause, 
+			flag_no, total_amount, other_fee, 
+			write_off_status, write_off_no, remark, 
+			logistic_code, logistic_number, logistic_fee, 
+			oid_acctno, currency_code, currency_rate, 
+			paid_amont, price_spec_code, price_dis
+			)
+		values (#{merchantId,jdbcType=BIGINT}, #{status,jdbcType=CHAR}, #{checkStatus,jdbcType=CHAR}, 
+			#{warehouseId,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, sysdate(), sysdate(), 
+			#{createrMid,jdbcType=BIGINT}, #{updaterMid,jdbcType=BIGINT}, #{outType,jdbcType=VARCHAR}, 
+			#{outId,jdbcType=BIGINT}, #{outCode,jdbcType=VARCHAR}, #{operatorId,jdbcType=BIGINT}, 
+			#{operatorName,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, #{checkerId,jdbcType=BIGINT}, 
+			#{checkerName,jdbcType=VARCHAR}, #{checkTime,jdbcType=TIMESTAMP}, #{supplierId,jdbcType=BIGINT}, 
+			#{supplierName,jdbcType=VARCHAR}, #{warehouseName,jdbcType=VARCHAR}, #{cause,jdbcType=VARCHAR}, 
+			#{flagNo,jdbcType=VARCHAR}, #{totalAmount,jdbcType=BIGINT}, #{otherFee,jdbcType=BIGINT}, 
+			#{writeOffStatus,jdbcType=VARCHAR}, #{writeOffNo,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+			#{logisticCode,jdbcType=BIGINT}, #{logisticNumber,jdbcType=VARCHAR}, #{logisticFee,jdbcType=BIGINT}, 
+			#{oidAcctno,jdbcType=BIGINT}, #{currencyCode,jdbcType=VARCHAR}, #{currencyRate,jdbcType=DOUBLE}, 
+			#{paidAmont,jdbcType=BIGINT}, #{priceSpecCode,jdbcType=VARCHAR}, #{priceDis,jdbcType=DOUBLE}
+			)
+		]]>
+	</insert>
+	<update id="updateStoreIn" parameterType="star.warehouse.po.StoreIn" >
+		<!--
+		  @haoxz11MyBatis
+		  更新入库单表记录
+		-->
+		update store_in
+		<set >
+			<if test="merchantId != null" >
+				merchant_id = #{merchantId,jdbcType=BIGINT},
+			</if>
+			<if test="status != null" >
+				`status` = #{status,jdbcType=CHAR},
+			</if>
+			<if test="checkStatus != null" >
+				check_status = #{checkStatus,jdbcType=CHAR},
+			</if>
+			<if test="warehouseId != null" >
+				warehouse_id = #{warehouseId,jdbcType=BIGINT},
+			</if>
+			<if test="code != null" >
+				code = #{code,jdbcType=VARCHAR},
+			</if>
+			modify_time = sysdate(),
+			<if test="createrMid != null" >
+				creater_mid = #{createrMid,jdbcType=BIGINT},
+			</if>
+			<if test="updaterMid != null" >
+				updater_mid = #{updaterMid,jdbcType=BIGINT},
+			</if>
+			<if test="outType != null" >
+				out_type = #{outType,jdbcType=VARCHAR},
+			</if>
+			<if test="outId != null" >
+				out_id = #{outId,jdbcType=BIGINT},
+			</if>
+			<if test="outCode != null" >
+				out_code = #{outCode,jdbcType=VARCHAR},
+			</if>
+			<if test="operatorId != null" >
+				operator_id = #{operatorId,jdbcType=BIGINT},
+			</if>
+			<if test="operatorName != null" >
+				operator_name = #{operatorName,jdbcType=VARCHAR},
+			</if>
+			<if test="operateTime != null" >
+				operate_time = #{operateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="checkerId != null" >
+				checker_id = #{checkerId,jdbcType=BIGINT},
+			</if>
+			<if test="checkerName != null" >
+				checker_name = #{checkerName,jdbcType=VARCHAR},
+			</if>
+			<if test="checkTime != null" >
+				check_time = #{checkTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="supplierId != null" >
+				supplier_id = #{supplierId,jdbcType=BIGINT},
+			</if>
+			<if test="supplierName != null" >
+				supplier_name = #{supplierName,jdbcType=VARCHAR},
+			</if>
+			<if test="warehouseName != null" >
+				warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+			</if>
+			<if test="cause != null" >
+				cause = #{cause,jdbcType=VARCHAR},
+			</if>
+			<if test="flagNo != null" >
+				flag_no = #{flagNo,jdbcType=VARCHAR},
+			</if>
+			<if test="totalAmount != null" >
+				total_amount = #{totalAmount,jdbcType=BIGINT},
+			</if>
+			<if test="otherFee != null" >
+				other_fee = #{otherFee,jdbcType=BIGINT},
+			</if>
+			<if test="writeOffStatus != null" >
+				write_off_status = #{writeOffStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="writeOffNo != null" >
+				write_off_no = #{writeOffNo,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null" >
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="logisticCode != null" >
+				logistic_code = #{logisticCode,jdbcType=BIGINT},
+			</if>
+			<if test="logisticNumber != null" >
+				logistic_number = #{logisticNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="logisticFee != null" >
+				logistic_fee = #{logisticFee,jdbcType=BIGINT},
+			</if>
+			<if test="oidAcctno != null" >
+				oid_acctno = #{oidAcctno,jdbcType=BIGINT},
+			</if>
+			<if test="currencyCode != null" >
+				currency_code = #{currencyCode,jdbcType=VARCHAR},
+			</if>
+			<if test="currencyRate != null" >
+				currency_rate = #{currencyRate,jdbcType=DOUBLE},
+			</if>
+			<if test="paidAmont != null" >
+				paid_amont = #{paidAmont,jdbcType=BIGINT},
+			</if>
+			<if test="priceSpecCode != null" >
+				price_spec_code = #{priceSpecCode,jdbcType=VARCHAR},
+			</if>
+			<if test="priceDis != null" >
+				price_dis = #{priceDis,jdbcType=DOUBLE},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="getByPrimaryKey" resultMap="StoreIn" parameterType="java.lang.Long" >
+		<!--
+		  @haoxz11MyBatis
+		  根据主键查询入库单表记录
+		-->
+		select  * from store_in where id = #{id,jdbcType=BIGINT}
+	</select>
+	<sql id="whereSQL" >
+		<!--
+		
+		  搜索入库单表记录，可修改
+		-->
+		<where >
+			<if test="id != null" >
+				<![CDATA[ AND id = #{id,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="merchantId != null" >
+				<![CDATA[ AND merchant_id = #{merchantId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="status != null" >
+				<![CDATA[ AND `status` = #{status,jdbcType=CHAR} ]]> 
+			</if>
+			<if test="checkStatus != null" >
+				<![CDATA[ AND check_status = #{checkStatus,jdbcType=CHAR} ]]> 
+			</if>
+			<if test="warehouseId != null" >
+				<![CDATA[ AND warehouse_id = #{warehouseId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="code != null" >
+				<![CDATA[ AND code = #{code,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="createrMid != null" >
+				<![CDATA[ AND creater_mid = #{createrMid,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="updaterMid != null" >
+				<![CDATA[ AND updater_mid = #{updaterMid,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="outType != null" >
+				<![CDATA[ AND out_type = #{outType,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="outId != null" >
+				<![CDATA[ AND out_id = #{outId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="outCode != null" >
+				<![CDATA[ AND out_code = #{outCode,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="operatorId != null" >
+				<![CDATA[ AND operator_id = #{operatorId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="operatorName != null" >
+				<![CDATA[ AND operator_name = #{operatorName,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="operateTime != null" >
+				<![CDATA[ AND operate_time = #{operateTime,jdbcType=TIMESTAMP} ]]> 
+			</if>
+			<if test="checkerId != null" >
+				<![CDATA[ AND checker_id = #{checkerId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="checkerName != null" >
+				<![CDATA[ AND checker_name = #{checkerName,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="checkTime != null" >
+				<![CDATA[ AND check_time = #{checkTime,jdbcType=TIMESTAMP} ]]> 
+			</if>
+			<if test="supplierId != null" >
+				<![CDATA[ AND supplier_id = #{supplierId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="supplierName != null" >
+				<![CDATA[ AND supplier_name = #{supplierName,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="warehouseName != null" >
+				<![CDATA[ AND warehouse_name = #{warehouseName,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="cause != null" >
+				<![CDATA[ AND cause = #{cause,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="flagNo != null" >
+				<![CDATA[ AND flag_no = #{flagNo,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="totalAmount != null" >
+				<![CDATA[ AND total_amount = #{totalAmount,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="otherFee != null" >
+				<![CDATA[ AND other_fee = #{otherFee,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="writeOffStatus != null" >
+				<![CDATA[ AND write_off_status = #{writeOffStatus,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="writeOffNo != null" >
+				<![CDATA[ AND write_off_no = #{writeOffNo,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="remark != null" >
+				<![CDATA[ AND remark = #{remark,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="logisticCode != null" >
+				<![CDATA[ AND logistic_code = #{logisticCode,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="logisticNumber != null" >
+				<![CDATA[ AND logistic_number = #{logisticNumber,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="logisticFee != null" >
+				<![CDATA[ AND logistic_fee = #{logisticFee,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="oidAcctno != null" >
+				<![CDATA[ AND oid_acctno = #{oidAcctno,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="currencyCode != null" >
+				<![CDATA[ AND currency_code = #{currencyCode,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="currencyRate != null" >
+				<![CDATA[ AND currency_rate = #{currencyRate,jdbcType=DOUBLE} ]]> 
+			</if>
+			<if test="paidAmont != null" >
+				<![CDATA[ AND paid_amont = #{paidAmont,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="priceSpecCode != null" >
+				<![CDATA[ AND price_spec_code = #{priceSpecCode,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="priceDis != null" >
+				<![CDATA[ AND price_dis = #{priceDis,jdbcType=DOUBLE} ]]> 
+			</if>
+		</where>
+	</sql>
+	<select id="getListByWhere" resultMap="StoreIn" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  搜索入库单表列表
+		-->
+		select
+		<if test="FIELDS != null" >
+			${FIELDS}
+		</if>
+		<if test="FIELDS == null" >
+			*
+		</if>
+		from store_in
+		<include refid="whereSQL" />
+		<if test="ORDERLIST != null" >
+			 ORDER BY ${ORDERLIST}
+		</if>
+	</select>
+	<select id="getCountByWhere" resultType="java.lang.Integer" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  得到搜索入库单表的记录数量
+		-->
+		select count(*) from store_in
+		<include refid="whereSQL" />
+	</select>
+</mapper>

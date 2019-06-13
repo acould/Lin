@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="star.warehouse.mapper.WarehouseClassMapper" >
+	<resultMap id="WarehouseClass" type="star.warehouse.po.WarehouseClass" >
+		<!--
+		  @haoxz11MyBatis
+		  仓库分类表表
+		-->
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="merchant_id" property="merchantId" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="orderby" property="orderby" jdbcType="INTEGER" />
+		<result column="creater_mid" property="createrMid" jdbcType="BIGINT" />
+		<result column="updater_mid" property="updaterMid" jdbcType="BIGINT" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+	</resultMap>
+	<insert id="insertWarehouseClass" parameterType="star.warehouse.po.WarehouseClass" useGeneratedKeys="true" >
+		<!--
+		  @haoxz11MyBatis
+		  插入仓库分类表记录
+		-->
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		<![CDATA[
+		insert into warehouse_class (merchant_id, `status`, create_time, modify_time, 
+			`name`, url, orderby, 
+			creater_mid, updater_mid, parent_id
+			)
+		values (#{merchantId,jdbcType=BIGINT}, #{status,jdbcType=CHAR}, sysdate(), sysdate(), 
+			#{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{orderby,jdbcType=INTEGER}, 
+			#{createrMid,jdbcType=BIGINT}, #{updaterMid,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}
+			)
+		]]>
+	</insert>
+	<update id="updateWarehouseClass" parameterType="star.warehouse.po.WarehouseClass" >
+		<!--
+		  @haoxz11MyBatis
+		  更新仓库分类表记录
+		-->
+		update warehouse_class
+		<set >
+			<if test="merchantId != null" >
+				merchant_id = #{merchantId,jdbcType=BIGINT},
+			</if>
+			<if test="status != null" >
+				`status` = #{status,jdbcType=CHAR},
+			</if>
+			modify_time = sysdate(),
+			<if test="name != null" >
+				`name` = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null" >
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="orderby != null" >
+				orderby = #{orderby,jdbcType=INTEGER},
+			</if>
+			<if test="createrMid != null" >
+				creater_mid = #{createrMid,jdbcType=BIGINT},
+			</if>
+			<if test="updaterMid != null" >
+				updater_mid = #{updaterMid,jdbcType=BIGINT},
+			</if>
+			<if test="parentId != null" >
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="getByPrimaryKey" resultMap="WarehouseClass" parameterType="java.lang.Long" >
+		<!--
+		  @haoxz11MyBatis
+		  根据主键查询仓库分类表记录
+		-->
+		select  * from warehouse_class where id = #{id,jdbcType=BIGINT}
+	</select>
+	<sql id="whereSQL" >
+		<!--
+		
+		  搜索仓库分类表记录，可修改
+		-->
+		<where >
+			<if test="id != null" >
+				<![CDATA[ AND id = #{id,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="merchantId != null" >
+				<![CDATA[ AND merchant_id = #{merchantId,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="status != null" >
+				<![CDATA[ AND `status` = #{status,jdbcType=CHAR} ]]> 
+			</if>
+			<if test="name != null" >
+				<![CDATA[ AND `name` = #{name,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="url != null" >
+				<![CDATA[ AND url = #{url,jdbcType=VARCHAR} ]]> 
+			</if>
+			<if test="orderby != null" >
+				<![CDATA[ AND orderby = #{orderby,jdbcType=INTEGER} ]]> 
+			</if>
+			<if test="createrMid != null" >
+				<![CDATA[ AND creater_mid = #{createrMid,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="updaterMid != null" >
+				<![CDATA[ AND updater_mid = #{updaterMid,jdbcType=BIGINT} ]]> 
+			</if>
+			<if test="parentId != null" >
+				<![CDATA[ AND parent_id = #{parentId,jdbcType=BIGINT} ]]> 
+			</if>
+		</where>
+	</sql>
+	<select id="getListByWhere" resultMap="WarehouseClass" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  搜索仓库分类表列表
+		-->
+		select
+		<if test="FIELDS != null" >
+			${FIELDS}
+		</if>
+		<if test="FIELDS == null" >
+			*
+		</if>
+		from warehouse_class
+		<include refid="whereSQL" />
+		<if test="ORDERLIST != null" >
+			 ORDER BY ${ORDERLIST}
+		</if>
+	</select>
+	<select id="getCountByWhere" resultType="java.lang.Integer" parameterType="map" >
+		<!--
+		  @haoxz11MyBatis
+		  得到搜索仓库分类表的记录数量
+		-->
+		select count(*) from warehouse_class
+		<include refid="whereSQL" />
+	</select>
+	
+	
+	
+	
+	<!-- user chenhan -->
+	
+	
+	
+</mapper>
