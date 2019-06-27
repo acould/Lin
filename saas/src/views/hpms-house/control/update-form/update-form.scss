@@ -1,0 +1,186 @@
+#hpms-update-form{
+    margin-top: 8px;
+    display: block;
+    background-color: #fff;
+    border-radius: 4px;
+    .show-info{
+        padding: 12px;
+        .head{
+            padding-bottom: 12px;
+            display: inline-block;
+            width: 100%;
+            border-bottom:none;
+            &:not(:first-child){
+                margin-top: 24px;
+            }
+            p {
+                font-size: 18px;
+                font-weight: 600;
+                display: inline-block;
+            }
+            .operation-box{
+                display: inline-block;
+                float: right;
+                font-weight: 400;
+                a,a:hover{
+                    color: #333;
+                    font-size: 14px;
+                    &:not(:first-child){
+                        margin-left: 32px;
+                    }
+                }
+            }
+           
+        }
+        .info-box{
+            margin-top:24px;
+            padding-bottom: 24px;
+            border-bottom:none;
+            color: #666666;
+            &:last-child{
+                border-bottom:none;
+            }
+            .info-li{
+                margin: 12px auto;
+                span{
+                    margin-right: 6px;
+                }
+                .operation-box{
+                    display: inline-block;
+                    float: right;
+                    a,a:hover{
+                        color: #329DFF;
+                        &:not(:first-child){
+                            margin-left: 32px;
+                        }
+                    }
+                }
+            }
+            .room-list{
+                display: inline-block;
+                width: 100%;
+                .house-floor-box{
+                    margin-bottom: 20px;
+                    .house-floor{
+                        border-left: solid 2px #329DFF;
+                        display: inline-block;
+                        font-weight: 600;
+                        padding-left: 8px;
+                        margin-right: 20px;
+                    }
+                    span{
+                        margin-right: 20px;
+                        a{
+                            color: #448AFF;
+                            &:hover{
+                                color: #448AFF;
+                            }
+                        }
+                    }
+                }
+                ul{
+					min-height: 210px;
+					max-height: 300px;
+					overflow-y: scroll;
+                    li{
+                        display: inline-block;
+                        float: left;
+                        width:100%;
+                        .rooms-card{
+                            width: 120px;
+                            height: 100px;
+                            margin-right: 12px;
+                            margin-bottom: 12px;
+                            border: solid 1px #EAEDF3;
+                            display: inline-block;
+                            &:hover{
+                                .card-del{
+                                    i{
+                                        visibility:initial
+                                       // display: inline-block;
+                                    }
+                                }
+                                
+                            }
+                            .card-info{
+                                .room-name{
+                                    font-size: 18px;
+                                    font-weight: 600;
+                                    min-height: 24px;
+                                    margin: 16px;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                }
+                                .template-name{
+                                    margin-left: 16px;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    min-height: 19px;
+                                }
+                            }
+                            
+                            .card-del{
+                                position: relative;
+                                margin-top: -68px;
+                                margin-left: 96px;
+                                i{
+                                   // display: none;
+                                   visibility: hidden;
+                                }
+                            }
+                        }
+                        .card-color-blue{
+                            background-color: #329dff;
+                            height: 100%;
+                            padding-top: 1px;
+                            color: #fff;
+                        }
+                        .card-color-yellow{
+                            background-color: #Ffb54d;
+                            height: 100%;
+                            padding-top: 1px;
+                            color: #fff;
+                        }
+                        .card-color-red{
+                            background-color: #fa6485;
+                            height: 100%;
+                            padding-top: 1px;
+                            color: #fff;
+                        }
+                        .card-white{
+                            background-color: #fff;
+                            .card-text{
+                                font-size: 16px;
+                                color: #333333;
+                            }
+                        }
+                        .active{
+                            border: solid 1px #f11;
+                        }
+                        .add-rooms{
+                            width: 120px;
+                            height: 100px;
+                            line-height: 100px;
+                            text-align: center;
+                            border: 1px dashed #c0ccda;
+                            border-radius: 4px;
+                            float: left;
+                            margin-bottom: 30px;
+                        }
+                    }
+                }
+                
+            }
+            
+        }
+        
+    }
+    .button-box{
+        .right{
+            float: right;
+        }
+    }
+ 
+}

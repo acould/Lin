@@ -1,0 +1,51 @@
+<div class="editHouse" >
+    <i-form :model="form1" ref="form1" :label-width="labelWidth"  :rules="formRules">
+        <i-form-item label="房间名称:" prop="roomName" :rules="[
+        {required:true,message:'请输入房间名称'},
+        {pattern:/^[a-zA-Z0-9\u4e00-\u9fa5]{1,9}$/,message:'请输入正确格式'}
+        ]">
+            <i-input v-model="form1.roomName"></i-input>
+        </i-form-item>
+
+        <i-form-item label="面积:" prop="area" :rules="[
+        {required:true,message:'请输入面积'},
+        {pattern:/^\d{0,9}(\.\d{0,2})?$/,message:'请输入正确格式'}
+        ]">
+            <i-input v-model="form1.area"></i-input>
+        </i-form-item>
+        
+        <i-form-item label="装修情况"  prop="decoration" >
+            <i-select v-model="form1.decoration">
+				<i-option v-for="item in dict['DecorationType']"  :value="item.dictKey" :label="item.dictValue"  :key="item.dictKey"></i-option>
+            </i-select>
+        </i-form-item>
+
+        
+
+        <i-form-item label="户型 :" prop="rooms" class="is-required" style="display: inline-block"  :rules="[{validator:_rlfs, trigger:'change'}]">
+            <i-input v-model="form1.rooms" style="display: inline-block;width: 40px;" ></i-input>
+            <span>室</span>
+            <i-input v-model="form1.halls" style="display: inline-block;width: 40px;"></i-input>
+            <span>厅</span>
+            <i-input v-model="form1.kitchens" style="display: inline-block;width: 40px;"></i-input>
+            <span>厨</span>
+            <i-input v-model="form1.toilets" style="display: inline-block;width: 40px;"></i-input>
+            <span>卫</span>
+        </i-form-item>
+
+       
+
+
+        <i-form-item label="朝向"  prop="orientation">
+            <i-select v-model="form1.orientation">
+				<i-option v-for="item in dict['Orientation']" :value="item.dictKey" :label="item.dictValue"  :key="item.dictKey"></i-option>
+            </i-select>
+        </i-form-item>
+
+    </i-form>
+    <div style="float:right;padding-bottom:20px;">
+        <i-button @click.stop="unset()">取消</i-button>
+        <i-button @click.stop="submit()" class="submit-button">提交</i-button>
+    </div>
+    
+</div>

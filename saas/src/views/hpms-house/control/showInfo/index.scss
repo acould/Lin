@@ -1,0 +1,87 @@
+#hpms-info-box{
+    .show-info,.facility,.house-bill-info,.history-box{
+        padding: 12px;
+        .head{
+            border-bottom:1px solid #E9E9E9;
+            padding-bottom: 12px;
+            display: inline-block;
+            width: 100%;
+            &:not(:first-child){
+                margin-top: 24px;
+            }
+            p {
+                font-size: 20px;
+                font-weight: 600;
+                display: inline-block;
+            }
+            .operation-box{
+                display: inline-block;
+                float: right;
+                font-weight: 400;
+                a,a:hover{
+                    color: #329DFF;
+                    font-size: 14px;
+                    &:not(:first-child){
+                        margin-left: 32px;
+                    }
+                }
+            }
+           
+        }
+        .info-box{
+            margin-top:24px;
+            padding-bottom: 24px;
+            border-bottom:1px solid #E9E9E9;
+            color: #666666;
+            &:last-child{
+                border-bottom:none;
+            }
+            .info-li{
+                margin: 12px auto;
+                span{
+                    margin-right: 6px;
+                }
+                .operation-box{
+                    display: inline-block;
+                    float: right;
+                    a,a:hover{
+                        color: #329DFF;
+                        &:not(:first-child){
+                            margin-left: 32px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .history-info{
+        .table-head{
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .history-total-data{
+            background-color: #FAFAFA;
+            border-radius: 4px;
+            border: #E9E9E9 1px solid;
+            padding: 24px;
+            margin: 6px 0;
+            .data-li{
+                display: inline-block;
+                p{  
+                    width: 350px;
+                    display: table-cell;
+                    span{
+                        color:#666666;
+                        padding-right:12px ;
+                    }
+                }
+            }
+        }
+    }
+    .list-info{
+        background-color: #FAFAFA;
+        border: 1px  solid #D8DCE6;
+        border-radius: 4px;
+    }
+}
+

@@ -1,0 +1,25 @@
+<div class="house-bill-info">
+    <div class="head">
+        <p>应收账单</p>
+        <p class="operation-box">
+            <i-checkbox-group  v-model="onlyEffective">
+                <i-checkbox label="Y">显示当前生效合同/订单</i-checkbox>
+            </i-checkbox-group>
+        </p>
+    </div>
+    <i-tabs  v-model="activeName" ref="tab">
+        <i-tab-pane label="月租租约" name="monthList" >
+            <monthList ref="monthList"></monthList>
+        </i-tab-pane>
+        <i-tab-pane label="日租订单" name="dayList">
+            <dayList ref="dayList" ></dayList>
+        </i-tab-pane>
+        
+    </i-tabs>
+</div>
+
+
+
+
+    
+    

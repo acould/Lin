@@ -1,0 +1,117 @@
+<div>
+    <div id="hpms-room-template" v-for="(item,index) in templateList">
+        <i-form  :ref="getRef(index)" :label-width="labelWidth">
+            <div class="template-head">
+                <h4>模板{{index+1}}</h4>
+                <span>
+					<i-button type="text" @click="delTemplate(index)">删除</i-button>
+                </span>
+            </div>
+            <div  class="template-body">
+                <i-row :gutter="10">
+                    <i-col :span="8">
+                        <i-form-item label="模板名称" class="is-required" >
+                            <i-input v-model="item.name"></i-input>
+                        </i-form-item>
+                    </i-col>
+                    <i-col :span="8">
+                        <i-form-item label="户型" class="is-required" >
+                            <i-input v-model="item.rooms"  style="display: inline-block;width: 40px;" placeholder="室"></i-input>
+                            <i-input v-model="item.halls" style="display: inline-block;width: 40px;" placeholder="厅"></i-input>
+                            <i-input v-model="item.kitchens" style="display: inline-block;width: 40px;" placeholder="厨"></i-input>
+                            <i-input v-model="item.toilets" style="display: inline-block;width: 40px;" placeholder="卫"></i-input>
+                        </i-form-item>
+                    </i-col>
+                    <i-col :span="8">
+                        <i-form-item label="面积" class="is-required">
+                            <i-input v-model="item.area">
+                                    <template slot="append">m²</template>
+                            </i-input>
+                        </i-form-item>
+                    </i-col>
+                </i-row>
+                <i-row :gutter="10">
+                    <i-col :span="8">
+                        <i-form-item label="朝向" class="is-required">
+							<i-select v-model="item.orientation">
+								<i-option v-for="item in dict['Orientation']" :value="item.dictKey" :label="item.dictValue"  :key="item.dictKey"></i-option>
+							</i-select>
+                        </i-form-item>
+                    </i-col>
+                
+                    <i-col :span="8">
+                        <i-form-item label="装修情况" class="is-required">
+                            <i-select v-model="item.decoration">
+								<i-option v-for="item in dict['DecorationType']"  :value="item.dictKey" :label="item.dictValue"  :key="item.dictKey"></i-option>
+                            </i-select>
+                        </i-form-item>
+                    </i-col>
+
+                    <i-col :span="8" class="rent-type">
+                        <i-form-item label="出租方式" class="is-required">
+                            <i-checkbox-group  id="checkbox-two"  v-model="item.rentType">
+								<i-checkbox v-for="item in dict['RentType']" :label="item.dictKey" :key="item.dictKey">{{item.dictValue}}</i-checkbox>
+                            </i-checkbox-group>
+                        </i-form-item>
+                    </i-col>
+                </i-row>
+                <i-row :gutter="10">
+                    <i-col :span="8">
+                        <i-form-item label="长租定价" class="is-required">
+                            <i-input v-model="item.monthPrice">
+                                    <template slot="append">元/月</template>
+                            </i-input>
+                        </i-form-item>
+                    </i-col>
+
+                    <i-col :span="8">
+                        <i-form-item label="日租定价">
+                            <i-input v-model="item.dayPrice">
+                                    <template slot="append">元/晚</template>
+                            </i-input>
+                        </i-form-item>
+                    </i-col>
+                </i-row>
+                <i-row :gutter="10">
+                    <i-col :span="24">
+                        <div class="room-facility" style="display: block;">
+                                <div class="head">
+                                    <p>房源配套</p>
+                                </div>
+                        
+                                <div class="info-box">
+                                    <div class="">
+                                        <i-checkbox-group id="checkbox-two"  v-model="item.roomFacility">
+											<i-checkbox id="checkbox-span"  v-for="item in dict['RoomFacility']" :key="item.dictKey" :label="item.dictKey" >{{item.dictValue}}</i-checkbox>
+                                        </i-checkbox-group>
+                                    </div>
+                                </div>
+                        </div>
+                    </i-col>
+
+                    <i-col :span="24" style="margin-top: 20px;">
+                        <div class="imgs-box ">
+                            <div class="head is-required-img">
+                                <p>室内图片</p>
+                            </div>
+                            <i-img-list v-model="item.showImg"  :props="{url:'src'}" :perfix="imgPerfix" :crop="crop" ></i-img-list>
+                            <div class="template-img" @click="openUpImgBox(index)">
+                                <i class="el-icon-plus"></i>
+                            </div>
+                        </div>
+                    </i-col>
+                </i-row>
+            </div>
+        </i-form>
+    </div>
+
+    <i-dialog v-model="isShowImgBox"  size="large" title="上传图片" append-to-body >
+            <imgBox ref="showImgList" 
+                @closeUpImgBox="closeUpImgBox"
+                @imgSubmit="imgSubmit"
+            >
+            </imgBox>
+    </i-dialog>
+
+    
+</div>

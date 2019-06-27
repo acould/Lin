@@ -1,0 +1,98 @@
+.hpms-form-room,#hpms-form-room{
+    border: solid 1px #ccc;
+    margin: 12px 20px;
+    border-radius: 2px;
+    padding: 20px;
+    height: 492px;
+    overflow-y: scroll;
+    .room-list{
+        display: inline-block;
+        width: 100%;
+        .house-floor-box{
+            margin-bottom: 20px;
+            .house-floor{
+                border-left: solid 2px #329DFF;
+                display: inline-block;
+                font-weight: 600;
+                padding-left: 8px;
+                margin-right: 20px;
+            }
+            span{
+                margin-right: 20px;
+                a{
+                    color: #448AFF;
+                    &:hover{
+                        color: #448AFF;
+                    }
+                }
+            }
+        }
+        ul{
+            li{
+                display: inline-block;
+                float: left;
+                .rooms-card{
+                    width: 120px;
+                    height: 100px;
+                    margin-right: 12px;
+                    margin-bottom: 12px;
+                    border: solid 1px #EAEDF3;
+                    display: inline-block;
+                    &:hover{
+                        .card-del{
+                            i{
+                                visibility:initial
+                               // display: inline-block;
+                            }
+                        }
+                        
+                    }
+                    .card-info{
+                        .room-name{
+                            font-size: 18px;
+                            font-weight: 600;
+                            min-height: 24px;
+                            margin: 16px;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            overflow: hidden;
+                        }
+                        .template-name{
+                            margin-left: 16px;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            min-height: 19px;
+                        }
+                    }
+                    
+                    .card-del{
+                        position: relative;
+                        margin-top: -68px;
+                        margin-left: 96px;
+                        i{
+                           // display: none;
+                           visibility: hidden;
+                        }
+                    }
+                }
+                .active{
+                    border: solid 1px #f11;
+                }
+                .add-rooms{
+                    width: 120px;
+                    height: 100px;
+                    line-height: 100px;
+                    text-align: center;
+                    border: 1px dashed #c0ccda;
+                    border-radius: 4px;
+                    float: left;
+                    margin-bottom: 30px;
+                }
+            }
+        }
+        
+    }
+   
+    
+}

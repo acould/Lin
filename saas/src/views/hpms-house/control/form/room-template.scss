@@ -1,0 +1,88 @@
+#hpms-room-template{
+    .template-head{
+        margin-top:24px;
+        margin-bottom: 12px;
+        h4{
+            display: inline-block;
+            margin: 0 12px 0 30px;
+            font-size: 18px;
+        }
+        a{
+            color: #329DFF;
+            &:hover{
+                color: #329DFF;
+            }
+        }
+        
+    }
+    
+    .template-body{
+        border: solid 1px #ccc;
+        padding: 26px 12px;
+        margin: 8px;
+        border-radius: 4px;
+        .rent-type{
+            display: inline-block;
+            .el-form-item{
+                display: inline-table;
+            }
+        }
+        
+        .room-facility,.imgs-box{
+            .el-checkbox{
+                margin-left: 30px;
+            }
+            #checkbox-span{
+                span{
+                    color:#333;
+                }
+            }
+           
+            .head{
+                display: inline-block;
+                float: left;
+                p{
+                    font-size: 13px;
+                    color:#000;
+                    margin-left: 20px;
+                    margin-right: 6px;
+                }
+               
+            }
+            .info-box{
+                display: inline-block;
+                width: 90%;
+                margin-left: -20px;
+            }
+        }
+        .template-img{
+            width: 120px;
+            height: 120px;
+            line-height: 120px;
+            text-align: center;
+            border: 1px dashed #c0ccda;
+            border-radius: 4px;
+            float: left;
+            margin-bottom: 30px;
+        }
+        .is-required-img{
+            p{
+                &:before{
+                    content: "*";
+                    color: #ff4949;
+                    margin-right: 4px;
+                }
+            }
+            
+        }
+        
+    }
+}
+
+
+#checkbox-two{
+    .el-checkbox{
+        min-width: 66px;
+    }
+    
+}

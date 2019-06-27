@@ -1,0 +1,38 @@
+<div class="portal">
+    <span v-loading.fullscreen.lock="common.search_loading" i-loading-text="查询中..."></span>
+    <span v-loading.fullscreen.lock="common.submit_loading" i-loading-text="提交中..."></span>
+    <span v-loading.fullscreen.lock="common.save_loading" i-loading-text="保存中..."></span>
+    <span v-loading.fullscreen.lock="common.export_loading" i-loading-text="导出中..."></span>
+    <div v-if="!$root.fullscreen" style="width: 100%; height: 100%">
+        <div class="side-bar" v-show="!fullscreen">
+            <div class="logo">
+                <img src="/static/logo.svg" alt="">
+                <span>{{title}}</span>
+            </div>
+            <div class="menu-bar">
+                <i-menubar :menus="menuConfig.menus" @activated="openTab"></i-menubar>
+            </div>
+        </div>
+        <div class="view-right">
+            <div class="header">
+                <div class="tabbar-container">
+                    <i-tabbar ref="tabbar"
+                              :defaultTab="defaultTab"
+                              @updateCache="handleCacheUpdate"
+                              @inited="handleTabbarInited"></i-tabbar>
+                </div>
+                <div class="tool-bar">
+                    <div class="tool-bar-city">
+                        <department-selector :options="options" @change="handleChangeDepartment"></department-selector>
+                    </div>
+                </div>
+            </div>
+            <keep-alive :include="cache">
+                <router-view class="view-main" :class="{fullscreen: fullscreen}"></router-view>
+            </keep-alive>
+        </div>
+    </div>
+    <div v-else style="width: 100%; height: 100%">
+        <router-view class="view-main" style="height: 100%"></router-view>
+    </div>
+</div>

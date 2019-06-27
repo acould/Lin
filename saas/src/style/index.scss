@@ -1,0 +1,13 @@
+@import './reset.scss',
+    './common.scss';
+
+* {
+    font-family: Microsoft Yahei, PingFang SC, sans-serif;
+}
+
+html,
+body {
+    min-width: 1280px;
+    overflow: hidden;
+    overflow-x: auto;
+}

@@ -1,0 +1,41 @@
+<div class="hpms-form-room" id="hpms-form-room">
+    <div class="room-list" v-for="(item,index) in data.floorList">
+        <div class="house-floor-box">
+            <div class="house-floor">{{item.floorName}}层</div>
+            <span><a href="javascript:;" @click.stop=showEditFloorName(item.floorId,item.floorName,index)>编辑</a></span>
+            <span><a href="javascript:;" @click.stop="delFloor(item.floorId,item.floorName,index)">删除</a></span>
+            <span v-if="item.active!=true"><a href="javascript:;" @click.stop="selAllFloorRoom(index)" >全选</a></span>
+            <span v-else><a href="javascript:;" @click.stop="selUnAllFloorRoom(index)"  >取消全选</a></span>
+        </div>
+        <ul>
+            <li v-for="(val,key) in item.roomList">
+                <div class="rooms-card "  :class="{ active:item.roomList[key].active } "  @click.stop="selRoom(index,key)" @dblclick="showEditRoomData(index,key)">
+                    <div class="card-info">
+                        <div class="room-name" :title="val.roomName">{{val.roomName}}</div>
+                        <div class="template-name" :title="val.tempName">{{val.tempName}}</div>
+                    </div>
+                    <div class=" card-del"  @click.stop="delRoom(val.roomId,index,key)">
+                        <i class="el-icon-close"></i>
+                    </div>
+                </div>
+            </li>
+            
+
+            <li>
+                <div class="rooms-card add-rooms"  @click.stop="addRoom(item.floorId,index)">
+                    <i class="el-icon-plus"></i>
+                </div>
+            </li>
+
+        </ul>
+    </div>
+    <i-dialog v-model="dialog.showTemplateBox" size="small" title="选择房间模板" append-to-body >
+          <selTmpList  ref="selTmpList" @closeDialog="closeTemplateBox" @submit="setTemplateDataToRooms"></selTmpList>
+    </i-dialog>
+    <i-dialog v-model="dialog.showEditFloorName" size="small" title="编辑楼层" append-to-body >
+        <editFloorName  ref="editFloorName" @closeDialog="closeEditFloorName" @submit="setEditFloorName"></editFloorName>
+    </i-dialog>
+    <i-dialog v-model="dialog.showEditRoomData" size="small" title="修改房间"  append-to-body >
+        <editRoomData  ref="editRoomData" @closeDialog="closeEditRoomData" @submit="setEditRoomData"></editRoomData>
+    </i-dialog>
+</div>

@@ -1,0 +1,96 @@
+#hpms-house-data-form{
+    margin-top: 8px;
+    display: block;
+    background-color: #fff;
+    border-radius: 4px;
+    .step-box{
+        margin: 6px auto 40px;
+        // padding-top: 12px;
+    }
+    .hpms-form-box{
+        min-height: 300px;
+        .prem-box{
+            margin-top: 35px;
+        }
+    }
+
+    .button-box{
+        display: block;
+        height: 40px;
+        margin: 6px 20px;
+        .button-left{
+            float: left;
+        }
+        .button-right{
+            float: right;
+        }
+    }
+    .room-input-box{
+        border: solid 1px #DDDDDD;
+        padding: 10px;
+        &:not(:first-child){
+            margin-top:10px;
+        }
+        
+        // &:after{//在元素内容后
+        //     content: ' ';
+        //     background: url(/static/imgs/hmps-house/del.png) no-repeat;
+        //     background-size: 100%;
+        //     width: 16px;
+        //     height: 16px;
+        //     position: absolute;
+        //     right: -24px;
+        //     margin-top: -84px;
+        // }
+    
+        .delRooms{
+            width: 16px;
+            position: absolute;
+            right: -24px;
+            margin-top: -45px;
+            img{width: 100%;}
+        }
+        
+        .el-input{
+            width: 108px;
+            display: inline-block;
+        }
+        .one{
+            display: inline-block;
+            .input-block{
+                display: inline-block;
+                &:not(:first-child){
+                    margin-left: 10px;
+                }
+            }
+        }
+        
+        span{
+            color:#999999;
+        }
+        .el-input-inner{
+            height: 28px;
+            width: 104px;
+            border-radius: 4px;
+        }
+    }
+}
+
+#checkbox-two{
+    .el-checkbox-label{
+        font-size: 12px;
+    }
+    #checkbox-span{
+        span{
+            color:#333;
+        }
+    }
+    
+}
+.hpms-prem-box,#hpms-room-template{
+    // background-color:#333;
+    .el-form-item-label {
+        color:#000;
+        font-size: 13px;
+    }
+}

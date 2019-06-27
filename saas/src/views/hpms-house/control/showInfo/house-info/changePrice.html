@@ -1,0 +1,21 @@
+<div class="changeRentType" >
+        <i-form :model="form1" ref="form1" :label-width="labelWidth" :rules="formRules">
+                
+                <i-form-item label="长租定价:" prop="monthPrice"  :rules="[
+                {pattern:/^\d{0,6}(\.\d{0,2})?$/,message:'请输入正确格式'}
+                ]">
+                    <i-input v-model="form1.monthPrice" placeholder="未定价"></i-input>
+                </i-form-item>
+
+                <i-form-item label="日租定价:" prop="dayPrice" :rules="{pattern:/^\d{0,6}(\.\d{0,2})?$/,message:'请输入正确格式'}">
+                    <i-input v-model="form1.dayPrice" placeholder="未定价"></i-input>
+                </i-form-item>
+
+                
+               
+            </i-form>
+            <div style="float:right;padding-bottom:20px;">
+                <i-button @click.stop="unset()">取消</i-button>
+                <i-button @click.stop="submit()" class="submit-button">提交</i-button>
+            </div>
+</div>

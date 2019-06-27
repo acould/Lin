@@ -1,0 +1,161 @@
+    <div id="hpms-house">
+        <div class="left" v-show="is_left_list">
+            <div class="left-operation-box">
+                <div class="left-operation">
+                        <div class="operation-img"  @click="toLeftfList()">
+                            <img src="/static/imgs/hmps-house/shape-close.png">
+                        </div>
+                        <div class="operation-create-house" @click="createForm()">
+                            <img src="/static/imgs/hmps-house/add.png">
+                            <p>新增项目</p>
+                        </div>
+                    </div>
+            </div>
+            <div  class="left-search-box">
+                <div class="search-input" >
+                        <i-input v-model="search.queryName"  placeholder="公寓名称" icon="search" @click.stop="getComHouseList()" @keyup.enter.native="getComHouseList"></i-input>
+                    </div>
+                    <div class="house-search-list">
+                        <ul>
+                            <li 
+                                v-for="(item,index) in comHouseList"
+                                @click="showHouseInfo(item.apartmentInfoId,index)"
+                                :class="{active: apartmentInfoId==item.apartmentInfoId} "
+                            >
+                                {{item.apartmentName}}
+                            </li>
+                        </ul>
+                    </div>
+            </div>
+        </div>
+        <div class="right " :class="{'right-none':!is_left_list}">
+            <div class="right-house-data-box">
+                <div class="house-data-box"">
+                    <p><label>房源总数：</label> {{comHouseInfo.rooms}}间</p>
+                    <p><label>空置率：</label>{{comHouseInfo.vacancyRage}}%</p>
+                    <p><label>问题房源：</label> {{comHouseInfo.illRooms}}间</p>
+                </div>
+                <div class="search-where-box">
+                   
+                    <span v-for="(v,vIndex) in searchWhere" @click="delWhere(vIndex)">{{v.name}}</span>
+                    
+                </div>
+                <div class="search-button" @click="toSearchBox()" :class="{'search-button-active':is_show_search} ">
+                    <p>筛选</p>
+                </div>
+            </div>
+            <i-dialog v-model="is_show_search" size="large" title="筛选" append-to-body >
+                <search-box @searchForm="searchForm"></search-box>
+            </i-dialog>
+
+            <house-info-box  ref="houseInfoBox" ></house-info-box>
+            
+            <div class="prem-room-box">
+                <div class="prem-address">
+                    <div class="operation-img" v-show="!is_left_list" @click="toLeftfList()">
+                        <img src="/static/imgs/hmps-house/shape-open.png">
+                    </div>
+                    <p>{{comHouseInfo.apartmentName}} - {{comHouseInfo.address}}</p>
+					<i-button type="text" @click="updateForm()">编辑项目</i-button>
+                </div>
+
+                <div class="room-list">
+                    <ul>
+                        <li v-for="(item,index) in houseList" >
+                            <div class="house-floor-box">
+                                <div class="house-floor">{{item.floorName}}层</div>
+                                <span v-if="typeof item.roomList!=='undefined' && item.roomList!=null &&  item.roomList.length>maxCradNum" :class="[{moreCard:activeCardClass[index]},{noneCard:activeCardt}]" @click="clickMoreCard(index)" >展开</span>
+                            </div>
+                            
+                            <div class="rooms-card " v-for="(v,vIndex) in item.roomList" :class="[{hideMoreCard:vIndex>=maxCradNum},{showMoreCard:showMoreCard[index]},{noneCard:activeCardt}]"  @click="showRoomsInfo(v.roomId)" >
+                                
+                                <div class="card-info card-lock" v-if="v.illRoom=='Y'">
+                                    <div class="card-head" >  <!-- //v-if="v.illRoom!=N" -->
+                                        <div class="card-title">
+                                            <div class="room-name" :class="[{'card-long4-title':v.roomName.length>4},{'card-long6-title':v.roomName.length>6}]">{{v.roomName}}</div>
+                                            <div class="room-tags" id="room-tags">
+                                                <div class="tag">锁定</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+
+                                <div class="card-info card-color-blue" v-else-if="v.rentStatus=='RENT' && v.monthRent=='Y'">
+                                    <div class="card-head" >  <!-- //v-if="v.illRoom!=N" -->
+                                        <div class="card-title">
+                                            <div class="room-name"  :class="[{'card-long4-title':v.roomName.length>4},{'card-long6-title':v.roomName.length>6}]">{{v.roomName}}</div>
+                                            <div class="room-tags" id="room-tags" v-html="getRoomTagText(v)">
+                                            </div>
+                                        </div>
+                                        <div class="room-info-text apartment">{{retText(1,v)}}</div>
+										<div class="room-info-text" style="display: inline-block;" v-html="retText(2,v)"></div>
+										<div class="eye-button" v-if="v.customerPhone!=''" @click.stop="getUserPone(v.roomId,v)"></div>
+										<div class="room-see-phone" :class="{'room-see-phone-show':v.customerPhoneShowTime>0}" @click.stop="return ;">{{v.customerPhoneOutPass}}</div>
+										
+                                    </div>
+                                    <div class="card-text" v-html="getRoomInfoText(v)"></div>
+                                </div>
+
+                                <div class="card-info card-color-yellow" v-else-if="v.rentStatus=='RENT' && v.dayRent=='Y'">
+                                    <div class="card-head" >  <!-- //v-if="v.illRoom!=N" -->
+                                        <div class="card-title">
+                                            <div class="room-name" :class="[{'card-long4-title':v.roomName.length>4},{'card-long6-title':v.roomName.length>6}]">{{v.roomName}}</div>
+                                            <div class="room-tags" id="room-tags" v-html="getRoomTagText(v)">
+                                            </div>
+                                        </div>
+                                        <div class="room-info-text apartment">{{retText(1,v)}}</div>
+                                        <div class="room-info-text" v-html="retText(2,v)"></div>
+                                    </div>
+                                    <div class="card-text" v-html="getRoomInfoText(v)"></div>
+                                </div>
+
+                                <div class="card-info card-color-red" v-else-if="v.vacantDays>60">
+                                    <div class="card-head" >  <!-- //v-if="v.illRoom!=N" -->
+                                        <div class="card-title">
+                                            <div class="room-name" :class="[{'card-long4-title':v.roomName.length>4},{'card-long6-title':v.roomName.length>6}]">{{v.roomName}}</div>
+                                            <div class="room-tags" id="room-tags" v-html="getRoomTagText(v)">
+                                            </div>
+                                        </div>
+                                        <div class="room-info-text apartment">{{retText(1,v)}}</div>
+										<div class="room-info-text" v-html="retText(2,v)"></div>
+                                    </div>
+                                    <div class="card-text" v-html="getRoomInfoText(v)"></div>
+                                </div>
+
+                                <div class="card-info" v-else>
+                                    <div class="card-head" >  <!-- //v-if="v.illRoom!=N" -->
+                                        <div class="card-title" >
+                                            <div class="room-name" :class="[{'card-long4-title':v.roomName.length>4},{'card-long6-title':v.roomName.length>6}]">{{v.roomName}}</div>
+                                            <div class="room-tags"  id="room-tags" v-html="getRoomTagText(v)">
+                                            </div>
+                                        </div>
+                                        <div class="room-info-text apartment">{{retText(1,v)}}</div>
+                                        <div class="room-info-text" v-html="retText(2,v)"></div>
+                                    </div>
+                                    <div class="card-text" v-html="getRoomInfoText(v)"></div>
+                                </div>
+
+                               
+                            </div>
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <createForm ref="createForm" ></createForm>
+        <updateForm ref="updateForm" ></updateForm>
+        
+    </div>
+    
+
+    
+
+    
+
+
+
