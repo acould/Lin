@@ -1,0 +1,151 @@
+html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height: 1.6;background: #FFF;height:100%;}
+* {-webkit-max-logical-width: 100%;margin:0;padding:0;box-sizing: border-box!important;-webkit-box-sizing: border-box!important;word-wrap: break-word!important;}
+body{-webkit-touch-callout:none;position: absolute; width: 100%;margin: 0;padding: 15px !important;font-size:16px;overflow-x:hidden;font-family:'微软雅黑','Microsoft YaHei',Arial,sans-serif;background-color:#FFF;line-height:inherit;height:100%;}
+body{word-break: break-all;	word-wrap: break-word;cursor:text;}
+
+p{clear:both;margin:0 0;white-space: normal;}
+a{color:#607fa6;text-decoration:none}
+img{*zoom:1;max-width:100%;*max-width:96%;height:auto !important;}
+iframe{width:301px !important;border:0;background-color:none;}
+iframe,.video_iframe {background-color: #000000;width: 100% !important;position: static;}
+iframe.qqmusic_iframe{background-color:#fff;}
+[contenteditable] {  caret-color: red;}
+::-webkit-scrollbar {width:6px;height:6px;background: #f1f1f1;}
+::-webkit-scrollbar-thumb {-webkit-box-shadow: inset 0 0 16px #c1c1c1;}
+::-webkit-input-placeholder { /* WebKit browsers */   color:    #ddd;}
+* {
+outline:0 none !important; blr:expression(this.onFocus=this.blur());
+}
+*:focus {
+    outline: none !important;
+}
+/*vote*/
+.vote_area{display:block;}
+.vote_iframe{height:100%;width:100% !important;*width:96% !important;}
+
+li.placeholder {
+    position: relative;list-style-type: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+li.placeholder:before {
+    position: absolute;
+    content: " ";
+    width: 0;
+    height: 0;
+    margin-top: -5px;
+    left: 0px;
+    top: -4px;
+    border: 8px solid transparent;
+    border-left-color: red;
+    border-right: none;
+}
+.dragged {
+    position: absolute !important;
+    top: 0;
+    opacity: 0.5;
+    z-index: 2000;
+}
+
+.hiddenIn135{display:none !important;visibility: hidden !important;}.showIn135{display:initial !important;opacity: 1 !important;    visibility: visible !important;}
+.hoverimg:hover{background:#000;}
+
+blockquote{margin:0;padding-left:10px;border-left:3px solid #DBDBDB;}
+
+ol,ul,dl
+{
+	/* IE7: reset rtl list margin. (#7334) */
+	*margin-right: 0px;
+	/* preserved spaces for list items with text direction other than the list. (#6249,#8049)*/
+	padding: 0 0 0 30px;
+}
+
+table.noBorderTable td,table.noBorderTable th,table.noBorderTable caption{border:1px dashed #ddd;}
+table{margin-bottom:10px;border-collapse:collapse;display:table;width:100%;margin:0 auto;}
+td,th{word-wrap:break-word;word-break:break-all;padding:5px 0px;border:1px solid #DDD}
+caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center}
+th{border-top:2px solid #BBB;background:#f7f7f7}
+.ue-table-interlace-color-single{background-color:#fcfcfc}
+.ue-table-interlace-color-double{background-color:#f7faff}
+ td p{margin:0;padding:0;width:auto;height:auto;}
+
+hr{border: 0px;border-top: 1px solid #ccc;}
+img:hover {z-index:-1;cursor:pointer;}
+pre{
+	white-space: pre-wrap; /* CSS 2.1 */
+	word-wrap: break-word; /* IE7 */
+}
+.marker {
+	background-color: Yellow;
+}
+
+figure {
+	text-align: center;
+	border: solid 1px #ccc;
+	border-radius: 2px;
+	background: rgba(0,0,0,0.05);
+	padding: 10px;
+	margin: 10px 20px;
+	display: inline-block;
+}
+
+figure > figcaption {
+	text-align: center;
+	display: block; /* For IE8 */
+}
+em{font-style: italic;}
+.view{height:100%;position: relative !important;}
+/*.view:after { content: ''; height: 60px; display: block;} */
+._135editor {border:0 none;padding: 0px;z-index:0;position: relative !important;}
+._135editor.active,.active{
+    z-index: 100;
+    outline: 1.5px dashed red !important;
+    outline-offset: 2px;
+}
+/*._135editor.active:before{content: "";z-index: -1;display: block;position: absolute;box-sizing:border-box;width: 102%;left:-1%;height: 100%;border:1px dashed red;}
+.view .active-135item:before {position: absolute;content: ''; left: 0;right: 0;top: 0;bottom: 0; box-sizing: border-box;border: 2px dashed red;margin:-5px;z-index: 1000;}*/
+._135editor .draghandle{position: absolute;background-color:rgba(200,200,200,0.8);color:#333;cursor: move;top:-30px;right:-5px;padding: 3px 5px;font-size:12px;}
+.view .active-135item{position: relative !important;}
+
+h1,h2,h3,h4,h5,h6{font-weight:400;font-size:16px}
+.hidden{display: none;visibility: hidden;}
+.otf-poptools{ line-height: 24px; padding: 8px;
+    border-radius: 0;border: 0 none;color: #FFF;position:absolute;width: 80%;left:15px;background:rgb(103,91,84);}
+.otf-poptools span {
+    cursor: pointer;
+    margin: 0 5px;
+}
+.slider{height:16px!important;width:auto;position:relative;background-color:#FFF;margin-bottom:5px}
+.slider .complete{height:100%;width:auto;color:#333;font-size:10px;line-height:16px;text-align:center;background-color:#ccc;z-index:2}
+.slider .marker{height:16px;width:12px;cursor:pointer;position:absolute;top:0;left:0;background-color:#999;z-index:3}
+
+
+/** 微信音乐，微信音频的样式 **/
+.db {  display: block;}
+
+qqmusic{
+	min-height: 60px;
+    width: 100%;
+    background: #ccc;
+    margin: 17px 1px 16px 0;
+    display: block;
+    opacity: 0.9;
+    background-image: url('https://image.135editor.com/files/users/0/1/201611/Omfdq9uS_SNXj.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+mpvoice{
+    min-height: 90px;
+    width: 100%;
+    background: #ccc;
+    margin: 17px 1px 16px 0;
+    display: block;
+    opacity: 0.9;
+    background-color:#FCFCFC,
+    background-image: url('https://by.135editor.com/img/icons/mpvoice.png');
+    background-size: auto;
+    background-position: left center;
+    background-repeat: no-repeat;
+}

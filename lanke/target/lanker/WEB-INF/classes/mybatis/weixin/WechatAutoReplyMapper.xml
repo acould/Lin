@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WechatAutoReplyMapper">
+	
+	
+	<!--表名 -->
+	<sql id="tableName">
+		wechat_auto_reply
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		AUTOREPLY_ID,
+		EVENT,
+		NAME,
+		KEYWORD,
+		TYPE,
+		OBJECT_ID,
+		CREATE_TIME,
+		STATE,
+		INTERNET_ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{AUTOREPLY_ID},	
+		#{EVENT},	
+		#{NAME},
+		#{KEYWORD},
+		#{TYPE},	
+		#{OBJECT_ID},	
+		#{CREATE_TIME},
+		#{STATE},
+		#{INTERNET_ID}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+			<include refid="tableName"></include>(<include refid="Field"></include>) 
+		values (<include refid="FieldValue"></include>)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			AUTOREPLY_ID = #{AUTOREPLY_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+			<include refid="tableName"></include>
+		set 
+			<if test="NAME != null and NAME != ''">
+				NAME = #{NAME},
+			</if>
+			<if test="KEYWORD != null and KEYWORD != ''">
+				KEYWORD = #{KEYWORD},
+			</if>
+			<if test="TYPE != null and TYPE != ''">
+				TYPE = #{TYPE},
+			</if>
+			<if test="OBJECT_ID != null and OBJECT_ID != ''">
+				OBJECT_ID = #{OBJECT_ID},
+			</if>
+			<if test="STATE != null and STATE != ''">
+				STATE = #{STATE},
+			</if>
+			AUTOREPLY_ID = #{AUTOREPLY_ID}
+		where 
+			AUTOREPLY_ID = #{AUTOREPLY_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			AUTOREPLY_ID = #{AUTOREPLY_ID}
+	</select>
+	
+	<select id="findByEvent" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			EVENT = #{EVENT} and INTERNET_ID = #{INTERNET_ID}
+			<if test="EVENT == 'keyword'">
+				<if test="KEYWORD != null and KEYWORD != ''">
+					and KEYWORD = #{KEYWORD}
+				</if>
+			</if>
+	</select>
+	
+	<!-- 分页列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 1 = 1 
+			<if test="pd.INTERNET_ID != null and pd.INTERNET_ID != ''">
+				and INTERNET_ID = #{pd.INTERNET_ID}
+			</if>
+			<if test="pd.EVENT != null and pd.EVENT != ''">
+				and EVENT = #{pd.EVENT}
+			</if>
+			
+			<!-- 只有关键词回复才有查询 -->
+			<if test="pd.EVENT == 'keyword'">
+				<if test="pd.KEYWORDS != null and pd.KEYWORDS != ''"><!-- 关键词检索 -->
+				and
+				(
+					NAME LIKE CONCAT(CONCAT('%', #{pd.KEYWORDS}),'%')
+					OR KEYWORD LIKE CONCAT(CONCAT('%', #{pd.KEYWORDS}),'%')
+				)
+				</if>
+			</if>
+		order by CREATE_TIME desc
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			AUTOREPLY_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+</mapper>

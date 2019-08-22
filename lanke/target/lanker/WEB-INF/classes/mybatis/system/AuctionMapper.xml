@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AuctionMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        Auction
+    </sql>
+
+    <!-- 字段 -->
+    <sql id="Field">
+        Auction_ID,
+        ANAME,
+        STORING,
+        CONTENT,
+        STATE,
+        CREATETIME,
+        INTERNET_ID,
+        INTEGRAL,
+        DELIVERY,
+        D_STATE,
+        payInt,
+        payCash,
+        price,
+        store_id
+    </sql>
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
+        #{Auction_ID}
+        ,
+        #{ANAME},
+        #{STORING},
+        #{CONTENT},
+        #{STATE},
+        #{CREATETIME},
+        #{INTERNET_ID},
+        #{INTEGRAL},
+        #{DELIVERY},
+        #{D_STATE},
+        #{payInt},
+        #{payCash},
+        #{price},
+        #{STORE_ID}
+    </sql>
+
+
+    <!-- 新增-->
+    <insert id="save" parameterType="pd">
+        insert into
+        <include refid="tableName"></include>
+        (
+        <include refid="Field"></include>
+        ) values (
+        <include refid="FieldValue"></include>
+        )
+    </insert>
+
+    <!-- 逻辑删除-->
+    <update id="delete" parameterType="pd">
+        update
+        <include refid="tableName"></include>
+        set
+        D_STATE = #{D_STATE}
+        where
+        Auction_ID = #{Auction_ID}
+    </update>
+
+
+    <!-- 修改 -->
+    <update id="edit" parameterType="pd">
+        update
+        <include refid="tableName"></include>
+        set
+        <if test="ANAME != null and ANAME != ''">
+            ANAME = #{ANAME},
+        </if>
+        <if test="CONTENT != null and CONTENT != ''">
+            CONTENT = #{CONTENT},
+        </if>
+        <if test="STORING != null and STORING != ''">
+            STORING = #{STORING},
+        </if>
+        <if test="STORE_ID != null and STORE_ID != ''">
+            store_id = #{STORE_ID},
+        </if>
+        <if test="STATE != null and STATE != ''">
+            STATE = #{STATE},
+        </if>
+        <if test="INTEGRAL != null and INTEGRAL != ''">
+            INTEGRAL = #{INTEGRAL},
+        </if>
+        <if test="DELIVERY != null and DELIVERY != ''">
+            DELIVERY = #{DELIVERY},
+        </if>
+        <if test="D_STATE != null and D_STATE != ''">
+            D_STATE = #{D_STATE},
+        </if>
+        payInt = #{payInt},
+        payCash = #{payCash},
+        <if test="price != null and price != ''">
+            price = #{price},
+        </if>
+        Auction_ID = #{Auction_ID}
+        where
+        Auction_ID = #{Auction_ID}
+    </update>
+
+    <!--修改状态（上下架）-->
+    <update id="editState" parameterType="pd">
+        update
+        <include refid="tableName"></include>
+        set
+        <if test="STATE != null and STATE != ''">
+            STATE = #{STATE}
+        </if>
+        where
+        Auction_ID = #{Auction_ID}
+    </update>
+
+
+    <!-- 通过ID获取数据 -->
+    <select id="findById" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        Auction_ID = #{Auction_ID}
+    </select>
+
+    <!-- 分页列表 -->
+    <select id="datalistPage" parameterType="page" resultType="pd">
+       <!-- select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>-->
+        select a.Auction_ID , a.ANAME, a.STORING, a.CONTENT, a.STATE, a.CREATETIME, a.INTERNET_ID, a.INTEGRAL, a.DELIVERY, a.D_STATE, a.payInt, a.payCash, a.price, a.store_id ,b.STORE_NAME from Auction a left join internet_store b on
+        a.store_id = b.store_id
+        where 1=1 and a.INTERNET_ID = #{pd.INTERNET_ID}
+        <if test="pd.STORE_ID!= null and pd.STORE_ID != ''">
+            and
+            a.store_id=#{pd.STORE_ID}
+        </if>
+        <!-- 关键词检索 -->
+        <if test="pd.keywords!= null and pd.keywords != ''">
+            and
+            a.ANAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+        </if>
+        <!-- 逻辑删除，1表示没删除 -->
+        and a.D_STATE = 1
+        <!-- 根据商品序号升序，创建时间降序排 -->
+        order by CONVERT(a.STORING,SIGNED) ASC,a.CREATETIME DESC
+    </select>
+
+    <!-- 列表(全部) -->
+    <select id="listAll" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where 1 = 1
+        <if test="internetId != null and internetId != ''">
+            and INTERNET_ID=#{internetId}
+        </if>
+        <if test="STATE != null and STATE != ''">
+            and STATE = #{STATE}
+        </if>
+        and D_STATE = 1
+        order by CONVERT(STORING,SIGNED) ASC,CREATETIME DESC
+    </select>
+    <!-- 列表网吧(全部) -->
+    <select id="listIntegral" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where 1=1
+        <if test="pd.intenetId!= null and pd.intenetId != ''">
+            and Auction_ID =#{Auction_ID}
+
+        </if>
+        and D_STATE = 1 order by CREATETIME DESC
+    </select>
+
+    <!-- 通过ANAME获取数据 -->
+    <select id="findByAname" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        INTERNET_ID = #{INTERNET_ID} and
+        ANAME = #{ANAME} and D_STATE = 1<!-- 未删除 -->
+    </select>
+
+    <!-- 批量删除 -->
+    <delete id="deleteAll" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        Auction_ID in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+</mapper>

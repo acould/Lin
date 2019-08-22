@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MemberLotteryMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		MEMBERLOTTERY
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		USER_ID,	
+		INTENET_ID,	
+		LOTTERY_ID,	
+		STATE,	
+		LOTTERY_TIME,	
+		CONVERT_TIME,	
+		MEMBERLOTTERY_ID,
+		STORE_ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{USER_ID},	
+		#{INTENET_ID},	
+		#{LOTTERY_ID},	
+		#{STATE},	
+		#{LOTTERY_TIME},	
+		#{CONVERT_TIME},	
+		#{MEMBERLOTTERY_ID},
+		#{STORE_ID}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			MEMBERLOTTERY_ID = #{MEMBERLOTTERY_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+		MEMBERLOTTERY_ID = MEMBERLOTTERY_ID
+		where 
+		MEMBERLOTTERY_ID = #{MEMBERLOTTERY_ID}
+	</update>
+	
+	<!-- 兑换奖品后(通过MEMBERLOTTERY_ID修改状态和时间)-->
+	<update id="editSqdj" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+		STATE = #{STATE}
+		<if test="CONVERT_TIME != null and CONVERT_TIME != ''">
+			,CONVERT_TIME = #{CONVERT_TIME}
+		</if>
+		where 
+		MEMBERLOTTERY_ID = #{MEMBERLOTTERY_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			MEMBERLOTTERY_ID = #{MEMBERLOTTERY_ID}
+	</select>
+	
+	<!-- 列表(列出MemberLottery列表(查询所有的会员兑奖信息)) -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+  	  select
+		A.USER_ID,	
+		A.INTENET_ID,	
+		A.LOTTERY_ID,	
+		A.STATE,	
+		A.LOTTERY_TIME,	
+		A.CONVERT_TIME,	
+		A.MEMBERLOTTERY_ID,
+		B.NAME,
+		C.CARDED,
+        D.CONTENT,
+        D.EXPIRY_DATE,
+        D.LOTTERY_NAME,
+		E.STORE_NAME
+      FROM memberlottery A,sys_user B,bund_user C,internet_lottery D,internet_store E
+      WHERE 
+           C.USER_ID=B.USER_ID
+            AND A.LOTTERY_ID=D.LOTTERY_ID
+            AND A.STORE_ID = E.STORE_ID
+            AND A.USER_ID = C.USER_ID
+		<if test="pd.intenetId!= null and pd.intenetId != ''">
+			and A.INTENET_ID=#{pd.intenetId}
+		</if>
+		
+        <if test="pd.storeId!= null and pd.storeId != ''">
+			and E.STORE_ID = #{pd.storeId}
+		</if>
+		<if test="pd.userId != null and pd.userId != ''">
+			and A.USER_ID=#{pd.userId}
+		</if>
+		<!-- 搜索条件 -->
+        <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+        and
+			(
+			E.STORE_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		  	or D.LOTTERY_NAME LIKE  CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		  	or C.CARDED LIKE  CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		  	or B.NAME LIKE  CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		  	or B.NAME LIKE CONCAT(CONCAT('%', #{pd.word}),'%')
+			)
+		</if>
+		<!-- 筛选条件 -->
+			<if test="pd.DUIHUAN_STORE!= null and pd.DUIHUAN_STORE != ''">
+				and A.STORE_ID = #{pd.DUIHUAN_STORE}
+			</if>
+			<choose>
+				<when test="pd.STATE == 1"><!-- 未兑奖 -->
+					and A.STATE = 1 and NOW() <![CDATA[<=]]> DATE_ADD(A.LOTTERY_TIME,INTERVAL D.EXPIRY_DATE day)
+				</when>
+				<when test="pd.STATE == 2"><!-- 兑奖中 -->
+					and A.STATE = 2 and NOW() <![CDATA[<=]]> DATE_ADD(A.LOTTERY_TIME,INTERVAL D.EXPIRY_DATE day)
+				</when>
+				<when test="pd.STATE == 3"><!-- 兑奖成功 -->
+					and A.STATE = 3 and NOW() <![CDATA[<=]]> DATE_ADD(A.LOTTERY_TIME,INTERVAL D.EXPIRY_DATE day)
+				</when>
+				<when test="pd.STATE == 4"><!-- 已失效 -->
+					and NOW() > DATE_ADD(A.LOTTERY_TIME,INTERVAL D.EXPIRY_DATE day)
+				</when>
+			</choose>
+			<if test="pd.lastLoginStart != null and pd.lastLoginStart != '' ">
+				and  A.LOTTERY_TIME <![CDATA[>]]> #{pd.lastLoginStart}
+			</if>
+			<if test="pd.lastLoginEnd != null and pd.lastLoginEnd != '' ">
+				and  A.LOTTERY_TIME <![CDATA[<]]> #{pd.lastLoginEnd}
+			</if>
+		<!-- 奖品是否有奖0表示有奖，1表示没奖 -->
+		and D.STATE = 0
+		<![CDATA[ and datediff(curdate(),A.LOTTERY_TIME) < 90 ]]> 
+		ORDER BY field(A.STATE,'1','2') desc, A.CONVERT_TIME DESC, A.LOTTERY_TIME DESC
+	</select>
+	
+	<select id="wxdatalist" parameterType="page" resultType="pd">
+  	  select
+		A.USER_ID,	
+		A.INTENET_ID,	
+		A.LOTTERY_ID,	
+		A.STATE,	
+		A.LOTTERY_TIME,	
+		A.CONVERT_TIME,	
+		A.MEMBERLOTTERY_ID,
+		B.NAME,
+		C.CARDED,
+        D.CONTENT,
+        D.EXPIRY_DATE,
+        D.LOTTERY_NAME,
+		E.STORE_NAME
+      FROM memberlottery A,sys_user B,bund_user C,internet_lottery D,internet_store E
+      WHERE 
+           C.USER_ID=B.USER_ID
+            AND A.LOTTERY_ID=D.LOTTERY_ID
+            AND A.STORE_ID = E.STORE_ID
+            AND A.USER_ID = C.USER_ID
+		<if test="pd.userId != null and pd.userId != ''">
+			and A.USER_ID=#{pd.userId}
+		</if>
+		<!-- 筛选条件 -->
+			<choose>
+				<when test="pd.STATE == 1"><!-- 未兑奖 -->
+					and A.STATE = 1 and NOW() <![CDATA[<=]]> DATE_ADD(A.LOTTERY_TIME,INTERVAL D.EXPIRY_DATE day)
+				</when>
+				<when test="pd.STATE == 2"><!-- 兑奖中 -->
+					and A.STATE = 2 and NOW() <![CDATA[<=]]> DATE_ADD(A.LOTTERY_TIME,INTERVAL D.EXPIRY_DATE day)
+				</when>
+				<when test="pd.STATE == 3"><!-- 兑奖成功 -->
+					and A.STATE = 3 and NOW() <![CDATA[<=]]> DATE_ADD(A.LOTTERY_TIME,INTERVAL D.EXPIRY_DATE day)
+				</when>
+				<when test="pd.STATE == 4"><!-- 已失效 -->
+					and NOW() > DATE_ADD(A.LOTTERY_TIME,INTERVAL D.EXPIRY_DATE day)
+				</when>
+			</choose>
+			<!-- 奖品是否有奖0表示有奖，1表示没奖 -->
+			and D.STATE = 0
+		ORDER BY A.CONVERT_TIME DESC,A.LOTTERY_TIME DESC
+	</select>
+	
+	<!-- 查询全部会员兑奖信息 -->
+	<select id="listExcel" parameterType="page" resultType="pd">
+  	   select
+		A.USER_ID,	
+		A.INTENET_ID,	
+		A.LOTTERY_ID,	
+		A.STATE,	
+		A.LOTTERY_TIME,	
+		A.CONVERT_TIME,	
+		A.MEMBERLOTTERY_ID,
+		B.`NAME`,
+		C.CARDED,
+        D.CONTENT,
+        D.EXPIRY_DATE,
+        D.LOTTERY_NAME,
+		E.STORE_NAME
+      FROM memberlottery A,sys_user B,bund_user C,internet_lottery D,internet_store E
+      WHERE 
+           C.USER_ID=B.USER_ID
+            AND A.LOTTERY_ID=D.LOTTERY_ID
+            AND A.STORE_ID = E.STORE_ID
+            AND A.USER_ID = C.USER_ID
+		<if test="pd.intenetId!= null and pd.intenetId != ''">
+			and A.INTENET_ID=#{pd.intenetId}
+		</if>
+		<if test="pd.storeId!= null and pd.storeId != ''">
+			and E.STORE_ID = #{pd.storeId}
+		</if>
+		<!-- 搜索条件 -->
+	        <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+	        and
+				(
+				E.STORE_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			  	or D.LOTTERY_NAME LIKE  CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			  	or C.CARDED LIKE  CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			  	or B.NAME LIKE  CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			  	or B.NAME LIKE CONCAT(CONCAT('%', #{pd.word}),'%')
+				)
+			</if>
+		<!-- 筛选条件 -->
+			<if test="pd.DUIHUAN_STORE!= null and pd.DUIHUAN_STORE != ''">
+				and A.STORE_ID = #{pd.DUIHUAN_STORE}
+			</if>
+			<choose>
+				<when test="pd.STATE == 1"><!-- 未兑奖 -->
+					and A.STATE = 1 and NOW() <![CDATA[<=]]> DATE_ADD(A.LOTTERY_TIME,INTERVAL D.EXPIRY_DATE day)
+				</when>
+				<when test="pd.STATE == 2"><!-- 兑奖中 -->
+					and A.STATE = 2 and NOW() <![CDATA[<=]]> DATE_ADD(A.LOTTERY_TIME,INTERVAL D.EXPIRY_DATE day)
+				</when>
+				<when test="pd.STATE == 3"><!-- 兑奖成功 -->
+					and A.STATE = 3 and NOW() <![CDATA[<=]]> DATE_ADD(A.LOTTERY_TIME,INTERVAL D.EXPIRY_DATE day)
+				</when>
+				<when test="pd.STATE == 4"><!-- 已失效 -->
+					and NOW() > DATE_ADD(A.LOTTERY_TIME,INTERVAL D.EXPIRY_DATE day)
+				</when>
+			</choose>
+			<if test="pd.lastLoginStart != null and pd.lastLoginStart != '' ">
+				and  A.LOTTERY_TIME <![CDATA[>]]> #{pd.lastLoginStart}
+			</if>
+			<if test="pd.lastLoginEnd != null and pd.lastLoginEnd != '' ">
+				and  A.LOTTERY_TIME <![CDATA[<]]> #{pd.lastLoginEnd}
+			</if>
+		and D.STATE = 0
+		<![CDATA[ and datediff(curdate(),A.LOTTERY_TIME) < 90 ]]> 
+		ORDER BY A.CONVERT_TIME DESC,A.LOTTERY_TIME DESC
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		A.USER_ID,	
+		A.INTENET_ID,	
+		A.LOTTERY_ID,	
+		A.STATE,	
+		A.LOTTERY_TIME,	
+		A.CONVERT_TIME,	
+		A.MEMBERLOTTERY_ID,B.LOTTERY_NAME
+		from 
+		<include refid="tableName"></include> A,INTERNET_LOTTERY B
+		WHERE A.LOTTERY_ID=B.LOTTERY_ID
+	</select>
+	
+	<!-- 根据奖品id获取该奖品的兑换记录 -->
+	<select id="findRecordByLottery" parameterType="pd" resultType="pd">
+		select
+			A.*,
+			B.EXPIRY_DATE,
+			B.LOTTERY_NAME
+		from 
+			<include refid="tableName"></include> A,INTERNET_LOTTERY B
+		WHERE 
+			A.LOTTERY_ID = B.LOTTERY_ID
+			and A.LOTTERY_ID = #{LOTTERY_ID}
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			MEMBERLOTTERY_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	
+</mapper>

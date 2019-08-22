@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MemberMarkeMapper">
+	<!--表名 -->
+	<sql id="tableName">
+		tb_marketing
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		title,
+		type,
+		mass_object,
+		object_id,
+		marketime,
+		mass_id,
+		internet_id,
+		store_id
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{title},
+		#{type},
+		#{mass_object},
+		#{object_id},
+		#{marketime},
+		#{mass_id},
+		#{internet_id},
+		#{store_id}
+	</sql>
+
+	<!-- 会员营销列表 -->
+	<select id="datalistPages" parameterType="page" resultType="pd">
+		select
+		a.*,b.`mass_context`
+		from
+		<include refid="tableName"></include>
+		a,tb_marketingcontext b
+		WHERE a.`mass_id`=b.`id`
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and
+			(
+			title LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or
+			marketime LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			)
+		</if>
+		<if test="pd.internet_id != null and pd.internet_id != ''">
+			and a.internet_id= #{pd.internet_id}
+		</if>
+		<if test="pd.type != null and pd.type != ''">
+			and a.type= #{pd.type}
+		</if>
+		<if test="pd.store_id != null and pd.store_id != ''">
+			and(a.store_id LIKE
+			CONCAT(CONCAT('%',#{pd.store_id}),'%'))
+		</if>
+		<if test="pd.store_id == null or pd.store_id == ''">
+			<if test="pd.storeId!= null and pd.storeId!=''">
+				and(a.store_id LIKE
+				CONCAT(CONCAT('%',#{pd.storeId}),'%'))
+			</if>
+		</if>
+		ORDER BY a.marketime DESC
+	</select>
+
+	<!-- 会员营销列表 -->
+	<select id="datalistPages1" parameterType="page" resultType="pd">
+		select
+		a.*,b.`mass_context`
+		from
+		<include refid="tableName"></include>
+		a,tb_marketingcontext b
+		WHERE a.`mass_id`=b.`id`
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and
+			(
+			title LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or
+			marketime LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			)
+		</if>
+		<if test="pd.internet_id != null and pd.internet_id != ''">
+			and a.internet_id= #{pd.internet_id}
+		</if>
+		<if test="pd.type != null and pd.type != ''">
+			and a.type= #{pd.type}
+		</if>
+		<if test="pd.store_id != null and pd.store_id != ''">
+			and(a.store_id LIKE
+			CONCAT(CONCAT('%',#{pd.store_id}),'%'))
+		</if>
+		<if test="pd.store_id == null or pd.store_id == ''">
+			<if test="pd.list1!= null and pd.list1!=''">
+				and a.`id` in ('${pd.list1}')
+			</if>
+		</if>
+		ORDER BY a.marketime DESC
+	</select>
+
+	<!-- 查询网吧(或个人)门店 -->
+	<select id="storeList" parameterType="page" resultType="pd">
+		SELECT
+		a.store_name,a.store_id, b.`STATE` as state
+		FROM
+		internet_store a,
+		internet_store_v b
+		WHERE a.`STORE_ID` = b.`STORE_ID`
+		AND a.`STATE`='1'
+		<if test="pd.internet_id != null and pd.internet_id != ''">
+			and a.INTERNET_ID= #{pd.internet_id}
+		</if>
+		<if test="pd.STORE_ID != null and pd.STORE_ID != ''">
+			and a.`STORE_ID`= #{pd.STORE_ID}
+		</if>
+	</select>
+
+	<!-- 查询网吧所有粉丝 -->
+	<select id="fanList" parameterType="pd" resultType="pd">
+		SELECT
+		OPEN_ID
+		FROM wechat_user
+		WHERE 1=1
+		<if test="internet_id != null and internet_id != ''">
+			and INTENET_ID = #{internet_id}
+		</if>
+		<if test="sex != null and sex != ''">
+			and SEX = #{sex}
+		</if>
+	</select>
+
+	<!-- 新增会员营销模板 -->
+	<insert id="saveMarket" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 去查询指定营销信息 -->
+	<select id="view" parameterType="pd" resultType="pd">
+		select
+			b.id,
+			b.`mass_context`,
+			b.send_type,
+			b.start_time,
+			b.end_time
+		from
+		<include refid="tableName"></include> a,tb_marketingcontext b
+		WHERE a.`mass_id`=b.`id`
+		<if test="id != null and id != ''">
+			and a.id= #{id}
+		</if>
+	</select>
+
+	<!-- 删除指定营销信息 -->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		id = #{id}
+	</delete>
+
+	<!-- 批量删除指定营销信息 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where id in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- 按条件查询符合要求的会员 -->
+	<select id="memberList" parameterType="pd" resultType="pd">
+		SELECT
+		a.`OPEN_ID`,b.`CARDED`,b.`OVERAGE`,c.consume_high,c.consume_low,c.balance_high,c.balance_low,c.live_high,c.live_low
+		FROM
+		wechat_user a,
+		bund_user b,
+		store_user_tips c
+		WHERE
+		a.`USER_ID` =
+		b.`USER_ID`
+		AND b.`STORE_ID` = c.`store_id`
+		<if test="sex != null and sex != ''">
+			AND a.`SEX`= #{sex}
+		</if>
+		<if test="storeId != null and storeId != ''">
+			AND b.`STORE_ID` IN
+			<foreach item="item" index="index" collection="storeId"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+
+	</select>
+
+	<!-- 通过门店id获取门店名称 -->
+	<select id="findByStoreId" parameterType="pd" resultType="pd">
+		SELECT
+		a.`STORE_ID` AS STORE_ID,
+		a.`STORE_NAME` AS STORE_NAME
+		FROM
+		internet_store a,
+		internet_store_v b
+		WHERE a.`STORE_ID` = b.`STORE_ID`
+		AND b.`STATE` = '1'
+		AND a.`STORE_ID` IN ('${list}')
+	</select>
+
+	<!-- 通过门店id获取门店名称 -->
+	<select id="findUser" parameterType="pd"
+		resultType="com.lk.entity.system.User">
+		SELECT
+		a.*
+		FROM
+		sys_user a,
+		wechat_user b
+		WHERE a.`USER_ID` =
+		b.`USER_ID`
+		AND b.`OPEN_ID` = #{open_id}
+	</select>
+
+	<!-- 通过门店id获取门店标签 -->
+	<select id="selectTips" parameterType="pd" resultType="pd">
+		SELECT
+		store_id,consume_high,consume_low,balance_high,balance_low,live_high,live_low
+		FROM store_user_tips WHERE 1=1
+		<if test="storeid != null and storeid != ''">
+			AND store_id = #{storeid}
+		</if>
+	</select>
+
+	<!-- 保存群发记录 -->
+	<insert id="saveRecord" parameterType="pd">
+		INSERT INTO
+		tb_marketingrecord (
+		id,
+		internet_id,
+		open_id,
+		mass_id,
+		type,
+		state,
+		sendtime,
+		view_state
+		)
+		VALUES
+		(
+		#{id},
+		#{internet_id},
+		#{open_id},
+		#{mass_id},
+		#{type},
+		#{state},
+		#{sendtime},
+		#{view_state}
+		)
+	</insert>
+
+	<!-- 保存链接内容 -->
+	<insert id="saveLink" parameterType="pd">
+		INSERT INTO
+		tb_marketinglink
+		(
+		id,
+		interent_id,
+		content,
+		mass_id,
+		creattime
+		)
+		VALUES
+		(
+		#{id},
+		#{interent_id},
+		#{content},
+		#{mass_id},
+		#{creattime}
+		)
+	</insert>
+
+	<!-- 去查询指定链接信息 -->
+	<select id="findLink" parameterType="pd" resultType="pd">
+		select
+		id,content
+		from
+		tb_marketinglink
+		WHERE id=#{id}
+	</select>
+
+	<!-- 通过mass_id去查询信息 -->
+	<select id="findContent" parameterType="pd" resultType="pd">
+		SELECT
+		mass_context
+		FROM
+		tb_marketingcontext
+		WHERE id = #{mass_id}
+	</select>
+
+	<!-- 获取符合条件的卡券 -->
+	<select id="selectCard" parameterType="page" resultType="pd">
+		SELECT * FROM (
+		SELECT
+		a.*,(
+		CASE
+		TYPE
+		WHEN 'DATE_TYPE_FIX_TERM' THEN '2'
+		ELSE (
+		CASE
+		WHEN END_TIMESTAMP &gt;#{pd.time1} THEN '2'
+		END) END) AS cardState
+		FROM
+		card a,
+		in_scene b,
+		card_store c,
+		internet_store d,
+		internet_store_v e
+		WHERE a.scene_id = b.scene_id
+		AND a.`CARD_ID` = c.`card_id`
+		AND c.`store_id`=d.`STORE_ID`
+		AND c.`store_id`= e.`STORE_ID`
+		AND d.`STATE`='1'
+		<if test="pd.NEW1 == 'NEW1'">
+			AND b.`BENEFIT_TYPE` != 'YHQ'
+			AND (a.`cardSum_type` IS NULL  OR a.`cardSum_type` !='1')
+		</if>
+		<if test="pd.NEW1 == 'APPLY'">
+			AND b.FAV_TYPE = #{pd.NEW1}
+		</if>
+		<!--已失效卡券不查-->
+		<if test="pd.internet_id != null and pd.internet_id != ''">
+			AND a.INTENET_ID = #{pd.internet_id}
+		</if>
+		<if test="pd.list != null and pd.list != ''">
+			AND c.store_id in ('${pd.list}')
+		</if>
+		<if test="pd.IS_ALL != null and pd.IS_ALL != ''">
+			AND a.IS_ALL = #{pd.IS_ALL}
+		</if>
+		<if test="pd.state != null and pd.state != ''">
+			AND e.`STATE` = #{pd.state}
+		</if>
+		<if test="pd.card_id != null and pd.card_id != ''">
+			AND a.`CARD_ID` = #{pd.card_id}
+		</if>
+		GROUP BY a.`CARD_ID`
+		ORDER BY CREATE_TIME DESC ) AS A WHERE 1=1
+		<if test="pd.NEW1 == 'NEW1'">
+			AND A.cardState IS NOT NULL
+		</if>
+			<!-- 未删除的卡券 -->
+			and a.D_STATE = '0'
+	</select>
+
+	<!-- 通过卡券id获取卡券信息 -->
+	<select id="cardView" parameterType="pd" resultType="pd">
+		SELECT
+		a.*,
+		c.STORE_ID,
+		c.STORE_NAME
+		FROM
+		card a,
+		card_store b,
+		internet_store c,
+		internet_store_v d
+		WHERE a.`CARD_ID` = b.card_id
+		AND
+		b.`store_id`= c.`STORE_ID`
+		AND b.`store_id` = d.`STORE_ID`
+		AND
+		c.`STATE`= '1'
+		<if test="cardId != null and cardId != ''">
+			AND a.`CARD_ID` = #{cardId}
+		</if>
+		<if test="state != null and state != ''">
+			AND d.`STATE`= #{state}
+		</if>
+		ORDER BY c.`INSERT_TIME` DESC
+	</select>
+
+	<!-- 通过门店id数组获取门店名称 -->
+	<select id="storeName" parameterType="String" resultType="pd">
+		SELECT
+		b.`STORE_NAME`,
+		b.`STORE_ID`
+		FROM
+		internet_store b
+		WHERE
+		b.`STORE_ID` IN
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		GROUP BY b.`STORE_ID`
+		ORDER BY b.`INSERT_TIME` DESC
+	</select>
+
+	<!-- 通过门店id获取门店名称 -->
+	<select id="selectName" parameterType="pd" resultType="pd">
+		SELECT
+		store_name
+		FROM internet_store
+		WHERE store_id=#{STORE_ID}
+	</select>
+
+	<!-- 通过open_id去查询查看详情状态(view_state) -->
+	<select id="findRecord" parameterType="pd" resultType="pd">
+		SELECT
+		view_state
+		FROM
+		tb_marketingrecord
+		WHERE 1=1
+		<if test="id != null and id != ''">
+			AND id = #{id}
+		</if>
+	</select>
+	<!-- 通过open_id去修改查看详情状态(view_state) -->
+	<update id="editRecord" parameterType="pd">
+		UPDATE
+		tb_marketingrecord
+		SET
+		view_state = '1'
+		WHERE
+		id = #{id}
+	</update>
+
+	<!-- 通过对象id获取卡券库存 -->
+	<select id="stock" parameterType="pd" resultType="pd">
+		SELECT
+		QUANTITY
+		FROM
+		card
+		WHERE card_id=#{object_id}
+	</select>
+
+	<!-- 这里通过open_id和卡券id去判断用户是否已领取该卡券(未核销) -->
+	<select id="findCard" parameterType="pd" resultType="pd">
+		SELECT
+		*
+		FROM
+		card_cancel
+		where OPEN_ID = #{open_id}
+		AND CARD_ID
+		=#{object_id}
+		<if
+			test="START_TIME != null and START_TIME != '' and END_TIME != null and END_TIME != ''">
+			AND CREAT_TIME between #{START_TIME} and #{END_TIME}
+		</if>
+		ORDER BY CREAT_TIME DESC
+	</select>
+
+	<!-- 通过卡券id获取卡券领取规则 -->
+	<select id="findRule" parameterType="pd" resultType="pd">
+		SELECT
+		b.*
+		FROM
+		card a,
+		in_scene b
+		WHERE a.SCENE_ID = b.SCENE_ID
+		AND
+		a.`CARD_ID`=#{card_id}
+	</select>
+
+	<!-- 通过卡劵id获取信息 -->
+	<select id="listByCardId" parameterType="pd" resultType="pd">
+		SELECT
+		c.`STORE_NAME`,d.`STATE`
+		FROM
+		card a,
+		card_store b,
+		internet_store
+		c,
+		internet_store_v d
+		WHERE a.`CARD_ID`= b.`card_id`
+		AND b.`store_id` =
+		c.`STORE_ID`
+		AND b.`store_id` = d.`STORE_ID`
+		AND c.`STATE` = 1
+		<if test="CARD_ID != null and CARD_ID != ''">
+			AND a.`CARD_ID`= #{CARD_ID}
+		</if>
+		<if test="state != null and state != ''">
+			AND d.`STATE`= #{state}
+		</if>
+	</select>
+
+	<!-- 查询含有该门店的营销id -->
+	<select id="selectId" parameterType="String" resultType="String">
+		SELECT
+		id
+		FROM
+		tb_marketing
+		WHERE 1=1
+		and(store_id LIKE
+		CONCAT(CONCAT('%',#{store_id}),'%'))
+	</select>
+</mapper>

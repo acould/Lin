@@ -1,0 +1,153 @@
+
+
+.edui-default .edui-bubble .edui-popup-content{line-height:24px;padding:8px;background:rgba(103,91,84,0.9);border-radius:0;border:0 none;color:#FFF;}
+	
+.edui-default span.edui-clickable,.edui-default a.edui-clickable {color: #fff;cursor: pointer;text-decoration: none;}
+.edui-default .edui-dialog-body{padding:0 0;background: #FFF;width:auto;}
+
+.edui-default .edui-dialog-titlebar{
+	height:52px;line-height:52px;padding: 0 10px;
+	color: #222;
+    background-color: #f4f5f9;
+    background-image: -moz-linear-gradient(top,#f4f5f9 0,#f4f5f9 100%);
+    background-image: -webkit-gradient(linear,0 0,0 100%,from(#f4f5f9),to(#f4f5f9));
+    background-image: -webkit-linear-gradient(top,#f4f5f9 0,#f4f5f9 100%);
+    background-image: -o-linear-gradient(top,#f4f5f9 0,#f4f5f9 100%);
+    background-image: linear-gradient(to bottom,#f4f5f9 0,#f4f5f9 100%);
+    border-bottom: 1px solid #e7e7eb;
+}
+.edui-default .edui-dialog-caption{font-size:14px;line-height:52px;}
+.edui-default .edui-dialog-draghandle{height:52px;}
+
+.edui-default .edui-dialog-closebutton .edui-button-body {margin-top: 15px; margin-right: 5px;}
+
+.edui-default .edui-dialog-foot{height: 62px;margin: 0;
+    padding: 16px 0;
+    background-color: #f4f5f9;
+    text-align: center;
+    border-top: 1px solid transparent;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+.edui-default .edui-dialog-buttons .edui-button .edui-button-body{
+	background:none;height:30px;cursor:pointer;
+	line-height:30px;background-color: #FFF;
+    border:1px solid #e7e7eb;
+    color: #222;
+}
+.edui-default .edui-dialog-buttons .edui-label{line-height:30px;}
+.edui-default .edui-dialog-buttons .edui-button .edui-state-hover .edui-button-body{
+	background:none;background-color: #e7e7eb;cursor:pointer;
+}
+
+.edui-default .edui-dialog-buttons .edui-okbutton .edui-button-body{background-color: rgb(0,183,238);color:#FFF;cursor:pointer;}
+.edui-default .edui-dialog-buttons .edui-okbutton .edui-state-hover .edui-button-body{background-color: rgb(0,162,212);color:#FFF;cursor:pointer;}
+
+.edui-default .edui-dialog-modalmask {
+	filter: alpha(opacity = 75);
+    -moz-opacity: .75;
+    -khtml-opacity: .75;
+    opacity: .75;
+    background-color: #000;
+}
+.edui-default .edui-for-music .edui-dialog-content {
+    height: 220px;
+    width: 515px;
+}
+.edui-default .edui-editor-iframeholder{max-width:100%;width: 100% !important;background: #FFF;}
+.edui-default .edui-editor{max-width: 100%;width:100%;}
+
+.edui-default .edui-shortcutmenu{opacity:1 !important;}
+/*.edui-default .edui-colorpicker-topbar { display: none;}*/
+
+.edui-default .edui-for-shadowcolor .edui-icon {
+    background-position: -750px -77px;
+}
+.edui-default .edui-for-uploadword .edui-icon {
+    background-position: -301px -40px;
+}
+.edui-default .edui-for-more .edui-icon{
+	background-position: -768px -77px;
+	/*background-image:url(../images/arrow_down.png) !important;*/
+}
+
+.edui-default .edui-for-spechars .edui-popup-content iframe{
+    width: 600px;
+    height: 520px;
+}
+
+.edui-button.edui-for-135editor .edui-button-wrap .edui-button-body .edui-icon{
+    background-image: url("http://static.135editor.com/img/icons/editor-135-icon.png") !important;
+    background-size: 85%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.edui-default .show-edui-more .edui-editor-messageholder{
+	top:100px !important;
+}
+
+
+.edui-default .edui-editor-toolbarboxinner .edui-toolbar:nth-child(3) {
+	display:none;
+	z-index: 10000;
+    background-color: RGBA(235,235,235,0.9);
+    padding: 5px 0;
+	position: absolute;
+    width: 100%;
+    height: 30px;
+}
+.show-edui-more .edui-default .edui-editor-toolbarboxinner .edui-toolbar:nth-child(3){
+	display:block !important;
+}
+
+.show-edui-more .edui-toolbar .edui-for-more .edui-button-wrap {    background-color: #ffe69f;}
+/*隐藏弹窗菜单的遮挡边框的区域*/
+.edui-default .edui-popup .edui-bordereraser {
+	display:none;
+}
+.show-edui-more .edui-editor-iframeholder {padding-top: 30px;}
+.show-edui-more .CodeMirror{margin-top:30px;}
+
+
+/* 远程地址获取 */
+.ue_remotecontent_bd{overflow:hidden;*zoom:1;border-bottom: 1px solid #ddd;margin-bottom: 5px;}
+.ue_remotecontent_square{float:left;width:18px;height:18px;margin:0 4px 4px 0;border:1px solid #e7e7eb;cursor:pointer}
+.ue_remotecontent_toolbar{overflow:hidden;*zoom:1;}
+.ue_remotecontent_toolbar .btn_ue_remotecontent{display: inline-block;margin-top:6px;padding:0 22px;height:24px;line-height:24px;*line-height:22px;text-decoration:none;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;font-size:14px;cursor:pointer;border:1px solid #e7e7eb;background-color:#fff;color:#222}
+.ue_remotecontent_toolbar .ue_remotecontent_input_box{overflow:hidden;*zoom:1;display:block;border:1px solid #e7e7eb;padding:0 5px}
+.ue_remotecontent_toolbar .ue_remotecontent_input_append{float:left;margin-right:4px;font-size: 16px;line-height:24px;}
+.ue_remotecontent_toolbar .ue_remotecontent_input_inner{overflow:hidden;*zoom:1;display:block}
+.ue_remotecontent_toolbar input{width:100%;background-color:transparent;border:1px solid #ddd;outline:0;line-height:24px;height:24px;font-size: 14px;}
+.edui-for-remotecontent .edui-popup-body{width:400px !important;}
+
+.edui-default .edui-for-remotecontent .edui-icon {
+    background-position: -240px -40px;
+}
+
+
+.slider {
+    height: 16px !important;
+    width: auto;
+    position: relative;
+    background-color: #FFF;
+    margin-bottom: 5px;
+}
+.slider .complete {
+    height: 100%;
+    width: auto;
+    color:#333;font-size:10px;line-height:16px;text-align:center;
+    background-color: #ccc;
+    z-index: 2;
+}
+.slider .marker {
+    height: 16px;
+    width: 12px;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #999;
+    z-index: 3;
+}

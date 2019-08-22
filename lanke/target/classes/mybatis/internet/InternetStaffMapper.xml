@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="InternetStaffMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		internet_staff
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		internet_id,
+		open_id,
+		store_id,
+		name,
+
+		state,
+		create_time,
+		perms
+
+
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{internet_id},
+		#{open_id},
+		#{store_id},
+		#{name},
+
+		#{state},
+		#{create_time},
+		#{perms}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="store_id != null and store_id != ''">
+			store_id = #{store_id},
+		</if>
+		<if test="state != null and state != ''">
+			state = #{state},
+		</if>
+		<if test="perms != null and perms != ''">
+			perms = #{perms},
+		</if>
+		id = #{id}
+		where
+		id = #{id}
+	</update>
+
+	<update id="editState" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="state != null and state != ''">
+			state = #{state},
+		</if>
+		id = #{id}
+		where
+		id = #{id}
+	</update>
+
+
+
+	
+	<!-- 通过主键ID获取数据 -->
+	<select id="findById" parameterType="String" resultType="pd">
+		select
+			a.*,
+			b.neck_name,
+			c.store_name
+		from 
+			<include refid="tableName"></include> a left join wechat_user b on a.open_id = b.open_id
+			left join internet_store c on a.store_id = c.store_id
+		where
+			a.id = #{id}
+	</select>
+
+	<!--分页加载-->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			a.*,
+			b.neck_name,
+			c.store_name
+		from internet_staff a left join wechat_user b on a.open_id = b.open_id
+		  left join internet_store c on a.store_id = c.store_id
+		where 1=1 and a.internet_id = #{pd.internet_id}
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and a.name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		</if>
+			<if test="pd.name != null and pd.name != ''">
+				and a.name LIKE CONCAT(CONCAT('%', #{pd.name}),'%')
+			</if>
+			<if test="pd.store_id != null and pd.store_id != ''">
+				and a.store_id = #{pd.store_id}
+			</if>
+		  order by a.create_time desc
+	</select>
+
+
+	<select id="getInternetStaff" parameterType="pd" resultType="pd">
+		select * from internet_staff
+		where state = '1' and internet_id = #{internet_id}
+		group by open_id
+		order by create_time desc
+	</select>
+	
+</mapper>

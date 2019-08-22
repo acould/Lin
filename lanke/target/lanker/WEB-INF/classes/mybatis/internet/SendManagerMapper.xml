@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SendManagerMapper">
+
+    <!--表名-->
+    <sql id="tableName">
+		internet_send_manager
+	</sql>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Field">
+        id,
+        internet_id,
+        foreign_id,
+        type,
+        temp_type,
+        act_type,
+        title,
+        content,
+        store_ids,
+        store_names,
+
+        sel_json,
+        sel_list,
+        sel_result,
+        ad_content,
+        create_time,
+        update_time,
+        send_time,
+        d_state,
+
+        status
+
+    </sql>
+
+    <sql id="FieldValue">
+        #{id},
+        #{internet_id},
+        #{foreign_id},
+        #{type},
+        #{temp_type},
+        #{act_type},
+        #{title},
+        #{content},
+        #{store_ids},
+        #{store_names},
+
+        #{sel_json},
+        #{sel_list},
+        #{sel_result},
+        #{ad_content},
+        #{create_time},
+        #{update_time},
+        #{send_time},
+        #{d_state},
+        #{status}
+    </sql>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="pd">
+        insert into
+        <include refid="tableName"></include>(<include refid="Field"></include>)
+        values
+        (<include refid="FieldValue"></include>)
+    </insert>
+
+    <!-- 删除-->
+    <delete id="delete" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        id = #{id}
+    </delete>
+    <update id="edit" parameterType="pd">
+        update
+        internet_send_manager
+        set
+        <if test="send_time != null and send_time != ''">
+            send_time = #{send_time},
+        </if>
+        <if test="update_time != null and update_time != ''">
+            update_time = #{update_time},
+        </if>
+        <if test="status != null and status != ''">
+            status = #{status},
+        </if>
+        <if test="ad_content != null and ad_content != ''">
+            ad_content = #{ad_content},
+        </if>
+        <if test="sel_result != null and sel_result != ''">
+            sel_result = #{sel_result},
+        </if>
+        <if test="sel_list != null and sel_list != ''">
+            sel_list = #{sel_list},
+        </if>
+        <if test="sel_json != null and sel_json != ''">
+            sel_json = #{sel_json},
+        </if>
+        <if test="store_ids != null and store_ids != ''">
+            store_ids = #{store_ids},
+        </if>
+        <if test="store_names != null and store_names != ''">
+            store_names = #{store_names},
+        </if>
+        <if test="title != null and title != ''">
+            title = #{title},
+        </if>
+        <if test="content != null and content != ''">
+            content = #{content},
+        </if>
+        <if test="foreign_id != null and foreign_id != ''">
+            foreign_id = #{foreign_id},
+        </if>
+        <if test="d_state != null and d_state != ''">
+            d_state = #{d_state},
+        </if>
+
+        id = #{id}
+        where
+        id = #{id}
+    </update>
+
+
+    <!-- 通过ID获取数据 -->
+    <select id="findById" parameterType="String" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        id = #{id}
+    </select>
+    <select id="findTempById" parameterType="String" resultType="pd">
+        select
+          a.*,
+          b.first_data,
+          b.keyword_data,
+          b.remark_data,
+          b.temp_content,
+          b.url
+        from internet_send_manager a left join wechat_template_record b on a.foreign_id = b.id
+        where
+        a.id = #{id}
+    </select>
+    <select id="findActById" parameterType="String" resultType="pd">
+        select a.*
+        from internet_send_manager a
+        where 1=1
+        and a.id = #{id}
+    </select>
+
+    <!-- 分页列表 -->
+    <select id="datalistPage" parameterType="page" resultType="pd">
+        select
+	      a.*
+        from internet_send_manager a
+        where 1=1 and a.d_state = 0 and a.internet_id = #{pd.internet_id}
+        <!-- 关键词搜索 -->
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            a.title LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            )
+        </if>
+        <!-- 群发类型 -->
+        <if test="pd.type != null and pd.type != ''">
+            and a.type = #{pd.type}
+        </if>
+        <!-- 模板消息类型 -->
+        <if test="pd.temp_type != null and pd.temp_type != ''">
+            and a.temp_type = #{pd.temp_type}
+        </if>
+        <!-- 活动消息类型 -->
+        <if test="pd.act_type != null and pd.act_type != ''">
+            and a.act_type = #{pd.act_type}
+        </if>
+
+
+        order by a.update_time desc , a.send_time desc
+    </select>
+
+
+
+    <select id="findByTypeAndOtherType" parameterType="pd" resultType="pd">
+        select
+            a.*
+        from internet_send_manager a
+        where 1=1
+        and internet_id = #{internet_id}
+        and type = #{type}
+        <if test="act_type != null and act_type != ''">
+            and a.act_type = #{act_type}
+        </if>
+        <if test="temp_type != null and temp_type != ''">
+            and a.temp_type = #{temp_type}
+        </if>
+        <if test="begin_time != null and begin_time != ''">
+            and a.send_time <![CDATA[>=]]> #{begin_time}
+        </if>
+        <if test="end_time != null and end_time != ''">
+            and a.send_time <![CDATA[<=]]> #{end_time}
+        </if>
+        order by a.send_time desc
+    </select>
+</mapper>

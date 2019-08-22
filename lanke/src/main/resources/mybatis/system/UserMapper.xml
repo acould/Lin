@@ -1,0 +1,858 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserMapper">
+
+	<resultMap type="User" id="userAndRoleResultMap">
+		<id column="USER_ID" property="USER_ID" />
+		<result column="USERNAME" property="USERNAME" />
+		<result column="PASSWORD" property="PASSWORD" />
+		<result column="NAME" property="NAME" />
+		<result column="RIGHTS" property="RIGHTS" />
+		<result column="LAST_LOGIN" property="LAST_LOGIN" />
+		<result column="IP" property="IP" />
+		<result column="STATUS" property="STATUS" />
+		<result column="SKIN" property="SKIN" />
+		<result column="ANGET_ID" property="ANGET_ID" />
+		<result column="INTEGRAL" property="INTEGRAL" />
+		<result column="INTENET_ID" property="INTENET_ID" />
+		<association property="role" column="ROLE_ID"
+			javaType="Role">
+			<id column="ROLE_ID" property="ROLE_ID" />
+			<result column="ROLE_NAME" property="ROLE_NAME" />
+			<result column="ROLE_RIGHTS" property="RIGHTS" />
+		</association>
+	</resultMap>
+	<resultMap type="User" id="userResultMap">
+		<id column="USER_ID" property="USER_ID" />
+		<result column="USERNAME" property="USERNAME" />
+		<result column="PASSWORD" property="PASSWORD" />
+		<result column="NAME" property="NAME" />
+		<result column="RIGHTS" property="RIGHTS" />
+		<result column="LAST_LOGIN" property="LAST_LOGIN" />
+		<result column="IP" property="IP" />
+		<result column="STATUS" property="STATUS" />
+		<result column="ROLE_ID" property="ROLE_ID" />
+		<result column="SKIN" property="SKIN" />
+		<result column="ANGET_ID" property="ANGET_ID" />
+		<result column="INTEGRAL" property="INTEGRAL" />
+		<result column="INTENET_ID" property="INTENET_ID" />
+	</resultMap>
+
+	<!--表名 -->
+	<sql id="tableName">
+		SYS_USER
+	</sql>
+	<sql id="roleTableName">
+		SYS_ROLE
+	</sql>
+	<!-- 字段 -->
+	<sql id="Field">
+		USER_ID,
+		USERNAME,
+		PASSWORD,
+		NAME,
+		RIGHTS,
+		ROLE_ID,
+		LAST_LOGIN,
+		IP,
+		BZ,
+		SKIN,
+		EMAIL,
+		PHONE,
+		ANGET_ID,
+		INTEGRAL,
+		INTENET_ID,
+		STATUS,
+		STORE_ID
+
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{USER_ID},
+		#{USERNAME},
+		#{PASSWORD},
+		#{NAME},
+		#{RIGHTS},
+		#{ROLE_ID},
+		#{LAST_LOGIN},
+		#{IP},
+		#{BZ},
+		#{SKIN},
+		#{EMAIL},
+		#{PHONE},
+		#{ANGET_ID},
+		#{INTEGRAL},
+		#{INTENET_ID},
+		#{STATUS},
+		#{STORE_ID}
+		
+	</sql>
+
+	<!-- 判断用户名和密码 -->
+	<select id="getUserInfo" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="USERNAME!=null and USERNAME!=''">
+			and (USERNAME = #{USERNAME} OR PHONE = #{USERNAME})
+		</if>
+		<if test="PASSWORD!=null and PASSWORD!=''">
+			and PASSWORD=#{PASSWORD}
+		</if>
+		<if test="USER_ID!=null and USER_ID>0">
+			and USER_ID = #{USER_ID}
+		</if>
+	</select>
+	<select id="checkLogin" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		and ((USERNAME = #{USERNAME} and PASSWORD=#{PASSWORD}) or
+		(PHONE =
+		#{PHONE} and PASSWORD=#{PASSWORD}))
+	</select>
+
+	<!-- 更新登录时间 -->
+	<update id="updateLastLogin" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		LAST_LOGIN = #{LAST_LOGIN}
+		where USER_ID = #{USER_ID}
+	</update>
+
+
+
+	<!-- 修改用户积分 -->
+	<update id="editUserJf" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		INTEGRAL = #{INTEGRAL}
+		where USER_ID = #{USER_ID}
+	</update>
+	<!-- 修改用户积分 -->
+	<update id="editUserStatus" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="STATUS != null and STATUS != ''">
+			STATUS = #{STATUS},
+		</if>
+		USER_ID = #{USER_ID}
+		where
+		USER_ID = #{USER_ID}
+	</update>
+
+	<!-- 通过用户ID获取用户信息和角色信息 -->
+	<select id="getUserAndRoleById" parameterType="String"
+		resultMap="userAndRoleResultMap">
+		select
+		u.USER_ID,
+		u.USERNAME,
+		u.NAME,
+		u.RIGHTS as USER_RIGHTS,
+		u.PASSWORD,
+		u.SKIN,
+		u.INTENET_ID,
+		r.ROLE_ID,
+		r.ROLE_NAME,
+		r.RIGHTS as ROLE_RIGHTS
+		from
+		<include refid="tableName"></include>
+		u
+		left join
+		<include refid="roleTableName"></include>
+		r
+		on u.ROLE_ID=r.ROLE_ID
+		where u.STATUS=0
+		and u.USER_ID=#{USER_ID}
+	</select>
+
+	<select id="getUserByOpenId" parameterType="String" resultMap="userResultMap">
+		select
+			u.USER_ID,
+			u.USERNAME,
+			u.PASSWORD,
+			u.NAME,
+			u.RIGHTS,
+			u.ROLE_ID,
+			u.LAST_LOGIN,
+			u.IP,
+			u.BZ,
+			u.SKIN,
+			u.EMAIL,
+			u.PHONE,
+			u.ANGET_ID,
+			u.INTEGRAL,
+			u.INTENET_ID,
+			u.STATUS,
+			f.OPEN_ID,
+			f.IMGURL
+		from
+		sys_user u left join wechat_user f on u.USER_ID=f.USER_ID
+		where f.OPEN_ID=#{openid}
+	</select>
+	<select id="getUserById" parameterType="String"
+		resultMap="userResultMap">
+		select
+		*
+		from
+		<include refid="tableName"></include>
+		where USER_ID = #{user_id}
+	</select>
+
+	<select id="findByUserId" parameterType="String" resultType="pd">
+		select
+		*
+		from
+		<include refid="tableName"></include>
+		where USER_ID = #{user_id}
+	</select>
+
+	<select id="findByUI" parameterType="pd" resultType="pd">
+		select
+		*
+		from
+		<include refid="tableName"></include>
+		where USER_ID = #{USER_ID}
+	</select>
+
+	<!-- 通过USERNAME获取数据 -->
+	<select id="findByUsername" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		USERNAME = #{USERNAME}
+	</select>
+	<select id="findByUserNameAndInternetId" parameterType="pd"
+		resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		USERNAME = #{user_name} and INTENET_ID = #{internet_id}
+	</select>
+
+	<!-- 通过PHONE获取数据 -->
+	<select id="findByUserPhone" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		PHONE = #{PHONE} OR USERNAME= #{PHONE}
+	</select>
+
+	<!-- 通过PHONE和USERNAME获取数据 -->
+	<select id="findByPhoneName" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		PHONE = #{PHONE}
+		and USERNAME = #{USERNAME}
+	</select>
+
+	<!-- 存入IP -->
+	<update id="saveIP" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		IP = #{IP}
+		where
+		USERNAME = #{USERNAME}
+	</update>
+	<!-- 存入积分 -->
+	<update id="saveINTEGRAL" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		INTEGRAL = #{INTEGRAL}
+		where
+		USER_ID = #{USER_ID}
+	</update>
+
+	<!-- 列出某角色下的所有用户 -->
+	<select id="listAllUserByRoldId" parameterType="pd"
+		resultType="pd">
+		select USER_ID
+		from
+		<include refid="tableName"></include>
+		where
+		ROLE_ID = #{ROLE_ID}
+	</select>
+
+	<!-- 系统用户列表 -->
+	<select id="listPageSysUser" parameterType="page"
+		resultType="pd">
+		select
+		u.USER_ID,
+		u.USERNAME,
+		u.PASSWORD,
+		u.LAST_LOGIN,
+		u.NAME,
+		u.IP,
+		u.EMAIL,
+		u.PHONE,
+		u.INTENET_ID,
+		r.ROLE_ID,
+		r.ROLE_NAME
+		from
+		sys_user u,
+		sys_role r
+		where
+		u.ROLE_ID = r.ROLE_ID and r.PARENT_ID = '1'
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+			(
+			u.USERNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or u.NAME
+			LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or u.EMAIL LIKE
+			CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or u.PHONE LIKE
+			CONCAT(CONCAT('%', #{pd.keywords}),'%')
+
+			or u.NAME LIKE
+			CONCAT(CONCAT('%', #{pd.en_keywords}),'%')
+			)
+		</if>
+		<if test="pd.ROLE_ID != null and pd.ROLE_ID != ''"><!-- 角色检索 -->
+			and u.ROLE_ID=#{pd.ROLE_ID}
+		</if>
+		<if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''">
+			<![CDATA[and u.LAST_LOGIN >= #{pd.lastLoginStart}]]>
+		</if>
+		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''">
+			<![CDATA[and u.LAST_LOGIN <= #{pd.lastLoginEnd}]]>
+		</if>
+
+		order by u.LAST_LOGIN desc
+	</select>
+	
+	
+	<select id="userlist" parameterType="pd" resultType="String">
+		select
+		u.USER_ID,
+		u.store_id
+		from
+		sys_user u, sys_role r , STORE_USER C , internet_store
+		d
+		where
+		u.ROLE_ID = r.ROLE_ID AND u.user_id = c.user_id and c.store_id =
+		d.store_id
+		and u.USERNAME !='admin' and r.PARENT_ID = '1'
+		<if test="internetId != null and internetId != ''">
+			and u.INTENET_ID=#{internetId}
+		</if>
+		<if test="STORE_ID != null and STORE_ID != ''">
+			and d.STORE_ID IN ('${STORE_ID}')
+		</if>
+		<if test="keywords!= null and keywords != ''"><!-- 关键词检索 -->
+			and
+			(u.USERNAME LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or u.NAME
+			LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or u.EMAIL LIKE
+			CONCAT(CONCAT('%', #{keywords}),'%')
+			or u.PHONE LIKE
+			CONCAT(CONCAT('%', #{keywords}),'%')
+			or d.STORE_NAME LIKE
+			CONCAT(CONCAT('%', #{keywords}),'%')
+			or u.NAME LIKE
+			CONCAT(CONCAT('%', #{keywords}),'%')
+			)
+		</if>
+		<if test="ROLE_ID != null and ROLE_ID != ''"><!-- 角色检索 -->
+			and u.ROLE_ID=#{ROLE_ID}
+		</if>
+		<if test="lastLoginStart!=null and lastLoginStart!=''">
+			<![CDATA[and u.LAST_LOGIN >= #{lastLoginStart}]]>
+		</if>
+		<if test="lastLoginEnd!=null and lastLoginEnd!=''">
+			<![CDATA[and u.LAST_LOGIN <= #{lastLoginEnd}]]>
+		</if>
+		order by u.LAST_LOGIN desc
+	</select>
+	
+	<select id="userl" parameterType="String" resultType="String">
+	SELECT
+		GROUP_CONCAT(store_name) store_name
+	FROM
+		internet_store
+	WHERE
+		store_id IN (
+			SELECT
+				store_id
+			FROM
+				store_user
+			WHERE
+				user_id = #{user_id}
+		)
+	</select>
+	
+	
+	<!-- 用户列表 -->
+	<select id="userlistPage" parameterType="page" resultType="pd">
+		SELECT
+			u.USER_ID,
+			u.USERNAME,
+			u. PASSWORD,
+			u.LAST_LOGIN,
+			u. NAME,
+			u.IP,
+			u.EMAIL,
+			u.PHONE,
+			u.INTENET_ID,
+			r.ROLE_ID,
+			r.ROLE_NAME,
+			u.STORE_ID,
+			(select GROUP_CONCAT(store_name) from internet_store where store_id in ('${pd.liststoreid}')) STOREN_NAME
+		FROM
+			sys_user u,
+			sys_role r
+		WHERE
+		  u.ROLE_ID = r.ROLE_ID and
+		  u.user_id IN ('${pd.list}')
+		  order by u.LAST_LOGIN desc
+	</select>
+
+
+
+
+	<!-- 通过邮箱获取数据 -->
+	<select id="findByUE" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		EMAIL = #{EMAIL}
+	</select>
+
+	<!-- 通过编号获取数据 -->
+	<select id="findByUN" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		<if test="USERNAME != null and USERNAME != ''">
+			USERNAME != #{USERNAME}
+		</if>
+	</select>
+
+	<!-- 通过用户id去获取用户的详细信息 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		SELECT
+		a.*,
+		b.INTENET_NAME AS INTENET_NAME,
+		b.auth_time AS auth_time,
+		c.`INSERT_TIME` AS INSERT_TIME
+		FROM
+		sys_user a,
+		sys_intenet b,
+		tb_terrace c
+		WHERE a.intenet_id = b.intenet_id
+		AND c.INTENET_ID = a.INTENET_ID
+		AND a.USER_ID = #{USER_ID}
+	</select>
+	<!-- 通过获取三个表的数据 -->
+	<select id="findByStoreUser" parameterType="pd" resultType="pd">
+		select
+		A.*,A.STORE_ID storeids
+		from
+		<include refid="tableName"></include>
+		A ,STORE_USER B ,INTERNET_STORE C
+		where A.USER_ID = B.USER_ID AND
+		B.STORE_ID = C.STORE_ID
+		AND A.USER_ID = #{USER_ID}
+		LIMIT 0,1
+	</select>
+	<!-- 查询 老用户的门店 -->
+	<select id="findByStoreisNot" parameterType="pd" resultType="pd">
+		select store_id from store_user where USER_ID = #{USER_ID}
+	</select>
+	
+	
+	<!-- 通过user_name获取数据 -->
+	<select id="hasU" parameterType="pd" resultType="pd">
+		SELECT
+		USER_ID,
+		PHONE
+		FROM
+		sys_user
+		WHERE USERNAME = #{USERNAME}
+		OR PHONE = #{PHONE}
+	</select>
+
+	<!-- 新增用户(保存用户信息) -->
+	<insert id="saveU" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+	<!-- 新增用户 门店 -->
+	<insert id="StoreUser" parameterType="pd">
+		insert into store_user
+		(
+		STORE_USER_ID,
+		USER_ID,
+		STORE_ID
+		) values (
+		STORE_USER_ID =
+		#{STORE_USER_ID},
+		USER_ID = #{USER_ID},
+		STORE_ID = #{STORE_ID}
+		)
+	</insert>
+	<!-- 修改 -->
+	<update id="editU" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="USERNAME != null and USERNAME != ''">
+			USERNAME = #{USERNAME},
+		</if>
+		<if test="NAME != null and NAME != ''">
+			NAME = #{NAME},
+		</if>
+		<if test="ROLE_ID != null and ROLE_ID != ''">
+			ROLE_ID = #{ROLE_ID},
+		</if>
+		<if test="BZ != null and BZ != ''">
+			BZ = #{BZ},
+		</if>
+		<if test="EMAIL != null and EMAIL != ''">
+			EMAIL = #{EMAIL},
+		</if>
+		<if test="PHONE != null and PHONE != ''">
+			PHONE = #{PHONE},
+		</if>
+		<if test="PASSWORD != null and PASSWORD != ''">
+			PASSWORD = #{PASSWORD},
+		</if>
+		USER_ID = #{USER_ID}
+		where
+		USER_ID = #{USER_ID}
+	</update>
+
+
+	<!-- 修改用户 -->
+	<update id="editUP" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		NAME=#{NAME},
+		ROLE_ID=#{ROLE_ID},
+		USERNAME =#{USERNAME},
+		<if test="PASSWORD != null and PASSWORD != ''">
+			PASSWORD = #{PASSWORD},
+		</if>
+		<if test="STORE_ID != null and STORE_ID != ''">
+			STORE_ID = #{STORE_ID},
+		</if>
+		PHONE=#{USERNAME}
+		where
+		USER_ID = #{USER_ID}
+	</update>
+
+	<!-- 通过用户id去保存新密码(找回密码) -->
+	<update id="editUPwd" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="PASSWORD != null and PASSWORD != ''">
+			PASSWORD = #{PASSWORD}
+		</if>
+		where
+		USER_ID = #{USER_ID}
+	</update>
+
+	<!-- 通过用户id去保存新密码/新手机号/新邮箱(用户中心) -->
+	<update id="userEdit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="PASSWORD != null and PASSWORD != ''">
+			PASSWORD = #{PASSWORD}
+		</if>
+		<if test="PHONE != null and PHONE != ''">
+			PHONE = #{PHONE}
+		</if>
+		<if test="EMAIL != null and EMAIL != ''">
+			EMAIL = #{EMAIL}
+		</if>
+		where
+		USER_ID = #{USER_ID}
+	</update>
+
+	<!-- 修改name -->
+	<update id="editUPname" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		NAME=#{INTENET_NAME}
+		where
+		USER_ID = #{USER_ID}
+	</update>
+	<!-- 删除用户 -->
+	<delete id="deleteU" parameterType="pd" flushCache="false">
+		delete from
+		<include refid="tableName"></include>
+		where
+		USER_ID = #{USER_ID}
+	</delete>
+	<!-- 删除系统用户 -->
+	<delete id="deleteUser" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		USER_ID = #{USER_ID}
+	</delete>
+
+	<!-- 批量删除用户 -->
+	<delete id="deleteAllU" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		USER_ID in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="listAllUser" parameterType="pd" resultType="pd">
+		select u.USER_ID,
+		u.USERNAME,
+		u.PASSWORD,
+		u.LAST_LOGIN,
+		u.NAME,
+		u.IP,
+		u.EMAIL,
+		u.NUMBER,
+		u.PHONE,
+		r.ROLE_ID,
+		r.ROLE_NAME
+		from
+		<include refid="tableName"></include>
+		u,
+		<include refid="roleTableName"></include>
+		r
+		where u.ROLE_ID = r.ROLE_ID
+		and u.USERNAME != 'admin'
+		and r.PARENT_ID =
+		'1'
+		<if test="keywords!= null and keywords != ''"><!-- 关键词检索 -->
+			and
+			(
+			u.USERNAME LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or
+			u.EMAIL
+			LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or
+			u.NUMBER LIKE
+			CONCAT(CONCAT('%', #{keywords}),'%')
+			or
+			u.NAME LIKE CONCAT(CONCAT('%',
+			#{keywords}),'%')
+			or
+			u.PHONE LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			)
+		</if>
+		<if test="ROLE_ID != null and ROLE_ID != ''"><!-- 角色检索 -->
+			and u.ROLE_ID=#{ROLE_ID}
+		</if>
+		<if test="lastLoginStart!=null and lastLoginStart!=''"><!-- 登录时间检索 -->
+			and u.LAST_LOGIN &gt;= #{lastLoginStart}
+		</if>
+		<if test="lastLoginEnd!=null and lastLoginEnd!=''"><!-- 登录时间检索 -->
+			and u.LAST_LOGIN &lt;= #{lastLoginEnd}
+		</if>
+		order by u.LAST_LOGIN desc
+	</select>
+
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		USER_ID in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- 获取总数 -->
+	<select id="getUserCount" parameterType="pd" resultType="pd">
+		select
+		INTENET_ID, count(*) userCount
+		from
+		<include refid="tableName"></include>
+		WHERE
+		<if test="INTENET_ID!=null and INTENET_ID!=''">
+			INTENET_ID=#{INTENET_ID}
+		</if>
+		group by INTENET_ID order by count(*) desc;
+	</select>
+
+	<!-- 登录判断用户状态 -->
+	<select id="judge" parameterType="pd" resultType="pd">
+		select STATE from
+		<include refid="tableName"></include>
+		a,sys_intenet b
+		where a. INTENET_ID= b.INTENET_ID
+		and (USERNAME
+		=#{USERNAME} OR a.PHONE = #{USERNAME})
+	</select>
+
+	<!-- 判断公众号用户状态 -->
+	<select id="decideUser" parameterType="pd" resultType="pd">
+		select STATE,a.PHONE AS PHONE from
+		<include refid="tableName"></include>
+		a,sys_intenet b
+		where a.USER_ID=B.USER_ID
+		and a.USER_ID=#{USER_ID};
+	</select>
+
+	<!-- 通过网吧id去查询授权时间 -->
+	<select id="getTime" parameterType="pd" resultType="pd">
+		SELECT
+		auth_time
+		FROM
+		sys_intenet
+		WHERE INTENET_ID = #{INTENET_ID}
+	</select>
+
+	<!-- 根据用户名修改代理商账户信息 -->
+	<update id="editAgent" parameterType="pd">
+		UPDATE
+		<include refid="tableName"></include>
+		SET
+		USERNAME = #{USERNAME},
+		NAME = #{NAME},
+		PHONE = #{PHONE}
+		WHERE
+		USERNAME = #{agent_numberOld}
+	</update>
+
+	<!-- 根据用户id获取代理商账户信息 -->
+	<select id="selAgent" parameterType="pd" resultType="pd">
+		SELECT
+		a.`USERNAME`,a.`PHONE`,b.`createtime`
+		FROM
+		sys_user a,
+		tb_agent b
+		WHERE
+		a.`ANGET_ID` = b.`id`
+		AND a.`USER_ID`=#{USER_ID}
+	</select>
+
+	<!-- 根据用户id获取代理商门店信息 -->
+	<select id="selAgentlistPages" parameterType="page"
+		resultType="pd">
+		SELECT
+			c.STORE_NAME,
+			c.STORE_ID,
+			c.PROVINCE,
+			c.CITY,
+			c.COUNTY,
+			c.ADDRESS,
+			c.TELEPHONE,
+			d.`STATE`,
+			f.`STATUS`,
+			h.STATUS AS JL_STATUS
+		FROM
+			tb_agentstore a LEFT JOIN sys_user b ON a.`agent_id` = b.`ANGET_ID`
+			LEFT JOIN internet_store c ON c.`store_id` = a.`store_id`
+			LEFT JOIN internet_store_v d ON d.`STORE_ID` = a.`store_id`
+			LEFT JOIN tb_internetdatum f ON f.`store_id` = a.`store_id`
+			left join internet_match_store g on a.store_id = g.store_id
+			left join internet_store_jialian h on g.foreign_id = h.id
+		WHERE b.`USER_ID`=#{pd.USER_ID}
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and (
+				c.STORE_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or c.STORE_ID LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or c.ADDRESS LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or c.TELEPHONE LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			)
+		</if>
+		<if test="pd.province != null and pd.province != ''">
+			and province= #{pd.province}
+		</if>
+		<if test="pd.city != null and pd.city != ''">
+			and city= #{pd.city}
+		</if>
+		<if test="pd.county != null and pd.county != ''">
+			and county= #{pd.county}
+		</if>
+		<if test="pd.STATE != null and pd.STATE != ''">
+			and d.`STATE`= #{pd.STATE}
+		</if>
+		<if test="pd.STATUS != null and pd.STATUS != ''">
+			<if test="pd.STATUS == 0 ">
+				and (f.`status` is null or f.`status`= #{pd.STATUS})
+			</if>
+			<if test="pd.STATUS != 0 ">
+				and f.`status`= #{pd.STATUS}
+			</if>
+		</if>
+        <if test="pd.JL_STATUS != null and pd.JL_STATUS != ''">
+            and h.`JL_STATUS`= #{pd.JL_STATUS}
+        </if>
+	</select>
+
+	<!-- 根据用户id获取代理商所有信息 -->
+	<select id="selAgentShow" parameterType="pd" resultType="pd">
+		SELECT
+		b.*
+		FROM
+		sys_user a,
+		tb_agent b
+		WHERE a.`ANGET_ID` = b.`id`
+		AND
+		a.`USER_ID`=#{USER_ID}
+	</select>
+
+	<!-- 根据代理商id获取代理商账户的手机号 -->
+	<select id="findeByAgentId" parameterType="pd" resultType="pd">
+		SELECT PHONE FROM sys_user WHERE ANGET_ID = #{id}
+	</select>
+	<!-- fh313596790qq(青苔) -->
+
+	<!-- 通过user_id获取代理商id -->
+	<select id="findAgentId" parameterType="pd" resultType="pd">
+		SELECT
+		a.`ANGET_ID`
+		FROM
+		sys_user a,
+		tb_agent b
+		WHERE a.`ANGET_ID` = b.`id`
+		AND a.`USER_ID`=#{USER_ID}
+	</select>
+
+	<!-- 通过代理商id修改手机号 -->
+	<update id="editAgentId" parameterType="pd">
+		UPDATE
+		tb_agent
+		SET phone =#{PHONE}
+		WHERE id = #{ANGET_ID}
+	</update>
+</mapper>

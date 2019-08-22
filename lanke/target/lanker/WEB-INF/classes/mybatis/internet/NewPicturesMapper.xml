@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="NewPicturesMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		internet_new_pictures
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+        id,
+        store_id,
+        foreign_id,
+        name,
+        path,
+        type,
+        sort,
+        url,
+        jl_path,
+        create_time
+
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{id},
+        #{store_id},
+        #{foreign_id},
+        #{name},
+        #{path},
+        #{type},
+        #{sort},
+        #{url},
+        #{jl_path},
+        #{create_time}
+
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+			<include refid="tableName"></include>(<include refid="Field"></include>) 
+		values 
+			(<include refid="FieldValue"></include>)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="String">
+		delete from
+			<include refid="tableName"></include>
+		where
+		id = #{id}
+	</delete>
+	<delete id="delByForeignIdAndSort" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		foreign_id = #{foreign_id} and sort = #{sort}
+	</delete>
+
+
+
+
+	<update id="edit" parameterType="pd">
+		update 	internet_new_pictures
+		set
+		<if test="name != null and name != ''">
+			name = #{name},
+		</if>
+		<if test="path != null and path != ''">
+			path = #{path},
+		</if>
+		<if test="url != null and url != ''">
+			url = #{url},
+		</if>
+		<if test="jl_path != null and jl_path != ''">
+			jl_path = #{jl_path},
+		</if>
+
+		id = #{id}
+		where
+		id = #{id}
+	</update>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="String" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where
+		id = #{id}
+	</select>
+	<select id="findByStoreIdAndSort" parameterType="pd" resultType="pd">
+		select
+			a.*
+		from
+			internet_new_pictures a
+		where
+		a.store_id = #{store_id} and
+		a.sort = #{sort}
+	</select>
+	<select id="findByStoreIdAndType" parameterType="pd" resultType="pd">
+		select
+			a.*
+		from
+			internet_new_pictures a
+		where
+		a.store_id = #{store_id}
+		and a.type = #{type}
+		order by a.create_time desc
+	</select>
+    <select id="findByForeignIdAndType" parameterType="pd" resultType="pd">
+		select
+			a.*
+		from
+			internet_new_pictures a
+		where
+		a.foreign_id = #{foreign_id}
+		and a.type = #{type}
+		order by a.create_time desc
+	</select>
+
+	<select id="findByForeignId" parameterType="String" resultType="pd">
+		select
+			a.*
+		from
+			internet_new_pictures a
+		where
+		a.foreign_id = #{foreign_id}
+		order by a.create_time desc
+		limit 1
+	</select>
+	
+</mapper>

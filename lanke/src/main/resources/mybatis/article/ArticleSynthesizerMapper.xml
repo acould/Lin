@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ArticleSynthesizerMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		article_synthesizer
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		article_id,
+		sequence,
+		user_id,
+		internet_id
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{article_id},
+		#{sequence},
+		#{user_id},
+		#{internet_id}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+			<include refid="tableName"></include>(<include refid="Field"></include>) 
+		values 
+			(<include refid="FieldValue"></include>)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+			<include refid="tableName"></include>
+		where
+			id = #{id}
+	</delete>
+	<delete id="delByUserId" parameterType="pd">
+		delete from
+			<include refid="tableName"></include>
+		where
+			user_id = #{user_id}
+			<if test="sequence != null and sequence != ''">
+				and article_id = #{article_id} and sequence = #{sequence}
+			</if>
+	</delete>
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+			<include refid="tableName"></include>
+		set 
+			<if test="sequence != null and sequence != ''">
+				sequence = #{sequence},
+			</if>
+
+			id = #{id}
+		where
+			id = #{id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where
+			id = #{id}
+	</select>
+	<select id="findBySequence" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from
+			<include refid="tableName"></include>
+		where
+			user_id = #{user_id} and sequence = #{sequence}
+	</select>
+	<select id="findOneByUserId" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from
+			<include refid="tableName"></include>
+		where
+			user_id = #{user_id}
+		order by sequence desc
+		limit 1
+	</select>
+	<select id="findByArticleId" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		article_id = #{article_id} and user_id = #{user_id}
+		limit 1
+	</select>
+	<select id="findLasts" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from
+			<include refid="tableName"></include>
+		where
+			user_id = #{user_id} and sequence <![CDATA[ > ]]> #{sequence}
+	</select>
+
+
+
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 1=1 and internet_id = #{pd.internet_id}
+		<!-- 关键词检索 -->
+			<if test="pd.keywords!= null and pd.keywords != ''">
+				and company_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			</if>
+		<!-- 筛选条件 -->
+	</select>
+	<select id="listByUser" parameterType="pd" resultType="pd">
+		select
+			a.article_id,
+			a.sequence,
+			b.title,
+			b.author,
+			b.digest,
+			b.content,
+			b.picture_id,
+			b.used_number,
+			c.path
+		from
+			<include refid="tableName"></include> a left join article_libs b on a.article_id = b.id
+				left join internet_pictures c on b.picture_id = c.picture_id
+		where 1=1 and a.user_id = #{user_id}
+		order by a.sequence asc
+	</select>
+
+
+	<select id="synthesizerSize" parameterType="pd" resultType="Integer">
+		select count(*) from <include refid="tableName"></include>
+		where 1=1
+		<if test="user_id != null and user_id != ''">
+			and user_id = #{user_id}
+		</if>
+	</select>
+	
+</mapper>

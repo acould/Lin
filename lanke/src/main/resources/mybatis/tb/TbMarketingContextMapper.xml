@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TbMarketingContextMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		tb_marketingcontext
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		mass_context,
+		send_type,
+		start_time,
+		end_time
+
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{mass_context},
+		#{send_type},
+		#{start_time},
+		#{end_time}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+
+	<update id="updateSendType" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		send_type = #{send_type},
+		start_time = #{start_time},
+		end_time = #{end_time}
+		where id = #{id}
+	</update>
+	
+	<!-- 通过主键ID获取数据 -->
+	<select id="findById" parameterType="String" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where
+		id = #{id}
+	</select>
+
+	<select id="findByTypeAndTime" parameterType="pd" resultType="pd">
+		select * from
+			tb_marketingcontext
+		where send_type = #{send_type}
+		 and id in(select mass_id from tb_marketing where internet_id = #{internet_id})
+		<if test="current_time != null">
+			and start_time <![CDATA[<=]]> #{current_time} and end_time <![CDATA[>=]]> #{current_time}
+		</if>
+	</select>
+
+	
+</mapper>

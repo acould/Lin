@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StoreUserTipsMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		store_user_tips
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		store_id,
+		consume_high,
+		consume_low,
+		balance_high,
+		balance_low,
+		live_high,
+		live_low,
+		create_time,
+		update_time
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{store_id},
+		#{consume_high},
+		#{consume_low},
+		#{balance_high},
+		#{balance_low},
+		#{live_high},
+		#{live_low},
+		#{create_time},
+		#{update_time}
+	</sql>
+
+	<!-- 新增会员标签(新增) -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 通过门店id修改会员标签(修改) -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		consume_high = #{consume_high},
+		consume_low = #{consume_low},
+		live_high = #{live_high},
+		live_low = #{live_low},
+		balance_high = #{balance_high},
+		balance_low = #{balance_low},
+		update_time = #{update_time}
+		where
+		store_id = #{store_id}
+	</update>
+
+	<!-- 通过ID获取标签数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		store_id = #{store_id}
+	</select>
+
+
+	
+</mapper>

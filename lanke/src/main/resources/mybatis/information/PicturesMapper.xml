@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PicturesMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		TB_PICTURES
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		TITLE,	
+		NAME,	
+		PATH,	
+		CREATETIME,	
+		MASTER_ID,	
+		BZ,	
+		INTERNET_ID,
+		URL,
+		PICTURES_ID,
+		MATERIAL_ID,
+		LM_ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{TITLE},	
+		#{NAME},	
+		#{PATH},	
+		#{CREATETIME},	
+		#{MASTER_ID},	
+		#{BZ},
+		#{INTERNET_ID},	
+		#{URL},	
+		#{PICTURES_ID},
+		#{MATERIAL_ID},
+		#{LM_ID}
+	</sql>	
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			a.TITLE,	
+			a.NAME,	
+			a.PATH,	
+			a.CREATETIME,	
+			a.MASTER_ID,	
+			a.BZ,	
+			a.MATERIAL_ID,
+			a.PICTURES_ID
+				
+		from 
+			<include refid="tableName"></include> a
+		where 1 = 1
+		<if test="pd.KEYW != null and pd.KEYW != ''"><!-- 关键词检索 -->
+			and
+				(
+				 a.TITLE LIKE CONCAT(CONCAT('%', #{pd.KEYW}),'%')
+				 or 
+				 a.NAME LIKE CONCAT(CONCAT('%', #{pd.KEYW}),'%') 
+				 or
+				 a.PICTURES_ID LIKE CONCAT(CONCAT('%', #{pd.KEYW}),'%')
+				 or
+				 a.MASTER_ID LIKE CONCAT(CONCAT('%', #{pd.KEYW}),'%')
+				)
+		</if>
+		<if test="pd.internetId != null and pd.internetId != ''"><!-- 关键词检索 -->
+			and
+				
+				 a.INTERNET_ID =#{pd.internetId}
+		</if>
+		
+	</select>	
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into <include refid="tableName"></include>(
+			<include refid="Field"></include>
+		) values (
+			<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from <include refid="tableName"></include>
+		where 
+			PICTURES_ID = #{PICTURES_ID}
+	</delete>
+	
+	<!-- 删除-->
+	<delete id="deleteByLmID" parameterType="java.lang.String">
+		delete from <include refid="tableName"></include>
+		where 
+			LM_ID = #{LM_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update  
+			<include refid="tableName"></include>
+		set 
+			<if test="TITLE != null and TITLE != ''">
+				TITLE = #{TITLE},	
+			</if>
+			<if test="NAME != null and NAME != ''">
+				NAME = #{NAME},
+			</if>	
+			<if test="PATH != null and PATH != ''">
+				PATH = #{PATH},
+			</if>	
+			<if test="MASTER_ID != null and MASTER_ID != ''">
+				MASTER_ID = #{MASTER_ID},	
+			</if>
+			<if test="BZ != null and BZ != ''">
+				BZ = #{BZ},
+			</if>
+			<if test="URL != null and URL != ''">
+				URL = #{URL},
+			</if>
+			<if test="MATERIAL_ID != null and MATERIAL_ID != ''">
+				MATERIAL_ID = #{MATERIAL_ID},
+			</if>
+			<if test="LM_ID != null and LM_ID != ''">
+				LM_ID = #{LM_ID},
+			</if>
+			PICTURES_ID = #{PICTURES_ID}
+		where 
+			PICTURES_ID = #{PICTURES_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			PICTURES_ID = #{PICTURES_ID}
+	</select>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findByLMId" parameterType="java.lang.String" resultType="com.lk.entity.system.Pictures">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			LM_ID = #{LM_ID}
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from <include refid="tableName"></include>
+		where 
+			PICTURES_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量获取 -->
+	<select id="getAllById" parameterType="String" resultType="pd">
+		select PATH from <include refid="tableName"></include>
+		where 
+			PICTURES_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</select>
+	
+	<!-- 根据网吧获取log-->
+	<select id="findByIntenet" parameterType="pd" resultType="pd">
+		select <include refid="Field"></include>
+		 from <include refid="tableName"></include>
+		where 1=1
+		<if test="INTERNETID != null and INTERNETID != ''"><!-- 关键词检索 -->
+			and
+				 INTERNET_ID =#{INTERNETID}
+		</if>
+	</select>
+	
+	<!-- 根据网吧获取log-->
+	<select id="findByIntenet_id" parameterType="pd" resultType="pd">
+		select <include refid="Field"></include>
+		 from <include refid="tableName"></include>
+		where 1=1
+		<if test="Intenet_id != null and Intenet_id != ''">
+			and INTERNET_ID =#{Intenet_id}
+		</if>
+	</select>
+	
+	<!-- 根据网吧获取log-->
+	<select id="findByIntenetMetrial" parameterType="pd" resultType="pd">
+		select <include refid="Field"></include>
+		 from <include refid="tableName"></include>
+		where 1=1
+		<if test="INTERNETID != null and INTERNETID != ''"><!-- 关键词检索 -->
+			and
+				 INTERNET_ID =#{INTERNETID}
+		</if>
+		and MATERIAL_ID is not null
+	</select>
+	
+	<!-- 根据网吧获取log-->
+	<select id="findByMetrial" parameterType="pd" resultType="pd">
+		select <include refid="Field"></include>
+		 from <include refid="tableName"></include>
+		where 1=1
+		<if test="MATERIAL_ID != null and MATERIAL_ID != ''"><!-- 关键词检索 -->
+			and
+				 MATERIAL_ID =#{MATERIAL_ID}
+		</if>
+	</select>
+	
+	<!-- 删除图片 -->
+	<update id="delTp" parameterType="pd">
+		update  <include refid="tableName"></include>
+			set 
+				PATH			= ''
+			where 
+				PICTURES_ID = #{PICTURES_ID}
+	</update>
+	
+</mapper>

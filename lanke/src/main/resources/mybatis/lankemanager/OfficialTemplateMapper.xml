@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OfficialTemplateMapper">
+
+
+    <!--展示模板列表-->
+    <select id="datalistPage" parameterType="page" resultType="pd">
+        select * from (
+        SELECT
+        a.internet_id,
+        a.template_id,
+        a.title,
+        a.primary_industry,
+        a.deputy_industry,
+        a.type,
+        a.create_time,
+        ( SELECT INTENET_NAME FROM sys_intenet b WHERE a.internet_id = b.INTENET_ID ) AS INTENET_NAME
+        FROM
+        wechat_msg_template a
+        ) c  where 1=1
+           <if test="pd.keywords != null and pd.keywords != ''">
+                and (
+               c.type LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+               or INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+                )
+          </if>
+         order by intenet_name desc,type desc
+    </select>
+
+
+    <!--查询所有的公众号id-->
+    <select id="listAll" parameterType="String" resultType="pd">
+         select INTENET_ID from sys_intenet
+    </select>
+
+    <!--根据internetid查看是否有公众号id-->
+    <select id="getInternetId" parameterType="String"  resultType="Integer">
+                SELECT
+                    count(a.internet_id)
+                FROM
+                    wechat_msg_template a
+                WHERE
+                    1 = 1
+                <if test="_parameter != null and _parameter != ''">
+                   and  internet_id = #{id,jdbcType=VARCHAR}
+                </if>
+    </select>
+
+    <!--根据模板id查看是否有这个模板id-->
+    <select id="getTemplateId" parameterType="String"  resultType="Integer">
+        SELECT
+        count(a.template_id)
+        FROM
+        wechat_msg_template a
+        WHERE
+        1 = 1
+        <if test="_parameter != null and _parameter != ''">
+            and  template_id = #{template_id,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <!--批量插入模板消息-->
+    <insert id="insertForeach" parameterType="java.util.List" useGeneratedKeys="false">
+        insert into wechat_msg_template
+        (id,internet_id,template_id,create_time,title,primary_industry,deputy_industry,content,example,type)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.mid},
+            #{item.internet_id},
+            #{item.template_id},
+            #{item.create_time},
+            #{item.title},
+            #{item.primary_industry},
+            #{item.deputy_industry},
+            #{item.content},
+            #{item.example},
+            #{item.type}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 新增一条模板记录-->
+    <insert id="inserttemplateId" parameterType="java.util.Map">
+          INSERT INTO
+               wechat_msg_template
+               ( id, internet_id, template_id, create_time, title, primary_industry, deputy_industry, content, example,type )
+          VALUES
+                ( #{mid},
+                #{internet_id},
+                #{template_id},
+                #{create_time},
+                #{title},
+                #{primary_industry},
+                #{deputy_industry},
+                #{content},
+                #{example},
+                #{type}
+                    )
+    </insert>
+
+    <!-- 修改 -->
+    <update id="updateTemplate" parameterType="java.util.Map">
+        update
+           wechat_msg_template a
+        set
+            create_time =#{create_time},
+            title = #{title},
+            primary_industry = #{primary_industry},
+            deputy_industry = #{deputy_industry},
+            content = #{content},
+            example =  #{example},
+            a.type =  #{type}
+        where
+            template_id = #{template_id}
+    </update>
+
+    <!-- 批量删除第三方多余的公众号-->
+    <delete id="deleteAll" parameterType="String">
+        delete from
+              wechat_msg_template
+        where
+        internet_id  not in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+
+    <!-- 批量删除公众号下的多余的消息 -->
+    <delete id="deleteTemplate" parameterType="String">
+        delete from
+            wechat_msg_template
+        where
+        template_id  not in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteT" parameterType="String">
+        delete from
+        wechat_msg_template
+        where
+        1=1
+        <if test="_parameter != null and _parameter != ''">
+            and  template_id = #{template_id,jdbcType=VARCHAR}
+        </if>
+    </delete>
+
+    <delete id="deleteT2" parameterType="String">
+        delete from
+        wechat_msg_template
+    </delete>
+
+
+    <!--批量更新
+    <update id="batchUpdate"  parameterType="java.util.List">
+
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update test
+            <set>
+                test=${item.test}+1
+            </set>
+            where id = ${item.id}
+        </foreach>
+
+    </update>-->
+
+
+</mapper>

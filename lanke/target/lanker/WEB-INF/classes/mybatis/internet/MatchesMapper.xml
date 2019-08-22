@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MatchesMapper">
+
+    <!--表名-->
+    <sql id="tableName">
+		internet_matches
+	</sql>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Field">
+        id, internet_id, name, enroll_type, team_number, type,
+        enroll_start_time, enroll_end_time, start_time, end_time, content,
+        description, state, d_state, create_time, update_time
+    </sql>
+
+    <sql id="FieldValue">
+        #{id},
+        #{internet_id},
+        #{name},
+        #{enroll_type},
+        #{team_number},
+        #{type},
+        #{enroll_start_time},
+        #{enroll_end_time},
+        #{start_time},
+        #{end_time},
+        #{content},
+        #{description},
+        #{state},
+        #{d_state},
+        #{create_time},
+        #{update_time}
+    </sql>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="pd">
+        insert into
+        <include refid="tableName"></include>(<include refid="Field"></include>)
+        values
+        (<include refid="FieldValue"></include>)
+    </insert>
+
+    <!-- 删除-->
+    <delete id="delete" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        id = #{id}
+    </delete>
+
+    <!-- 修改-->
+    <update id="edit" parameterType="pd">
+        update
+		internet_matches
+		set
+
+        <if test="name != null and name != ''">
+            name = #{name},
+        </if>
+
+        <if test="enroll_type != null and enroll_type != ''">
+            enroll_type = #{enroll_type},
+        </if>
+        <if test="team_number != null and team_number != ''">
+            team_number = #{team_number},
+        </if>
+        <if test="type != null and type != ''">
+            type = #{type},
+        </if>
+        <if test="enroll_start_time != null and enroll_start_time != ''">
+            enroll_start_time = #{enroll_start_time},
+        </if>
+        <if test="enroll_end_time != null and enroll_end_time != ''">
+            enroll_end_time = #{enroll_end_time},
+        </if>
+        <if test="start_time != null and start_time != ''">
+            start_time = #{start_time},
+        </if>
+        <if test="end_time != null and end_time != ''">
+            end_time = #{end_time},
+        </if>
+        <if test="content != null and content != ''">
+            content = #{content},
+        </if>
+        <if test="description != null and description != ''">
+            description = #{description},
+        </if>
+        <if test="state != null and state != ''">
+            state = #{state},
+        </if>
+        <if test="d_state != null and d_state != ''">
+            d_state = #{d_state},
+        </if>
+        <if test="update_time != null and update_time != ''">
+            update_time = #{update_time},
+        </if>
+		id = #{id}
+		where
+        id = #{id}
+    </update>
+
+    <!-- 通过ID获取数据 -->
+    <select id="findById" parameterType="String" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        id = #{id}
+    </select>
+
+    <select id="datalistPage" parameterType="page" resultType="pd">
+        select
+            a.*,
+            d.path,
+            d.url,
+            (select count(*) from user_enroll where matches_id = a.id) as enroll_num
+        from internet_matches a left join internet_new_pictures d on a.id = d.foreign_id
+        where 1=1 and a.internet_id = #{pd.internet_id} and a.d_state = 0
+        <!-- 角色所在的门店列表 -->
+        <if test="pd.store_ids != null and pd.store_ids != ''">
+            and a.id in (select foreign_id from internet_match_store where store_id in ('${pd.store_ids}') and type = 2 group by foreign_id)
+        </if>
+        <!-- 筛选门店 -->
+        <if test="pd.store_id != null and pd.store_id != ''">
+            and a.id in (select foreign_id from internet_match_store where store_id = #{pd.store_id})
+        </if>
+        <if test="pd.state != null and pd.state != ''">
+            and a.state = #{pd.state}
+        </if>
+        <!-- 筛选状态 -->
+        <if test="pd.status != null and pd.status != ''">
+            <if test="pd.status == 0">
+              and now() <![CDATA[<=]]> a.enroll_start_time
+            </if>
+            <if test="pd.status == 1">
+                and now() <![CDATA[>]]> a.enroll_start_time and now() <![CDATA[<=]]> a.enroll_end_time
+            </if>
+            <if test="pd.status == 2">
+                and now() <![CDATA[>]]> a.enroll_end_time and now() <![CDATA[<=]]> a.start_time
+            </if>
+            <if test="pd.status == 3">
+                and now() <![CDATA[>]]> a.start_time and now() <![CDATA[<=]]> a.end_time
+            </if>
+            <if test="pd.status == 4">
+                and now() <![CDATA[>]]> a.end_time
+            </if>
+        </if>
+        <!-- 关键词搜索 -->
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            a.name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            or c.store_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            )
+        </if>
+
+        order by a.update_time desc
+    </select>
+
+    <select id="findByMatchesId" parameterType="pd" resultType="pd">
+        select
+          a.*
+        from
+          internet_store a left join internet_match_store b on a.store_id = b.store_id
+          left join internet_matches c on b.foreign_id = c.id
+        where b.type = 2 and c.id = #{id}
+
+    </select>
+
+
+    <select id="chooseStore" parameterType="pd" resultType="pd">
+        select
+          *
+        from
+          internet_store
+        where state = '1' and internet_id = #{internet_id}
+        <if test="pub != null and pub != ''">
+            and store_id in (select store_id from internet_store_v where state = '1')
+        </if>
+        <if test="yl != null and yl != ''">
+            and store_id in (select store_id from tb_internetdatum where status = '1')
+        </if>
+        <if test="jl != null and jl != ''">
+            and store_id in (select a.store_id from internet_match_store a left join internet_store_jialian b on a.foreign_id=b.id where b.status = '1' and a.type = 1)
+        </if>
+        <if test="store_ids != null and store_ids != ''">
+            and store_id in
+            <foreach item="item" index="index" collection="store_ids" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+    <select id="chooseStore2" parameterType="pd" resultType="pd">
+        select
+        *
+        from
+        internet_store
+        where state = '1' and internet_id = #{internet_id}
+        <if test="noPub != null and noPub != ''">
+            and store_id not in (select store_id from internet_store_v where state = '1')
+        </if>
+        <if test="noYl != null and noYl != ''">
+            and store_id not in (select store_id from tb_internetdatum where status = '1')
+        </if>
+        <if test="noJl != null and noJl != ''">
+            and store_id not in (select a.store_id from internet_match_store a left join internet_store_jialian b on a.foreign_id=b.id where b.status = '1' and a.type = 1)
+        </if>
+        <if test="store_ids != null and store_ids != ''">
+            and store_id in
+            <foreach item="item" index="index" collection="store_ids" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <!--满足其一-->
+    <select id="chooseStore3" parameterType="pd" resultType="pd">
+        select
+        *
+        from
+        internet_store
+        where state = '1' and internet_id = #{internet_id}
+
+        <if test="pub != null and pub != ''">
+            and ( store_id in (select store_id from internet_store_v where state = '1')
+        </if>
+        <if test="yl != null and yl != ''">
+            <if test="pub != null and pub != ''">
+                or  store_id in (select store_id from tb_internetdatum where status = '1')
+            </if>
+            <if test="pub == null">
+                and (  store_id in (select store_id from tb_internetdatum where status = '1')
+            </if>
+        </if>
+        <if test="jl != null and jl != ''">
+            <if test="pub != null or yl != ''">
+                or store_id in (select a.store_id from internet_match_store a left join internet_store_jialian b on a.foreign_id=b.id where b.status = '1' and a.type = 1))
+            </if>
+            <if test="(pub == null and yl == null)">
+                and store_id in (select a.store_id from internet_match_store a left join internet_store_jialian b on a.foreign_id=b.id where b.status = '1' and a.type = 1)
+            </if>
+        </if>
+        <if test="jl == null">
+            <if test="pub != null or yl != null">
+            )
+            </if>
+        </if>
+        <if test="store_ids != null and store_ids != ''">
+            and ( store_id in
+            <foreach item="item" index="index" collection="store_ids" open="(" separator="," close=")">
+                #{item}
+            </foreach>)
+        </if>
+
+        group by store_id
+    </select>
+    <select id="chooseStore4" parameterType="pd" resultType="pd">
+        select
+        *
+        from
+        internet_store
+        where state = '1' and internet_id = #{internet_id}
+
+        <if test="noPub != null and noPub != ''">
+            and  store_id not in (select store_id from internet_store_v where state = '1')
+        </if>
+        <if test="noYl != null and noYl != ''">
+            and  store_id not in (select store_id from tb_internetdatum where status = '1')
+        </if>
+
+        <if test="noJl != null and noJl != ''">
+            and store_id not in (select a.store_id from internet_match_store a left join internet_store_jialian b on
+                a.foreign_id=b.id where b.status = '1' and a.type = 1)
+        </if>
+
+        <if test="store_ids != null and store_ids != ''">
+            and store_id in
+            <foreach item="item" index="index" collection="store_ids" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        group by store_id
+    </select>
+
+
+
+    <select id="findByInternetIdAndType" parameterType="pd" resultType="pd">
+        select
+            a.*,
+            d.path,
+            d.url,
+            (select count(*) from user_enroll where matches_id = a.id) as enroll_num
+        from internet_matches a left join internet_new_pictures d on a.id = d.foreign_id
+        where 1=1 and a.internet_id = #{internet_id}
+          <!-- 已发布，未删除 -->
+          and a.state = 1 and d_state = 0
+        <if test="type == 'all'">
+            and 1=1
+        </if>
+        <if test="type == 'ing'">
+            and now() <![CDATA[<=]]> a.end_time
+        </if>
+        <if test="type == 'end'">
+            and now() <![CDATA[>]]> a.end_time
+        </if>
+        <if test="flag == 'myEnroll'">
+            and a.id in(select matches_id from user_enroll where user_id = #{user_id} and matches_id = a.id)
+        </if>
+
+        order by a.update_time desc
+    </select>
+
+    <select id="selMatchesList" parameterType="pd" resultType="pd">
+        select
+            a.*,
+            d.path,
+            d.url
+        from internet_matches a
+        left join internet_new_pictures d on a.id = d.foreign_id
+        where a.d_state = 0 and a.state = 1 and a.internet_id = #{internet_id}
+        <!-- 报名结束前的赛事 -->
+          and now() <![CDATA[<=]]> a.enroll_end_time
+         <if test="store_ids != null and store_ids != ''">
+             and a.id in (select foreign_id from internet_match_store where store_id in
+             <foreach item="item" index="index" collection="store_ids" open="(" separator="," close=")">
+                 #{item}
+             </foreach>
+             group by card_id)
+         </if>
+    </select>
+
+
+</mapper>

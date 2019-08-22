@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ConsumptionMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		INTEGRAL_CONSUMPTION
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		INTENET_ID,	
+		CONSUMPTION_TYPE,	
+		NUMBER,	
+		CONSUMPTION_ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{INTENET_ID},	
+		#{CONSUMPTION_TYPE},	
+		#{NUMBER},	
+		#{CONSUMPTION_ID}
+	</sql>
+	
+	<!-- 新增(保存新的积分消耗信息)-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除(通过CONSUMPTION_ID删除积分消耗信息)-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			CONSUMPTION_ID = #{CONSUMPTION_ID}
+	</delete>
+	
+	<!-- 修改(通过CONSUMPTION_ID修改积分消耗信息) -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			CONSUMPTION_TYPE = #{CONSUMPTION_TYPE},
+			NUMBER = #{NUMBER},
+		CONSUMPTION_ID = CONSUMPTION_ID,
+		INTENET_ID= #{INTENET_ID}
+		where 
+		CONSUMPTION_ID = #{CONSUMPTION_ID}
+	</update>
+	
+	<!-- 通过ID获取数据(通过CONSUMPTION_ID查询积分消耗信息)-->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			CONSUMPTION_ID = #{CONSUMPTION_ID}
+	</select>
+	
+	<!-- 通过ID获取数据(通过CONSUMPTION_ID去查询id是否已存在) -->
+	<select id="findByInetrnet" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where  1=1
+			<if test="INTENET_ID != null and INTENET_ID != ''">
+			 	and INTENET_ID= #{INTENET_ID}
+			</if>
+		    <if test="CONSUMPTION_TYPE != null and CONSUMPTION_TYPE != ''">
+			 	and CONSUMPTION_TYPE= #{CONSUMPTION_TYPE}
+			</if>
+			<if test="CONSUMPTION_ID != null and CONSUMPTION_ID != ''">
+				and CONSUMPTION_ID != #{CONSUMPTION_ID}
+			</if>
+	</select>
+	
+	<!-- 列出Consumption列表(通过网吧id查询积分消耗信息) -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+		</if>
+		<if test="pd.INTENET_ID != null and pd.INTENET_ID != ''">
+			and INTENET_ID= #{pd.INTENET_ID}
+		</if>
+	</select>
+	
+	<!-- 列表(获取所有积分消耗信息) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除(通过CONSUMPTION_ID批量删除积分消耗信息) -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			CONSUMPTION_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	
+</mapper>

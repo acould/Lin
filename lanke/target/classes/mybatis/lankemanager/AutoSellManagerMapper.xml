@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AutoSellManagerMapper">
+
+    <select id="datalistPage" parameterType="page" resultType="pd">
+        SELECT
+            b.intenet_name,
+            a.store_id,
+            a.store_name,
+            a.autosell_username
+        FROM
+            internet_store a
+            LEFT JOIN sys_intenet b ON a.internet_id = b.intenet_id
+        WHERE
+            b.intenet_name IS NOT NULL
+        <if test="pd.keywords != null and pd.keywords !=''">
+            and (
+            b.intenet_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or a.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        ORDER BY b.intenet_name
+
+    </select>
+
+    <select id="datalistPage2" parameterType="page" resultType="pd">
+        SELECT
+        b.intenet_name,
+        a.store_id,
+        a.store_name,
+        a.autosell_username
+        FROM
+        internet_store a
+        LEFT JOIN sys_intenet b ON a.internet_id = b.intenet_id
+        WHERE
+        b.intenet_name IS NOT NULL
+        <if test="pd.store_ids != null and pd.store_ids !=''">
+            and a.store_id in ('${pd.store_ids}')
+        </if>
+        <if test="pd.internet_id != null and pd.internet_id !=''">
+            and a.INTERNET_ID in ('${pd.internet_id}')
+        </if>
+        ORDER BY b.intenet_name
+    </select>
+
+    <select id="getSellNo" parameterType="java.util.Map" resultType="pd">
+       select sm_no from tb_sellmachine
+       where 1=1
+       and store_id=#{store_id}
+   </select>
+
+    <select id="getNoByStore_id" parameterType="pd" resultType="pd">
+        select sm_no from  tb_sellmachine  where store_id =#{store_id}
+    </select>
+
+    <!--<select id="getNoByStore_id" parameterType="pd" resultType="pd">
+        select sm_no from  tb_sellmachine  where store_id =#{store_id}
+    </select>-->
+
+    <select id="getMsgByopen_id" parameterType="java.util.Map" resultType="pd">
+       select * from bund_user where user_id = (
+       select user_id from wechat_user
+       where 1=1
+       and open_id=#{open_id})
+   </select>
+
+    <select id="getMember" parameterType="java.util.Map" resultType="pd">
+       select *  from bund_user
+       where 1=1
+       and  user_id=#{user_id}
+   </select>
+
+    <select id="getStoreAndId"  resultType="pd">
+       select * from tb_sellmachine_order where out_order_no = #{out_order_no}
+   </select>
+
+    <select id="getUserName"  resultType="pd">
+       select * from internet_store where store_id = #{store_id}
+   </select>
+
+    <select id="getInternet"  resultType="pd">
+       select * from internet_store where store_id = #{store_id}
+   </select>
+
+    <select id="getStoreName" resultType="pd">
+        select * from internet_store where store_id = #{store_id}
+    </select>
+
+    <select id="getOrderById"  resultType="pd">
+       select * from tb_sellmachine_order where ORDER_ID = #{id}
+   </select>
+
+    <select id="getTemplate"  resultType="pd">
+       select * from wechat_msg_template where internet_id=#{internet_id} and title like CONCAT(CONCAT('%', #{temple_name}), '%')
+   </select>
+
+    <select id="findOrder"  resultType="pd">
+       select * from tb_sellmachine_order where out_order_no=#{order_no}
+   </select>
+
+    <select id="getAppId" parameterType="java.util.Map" resultType="pd">
+        SELECT
+            wechat_id
+        FROM
+            sys_intenet
+        WHERE
+            INTENET_ID = ( SELECT internet_id FROM internet_store WHERE store_id = ( SELECT store_id FROM tb_sellmachine WHERE sm_no = #{vm_code} ) )
+   </select>
+
+    <select id="selectRefundMsg" resultType="pd">
+        select * from tb_sellmachine_order where out_order_no =#{out_order_no}
+    </select>
+
+    <select id="getStore_id" parameterType="java.util.Map" resultType="pd">
+          SELECT store_id FROM tb_sellmachine WHERE sm_no = #{vm_code}
+   </select>
+
+    <delete id="deleteSM" parameterType="pd">
+            DELETE
+            FROM
+                tb_sellmachine
+            WHERE
+                STORE_ID =#{store_id}
+            AND sm_no =#{sm_no}
+    </delete>
+
+
+    <delete id="deleteAll" parameterType="pd">
+            DELETE
+            FROM
+                tb_sellmachine
+            WHERE
+                STORE_ID =#{store_id}
+    </delete>
+
+    <insert id="save" parameterType="java.util.List">
+          INSERT INTO
+               tb_sellmachine
+               ( SM_ID, SM_NO, STORE_ID)
+          VALUES
+        <foreach collection = "list" item = "item" open = "" close = "" separator= "," >
+            (
+            #{item.sm_id},
+            #{item.sm_mo},
+            #{item.store_id}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="addOrder">
+        INSERT INTO
+        tb_sellmachine_order
+        (order_id,sm_no,out_order_no,lanke_order_no,price,order_time,detail,notify_url,store_id,product_count,order_state,attach,result_url)
+        VALUES(
+            #{id},
+            #{vm_code},
+            #{out_order_no},
+            #{lanke_order_no},
+            #{price},
+            #{date},
+            #{detail},
+            #{notify_url},
+            #{store_id},
+            #{product_count},
+            #{order_state},
+            #{attach},
+            #{result_url}
+            )
+    </insert>
+
+    <update id="insertRefundMsg" parameterType="java.util.Map">
+        update
+           tb_sellmachine_order
+        set
+            refund_time =#{date},
+            refund_fee = #{refund_fee},
+            refund_desc = #{refund_desc},
+            refund_state = #{refund_state}
+        where
+            out_order_no = #{out_order_no}
+    </update>
+
+    <update id="addUserMsg" parameterType="java.util.Map">
+        update
+           tb_sellmachine_order
+        set
+            user_id =#{user_id},
+            username = #{username},
+            carded = #{carded},
+            cardid = #{card_id},
+            openid = #{openid},
+            pay_time = #{date}
+        where
+            order_id = #{id}
+    </update>
+
+    <update id="addUserMsg2" parameterType="java.util.Map">
+        update
+           tb_sellmachine_order
+        set
+            principal =#{principal},
+            award_price = #{award_price},
+            pay_type = #{pay_type}
+        where
+            order_id = #{id}
+    </update>
+
+    <update id="addState" parameterType="java.util.Map">
+        update
+           tb_sellmachine_order
+        set
+            pay_state =#{pay_state},
+            pay_fail_desc =#{pay_fail_desc},
+            order_state =#{order_state},
+            time_end =#{time_end}
+        where
+            order_id = #{id}
+    </update>
+
+    <update id="addState2" parameterType="java.util.Map">
+        update
+           tb_sellmachine_order
+        set
+            order_state =#{order_state}
+        where
+            lanke_order_no = #{lanke_order_no}
+    </update>
+
+    <select id="getOrderResult" resultType="pd">
+        select * from tb_sellmachine_order where out_order_no=#{out_order_no}
+    </select>
+
+    <select id="check" resultType="pd">
+        select * from tb_sellmachine where SM_NO=#{sm_no}
+    </select>
+
+    <select id="checkOrder" resultType="pd">
+         select * from tb_sellmachine_order where lanke_order_no=#{order_no}
+    </select>
+
+</mapper>

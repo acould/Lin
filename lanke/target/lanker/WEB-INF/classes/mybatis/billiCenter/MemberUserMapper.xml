@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MemberUserMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		member_user
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		member_id,
+		store_id,
+		card_id,
+		user_name,
+		user_password,
+		id_card,
+		id_type,
+		phone_number,
+		member_level,
+		usable_integral,
+		overage,
+		reward,
+		confirm_type,
+		update_time,
+		create_time
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{member_id},	
+		#{store_id},	
+		#{card_id},	
+		#{user_name},	
+		#{user_password},
+		#{id_card},
+		#{id_type},
+		#{phone_number},
+		#{member_level},
+		#{usable_integral},
+		#{overage},
+		#{reward},
+		#{confirm_type},
+		#{update_time},
+		#{create_time}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+			<include refid="tableName"></include>(<include refid="Field"></include>) 
+		values 
+			(<include refid="FieldValue"></include>)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			member_id = #{member_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+			<include refid="tableName"></include>
+		set 
+			<if test="card_id != null and card_id != ''">
+				card_id = #{card_id},
+			</if>
+			<if test="user_name != null and user_name != ''">
+				user_name = #{user_name},
+			</if>
+			<if test="user_password != null and user_password != ''">
+				user_password = #{user_password},
+			</if>
+			<if test="id_card != null and id_card != ''">
+				id_card = #{id_card},
+			</if>
+			<if test="id_type != null and id_type != ''">
+				id_type = #{id_type},
+			</if>
+			<if test="phone_number != null and phone_number != ''">
+				phone_number = #{phone_number},
+			</if>
+			<if test="member_level != null and member_level != ''">
+				member_level = #{member_level},
+			</if>
+			<if test="usable_integral != null and usable_integral != ''">
+				usable_integral = #{usable_integral},
+			</if>
+			<if test="overage != null and overage != ''">
+				overage = #{overage},
+			</if>
+			<if test="reward != null and reward != ''">
+				reward = #{reward},
+			</if>
+			<if test="confirm_type != null and confirm_type != ''">
+				confirm_type = #{confirm_type},
+			</if>
+			<if test="update_time != null and update_time != ''">
+				update_time = #{update_time},
+			</if>
+			member_id = #{member_id}
+		where 
+			member_id = #{member_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			member_id = #{member_id}
+	</select>
+	<select id="findByCardIdAndStoreId" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			card_id = #{card_id} and store_id = #{store_id}
+	</select>
+	
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 1=1
+			<if test="store_id != null and store_id != ''">
+				and store_id = #{store_id}
+			</if>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			member_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	
+</mapper>

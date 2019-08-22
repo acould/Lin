@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ClientMapper">
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		SELECT
+			a.company_name,
+			a.online_time,
+			b.store_name,
+			a.pubwin_store_id,
+			a.store_id,
+			a.expiration_time,
+			b.telephone,
+			d.company_name agent_name,
+			d.phone agent_phone
+		FROM
+			internet_store_v a left join internet_store b on a.STORE_ID = b.STORE_ID
+			left join tb_agentstore c on b.STORE_ID = c.STORE_ID
+			LEFT JOIN tb_agent d ON c.agent_id = d.id
+		WHERE 1=1 AND a.state = 1
+		<if test="pd.agent_id != null and pd.agent_id != ''">
+			and d.id=#{pd.agent_id}
+		</if>
+		<if test="pd.storeIds!= null and pd.storeIds!=''">
+			and a.STORE_ID in ('${pd.storeIds}')
+		</if>
+		<if test="pd.storeIds2!= null and pd.storeIds2!=''">
+			and a.STORE_ID not in ('${pd.storeIds2}')
+		</if>
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and ( a.company_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or b.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or a.pubwin_store_id LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or a.store_id LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or a.expiration_time LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or b.telephone LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or d.company_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or d.phone LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%'))
+		</if>
+	</select>
+
+	<select id="totalNum" parameterType="page" resultType="Integer">
+		SELECT
+		count(1)
+		FROM
+		internet_store_v a,
+		internet_store b left join tb_agentstore c on
+		b.STORE_ID = c.STORE_ID LEFT JOIN
+		tb_agent d ON c.agent_id = d.id
+		WHERE
+		a.STORE_ID = b.STORE_ID
+		AND a.state = 1
+		<if test="pd.agent_id != null and pd.agent_id != ''">
+			and d.id=#{pd.agent_id}
+		</if>
+		<if test="pd.list!= null and pd.list!=''">
+		and a.STORE_ID in ('${pd.list}')
+		</if>
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and ( a.company_name LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or b.store_name LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or a.pubwin_store_id LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or a.store_id LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or a.expiration_time LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or b.telephone LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or d.company_name LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or d.phone LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%'))
+		</if>
+	</select>
+
+
+	<update id="edit" parameterType="pd">
+		update
+		internet_store_v
+		set
+		online_time = #{online_time}
+		where
+		store_id = #{store_id}
+	</update>
+</mapper>

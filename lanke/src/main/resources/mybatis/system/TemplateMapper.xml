@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TemplateMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		wechat_msg_template
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,	
+		internet_id,	
+		template_id,	
+		type,	
+		create_time
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},	
+		#{internet_id},	
+		#{template_id},	
+		#{type},	
+		#{create_time}
+	</sql>
+	
+	<!-- 新增(保存新的消息模板)-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where internet_id = #{internet_id} 
+			<if test="type != null and type != ''">
+				and type = #{type}
+			</if>
+        limit 1
+	</select>
+	
+	<select id="findByInternetId" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where internet_id = #{internet_id} 
+	</select>
+	
+</mapper>

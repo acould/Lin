@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ProductVersionMapper">
+	<!--表名 -->
+	<sql id="tableName">
+		tb_productversion
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		version,
+		updatetime
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{version},
+		#{updatetime}
+	</sql>
+
+	<!--表名 -->
+	<sql id="tableName_detail">
+		tb_versiondetail
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field_detail">
+		id,
+		type,
+		content,
+		version_id
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue_detail">
+		#{id},
+		#{type},
+		#{content},
+		#{version_id}
+	</sql>
+
+	<!-- 查询版本列表 -->
+	<select id="list" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		ORDER BY updatetime DESC
+	</select>
+
+	<!-- 查询指定版本信息 -->
+	<select id="showVersion" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		WHERE id = #{version_id}
+	</select>
+
+	<!-- 查询版本预告信息 -->
+	<select id="showDetail" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field_detail"></include>
+		from
+		<include refid="tableName_detail"></include>
+		where version_id=#{version_id}
+		ORDER BY type ASC
+	</select>
+
+	<!--新增版本日志 -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 修改版本日志 -->
+	<update id="edit" parameterType="pd">
+		UPDATE
+		<include refid="tableName"></include>
+		SET
+		version = #{version},
+		updatetime = #{updatetime}
+		WHERE
+		id = #{version_id}
+	</update>
+
+	<!--新增版本日志详情 -->
+	<insert id="saveDetail" parameterType="pd">
+		insert into
+		<include refid="tableName_detail"></include>
+		(
+		<include refid="Field_detail"></include>
+		) values (
+		<include refid="FieldValue_detail"></include>
+		)
+	</insert>
+
+	<!-- 删除版本日志 -->
+	<delete id="deleteVersion" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		id = #{id}
+	</delete>
+
+	<!-- 删除版本日志详情 -->
+	<delete id="deleteDetail" parameterType="pd">
+		delete from
+		<include refid="tableName_detail"></include>
+		where
+		version_id = #{id}
+	</delete>
+
+	<!-- 查询最新版本的id -->
+	<select id="selectId" parameterType="pd" resultType="pd">
+		select
+		id
+		from
+		<include refid="tableName"></include>
+		ORDER BY updatetime DESC LIMIT 0,1;
+	</select>
+
+	<!-- 查询最新版本的id -->
+	<select id="selectAllId" parameterType="pd" resultType="pd">
+		select
+		id
+		from
+		<include refid="tableName"></include>
+		ORDER BY updatetime DESC;
+	</select>
+</mapper>

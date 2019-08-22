@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HomeMapper">
+
+	<!-- 待查看消息 -->
+	<select id="messageSum" parameterType="page" resultType="pd">
+		SELECT
+		id
+		FROM
+		tb_message
+		WHERE 1 = 1
+		AND state = '0'
+		<if test="pd.internetId != null and pd.internetId != ''">
+			and internet_id = #{pd.internetId}
+		</if>
+	</select>
+
+	<!-- 待发货商品 -->
+	<select id="orderSum" parameterType="page" resultType="pd">
+		SELECT
+		ORDER_ID
+		FROM
+		dingdan
+		WHERE 1=1
+		AND STATE = '2'
+		<if test="pd.internetId != null and pd.internetId != ''">
+			and INTERNET_ID = #{pd.internetId}
+		</if>
+		<if test="pd.list!= null and pd.list!=''">
+			and STORE_ID in ('${pd.list}')
+		</if>
+	</select>
+
+	<!-- 待核销卡券 -->
+	<select id="cardSum" parameterType="page" resultType="pd">
+		SELECT
+		a.`CANCEL_ID`
+		FROM
+		card_cancel a,
+		card_store b
+		WHERE a.`CARD_ID` =
+		b.`card_id`
+		AND a.`STATE`='1'
+		<if test="pd.internetId != null and pd.internetId != ''">
+			and a.`INTERNET_ID` = #{pd.internetId}
+		</if>
+		<if test="pd.list!= null and pd.list!=''">
+			and b.store_id in ('${pd.list}')
+		</if>
+		GROUP BY a.`CANCEL_ID`
+	</select>
+
+	<!-- 待回复留言 -->
+	<select id="leaveSum" parameterType="page" resultType="pd">
+		SELECT
+		LM_ID
+		FROM
+		leavemessage
+		WHERE 1=1
+		AND LM_STATE ='2'
+		<if test="pd.internetId != null and pd.internetId != ''">
+			and INTERNET_ID = #{pd.internetId}
+		</if>
+		<if test="pd.list!= null and pd.list!=''">
+			and STROE_ID in ('${pd.list}')
+		</if>
+		<!-- 显示最新3个月 -->
+		<![CDATA[ and datediff(curdate(),LM_DATE) < 90 ]]>
+	</select>
+
+	<!-- 按条件查粉丝 -->
+	<select id="fansCount" parameterType="page" resultType="pd">
+		SELECT
+		count(WECHAT_ID) as fans_num
+		FROM
+		wechat_user
+		WHERE 1=1
+		<if test="pd.time1 != null and pd.time1 != '' and pd.time2 != null and pd.time2 != ''">
+			and CREATE_TIME &gt;#{pd.time1}
+			and CREATE_TIME &lt;=#{pd.time2}
+		</if>
+		<if test="pd.internetId != null and pd.internetId != ''">
+			and INTENET_ID = #{pd.internetId}
+		</if>
+	</select>
+
+	<!-- 按条件查会员 -->
+	<select id="memberCount" parameterType="page" resultType="pd">
+		SELECT
+		COUNT(a.`BUNDUSER_ID`) AS member_num
+		FROM
+		bund_user a,
+		INTERNET_store b
+		WHERE a.`STORE_ID` = b.`STORE_ID`
+		<if test="pd.time1 != null and pd.time1 != '' and pd.time2 != null and pd.time2 != ''">
+			and a.`CREATE_TIME` &gt;#{pd.time1}
+			and a.`CREATE_TIME` &lt;=#{pd.time2}
+		</if>
+		<if test="pd.internetId != null and pd.internetId != ''">
+			and b.`INTERNET_ID` = #{pd.internetId}
+		</if>
+		<if test="pd.store != null and pd.store != ''">
+			and a.`STORE_ID` = #{pd.store}
+		</if>
+		<if test="pd.store == null or pd.store == ''">
+			<if test="pd.list!= null and pd.list!=''">
+				and a.`STORE_ID` in ('${pd.list}')
+			</if>
+		</if>
+	</select>
+
+	<!-- 按条件查收入 -->
+	<select id="incomeCount" parameterType="page" resultType="pd">
+		SELECT
+		IFNULL (SUM(a.`pay_actualbalance`),0) AS income
+		FROM
+		tb_rechargehistory a
+		WHERE 1 = 1
+		AND a.`pay_state` = 'a'
+		<if test="pd.time1 != null and pd.time1 != '' and pd.time2 != null and pd.time2 != ''">
+			and a.`createtime` &gt;#{pd.time1}
+			and a.`createtime` &lt;=#{pd.time2}
+		</if>
+		<if test="pd.internetId != null and pd.internetId != ''">
+			and a.`internet_id` = #{pd.internetId}
+		</if>
+		<if test="pd.store != null and pd.store != ''">
+			and a.`store_id` = #{pd.store}
+		</if>
+		<if test="pd.store == null or pd.store == ''">
+			<if test="pd.list!= null and pd.list!=''">
+				and a.`store_id` in ('${pd.list}')
+			</if>
+		</if>
+	</select>
+
+
+	<!-- 查询相关门店信息 -->
+	<select id="storeList" parameterType="page" resultType="pd">
+		SELECT
+		STORE_ID,STORE_NAME
+		FROM
+		internet_store
+		WHERE 1=1
+		<if test="pd.list!= null and pd.list!=''">
+			and STORE_ID in ('${pd.list}')
+		</if>
+	</select>
+
+	<!-- 查询相关门店信息 -->
+	<select id="selectMenu" parameterType="pd" resultType="pd">
+		SELECT
+		MENU_ID
+		FROM
+		sys_menu
+		WHERE 1 = 1
+		<if test="menuUrl!= null and menuUrl!=''">
+			AND MENU_URL=#{menuUrl}
+		</if>
+	</select>
+
+	<!-- 获取门店列表 -->
+	<select id="storeLists" parameterType="page" resultType="pd">
+		SELECT
+		STORE_ID,STORE_NAME
+		FROM
+		internet_store
+		WHERE 1=1
+		<if test="pd.internetId != null and pd.internetId != ''">
+			and INTERNET_ID = #{pd.internetId}
+		</if>
+	</select>
+</mapper>

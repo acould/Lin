@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SceneMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+		IN_SCENE
+	</sql>
+
+    <!-- 字段 -->
+    <sql id="Field">
+		FAV_TYPE,	
+		BENEFIT_TYPE,	
+		RECEIVE_NUMBER,	
+		RECEIVE_DETIL,	
+		RECEIVE_STATE,	
+		CANCEL_STATE, 
+		SCENE_NAME,	
+		BLANK_NUMBER,
+		RUSH_BUY_NUMBER,
+        RUSH_BUY_TIME,
+        RUSH_BUY_TIME_UNITS,
+		INTENET_ID,
+		STATE,
+		SCENE_ID,
+		unusertime
+	</sql>
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
+		#{FAV_TYPE},	
+		#{BENEFIT_TYPE},	
+		#{RECEIVE_NUMBER},	
+		#{RECEIVE_DETIL},	
+		#{RECEIVE_STATE},	
+		#{CANCEL_STATE},	
+		#{SCENE_NAME},	
+		#{BLANK_NUMBER},
+		#{RUSH_BUY_NUMBER},
+		#{RUSH_BUY_TIME},
+		#{RUSH_BUY_TIME_UNITS},
+		#{INTENET_ID},
+		#{STATE},	
+		#{SCENE_ID},
+		#{unusertime}
+	</sql>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="pd">
+        insert into
+        <include refid="tableName"></include>
+        (
+        <include refid="Field"></include>
+        ) values (
+        <include refid="FieldValue"></include>
+        )
+    </insert>
+
+    <!-- 通过卡劵id删除卡劵使用场景(删除)-->
+    <delete id="delete" parameterType="pd">
+        delete from
+        <include refid="tableName"></include>
+        where
+        SCENE_ID = #{SCENE_ID}
+    </delete>
+
+    <!-- 修改场景数据(修改) -->
+    <update id="edit" parameterType="pd">
+        update
+        <include refid="tableName"></include>
+        set
+        <if test="FAV_TYPE != null and FAV_TYPE != ''">
+            FAV_TYPE = #{FAV_TYPE},
+        </if>
+        <if test="BENEFIT_TYPE != null and BENEFIT_TYPE != ''">
+            BENEFIT_TYPE = #{BENEFIT_TYPE},
+        </if>
+        <if test="RECEIVE_NUMBER != null and RECEIVE_NUMBER != ''">
+            RECEIVE_NUMBER = #{RECEIVE_NUMBER},
+        </if>
+        <if test="RECEIVE_DETIL != null and RECEIVE_DETIL != ''">
+            RECEIVE_DETIL = #{RECEIVE_DETIL},
+        </if>
+        <if test="RECEIVE_STATE != null and RECEIVE_STATE != ''">
+            RECEIVE_STATE = #{RECEIVE_STATE},
+        </if>
+        <if test="CANCEL_STATE != null and CANCEL_STATE != ''">
+            CANCEL_STATE = #{CANCEL_STATE},
+        </if>
+        <if test="SCENE_NAME != null and SCENE_NAME != ''">
+            SCENE_NAME = #{SCENE_NAME},
+        </if>
+        <if test="BLANK_NUMBER != null and BLANK_NUMBER != ''">
+            BLANK_NUMBER = #{BLANK_NUMBER},
+        </if>
+        <if test="RUSH_BUY_NUMBER != null and RUSH_BUY_NUMBER != ''">
+            RUSH_BUY_NUMBER = #{RUSH_BUY_NUMBER},
+        </if>
+        <if test="RUSH_BUY_TIME != null and RUSH_BUY_TIME != ''">
+            RUSH_BUY_TIME = #{RUSH_BUY_TIME},
+        </if>
+        <if test="RUSH_BUY_TIME_UNITS != null and RUSH_BUY_TIME_UNITS != ''">
+            RUSH_BUY_TIME_UNITS = #{RUSH_BUY_TIME_UNITS},
+        </if>
+        SCENE_ID = SCENE_ID
+        where
+        SCENE_ID = #{SCENE_ID}
+    </update>
+
+    <!-- 通过ID获取数据 -->
+    <select id="findById" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        SCENE_ID = #{SCENE_ID}
+    </select>
+    <!-- 通过ID获取数据 -->
+    <select id="findByName" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where 1=1
+        <if test="SCENE_NAME != null and SCENE_NAME != ''"><!-- 关键词检索 -->
+            and
+            SCENE_NAME = #{SCENE_NAME}
+        </if>
+        <if test="SCENE_ID != null and SCENE_ID != ''"><!-- 关键词检索 -->
+            and
+            SCENE_ID != #{SCENE_ID}
+        </if>
+        <if test="INTENET_ID != null and INTENET_ID!= ''">
+            and
+            INTENET_ID = #{INTENET_ID}
+        </if>
+    </select>
+    
+    <!-- 通过ID获取数据(根据名称判断是否重复) -->
+    <select id="findByCard" parameterType="pd" resultType="pd">
+        select
+        A.FAV_TYPE,
+        A.BENEFIT_TYPE,
+        A.RECEIVE_NUMBER,
+        A.RECEIVE_DETIL,
+        A.RECEIVE_STATE,
+        A.CANCEL_STATE,
+        A.SCENE_NAME,
+        A.BLANK_NUMBER,
+        A.INTENET_ID,
+        A.SCENE_ID,
+        B.QUANTITY,
+        B.cardSum_type,
+        B.cardSum_time
+        from
+        <include refid="tableName"></include>
+        A, CARD B
+        where
+        A.SCENE_ID=B.SCENE_ID
+        AND B.CARD_ID = #{CARD_ID}
+    </select>
+
+    <!-- 列表 -->
+    <select id="datalistPage" parameterType="page" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where 1=1
+        <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+            and
+            (
+            <!--	根据需求自己加检索条件
+                字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+                 or
+                字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            -->
+            SCENE_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            )
+        </if>
+        <if test="pd.INTENET_ID!= null and pd.INTENET_ID != ''"><!-- 关键词检索 -->
+            and INTENET_ID = #{pd.INTENET_ID}
+        </if>
+    </select>
+
+    <!-- 列表(全部) -->
+    <select id="listAll" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where 1=1
+        <if test="INTERNETID!= null and INTERNETID != ''"><!-- 关键词检索 -->
+            and INTENET_ID = #{INTERNETID}
+        </if>
+    </select>
+    <!-- 查看系统设置的场景是否已经添加 -->
+    <select id="listByState" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where 1=1
+        <if test=" INTENET_ID!= null and INTENET_ID != ''"><!-- 关键词检索 -->
+            and INTENET_ID = #{INTENET_ID}
+        </if>
+        <if test=" STATE!= null and STATE!= ''"><!-- 关键词检索 -->
+            and STATE = #{STATE}
+        </if>
+    </select>
+
+    <!-- 批量删除 -->
+    <delete id="deleteAll" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        SCENE_ID in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+</mapper>

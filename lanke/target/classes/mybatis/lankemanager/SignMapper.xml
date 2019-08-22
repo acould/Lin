@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SignMapper">
+
+    <select id="getSign" resultType="pd">
+       select signCount from tb_sign
+       where
+       user_id = #{user_id}
+       and store_id =#{store_id}
+       and signTime =#{date}
+    </select>
+
+    <select id="getSigns" resultType="pd">
+      select sign_time_set from intintegral
+      where
+      store_id =#{store_id}
+      and CATEGRORY='5'
+    </select>
+
+    <insert id="addSign">
+        INSERT INTO
+        tb_sign
+        ( id,signCount,signTime,user_id,store_id,integral)
+        VALUES(
+            #{id},
+            #{signCount},
+            #{date},
+            #{user_id},
+            #{store_id},
+            #{integral}
+            )
+    </insert>
+
+    <select id="Signs" resultType="pd">
+        select INTEGRAL from  bund_user b left join sys_user a on a.user_id= b.user_id
+        where a.user_id=#{user_id}
+        and b.STORE_ID = #{store_id}
+    </select>
+
+
+    <update id="updateSign">
+        update
+        bund_user b left join sys_user a on a.user_id= b.user_id
+        set
+            INTEGRAL =#{sum}
+        where
+        a.user_id=#{user_id}
+        and b.STORE_ID = #{store_id}
+    </update>
+
+</mapper>

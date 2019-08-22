@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AuctionPicturesMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		auction_pictures
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		MPICTURES_ID,
+		TITLE,	
+		NAME,	
+		PATH,	
+		CREATETIME,	
+		INTERNET_ID,
+		Auction_ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{MPICTURES_ID},
+		#{TITLE},	
+		#{NAME},	
+		#{PATH},	
+		#{CREATETIME},	
+		#{INTERNET_ID},	
+		#{Auction_ID}
+	</sql>	
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			MPICTURES_ID = #{MPICTURES_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+			<include refid="tableName"></include>
+		set 
+			<if test="TITLE != null and TITLE != ''">
+				TITLE = #{TITLE},
+			</if>
+			<if test="NAME != null and NAME != ''">
+				NAME = #{NAME},
+			</if>
+			<if test="PATH != null and PATH != ''">
+				PATH = #{PATH},  
+			</if>
+			<if test="CREATETIME != null and CREATETIME != ''">
+				CREATETIME = #{CREATETIME},
+			</if>
+			MPICTURES_ID = #{MPICTURES_ID}
+		where
+			MPICTURES_ID = #{MPICTURES_ID}
+	</update>
+	<update id="editByAuctionId" parameterType="pd">
+		update
+			<include refid="tableName"></include>
+		set 
+			<if test="TITLE != null and TITLE != ''">
+				TITLE = #{TITLE},
+			</if>
+			<if test="NAME != null and NAME != ''">
+				NAME = #{NAME},
+			</if>
+			<if test="PATH != null and PATH != ''">
+				PATH = #{PATH},  
+			</if>
+			<if test="CREATETIME != null and CREATETIME != ''">
+				CREATETIME = #{CREATETIME},
+			</if>
+			Auction_ID = #{Auction_ID}
+		where
+			Auction_ID = #{Auction_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			MPICTURES_ID = #{MPICTURES_ID}
+	</select>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findByAuctionId" parameterType="java.lang.String" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			Auction_ID = #{Auction_ID}
+	</select>
+
+	<!-- 通过ID获取数据 -->
+	<select id="findByStoreId" parameterType="java.lang.String" resultType="pd">
+		select STORE_ID,STORE_NAME from internet_store where STORE_ID=#{store_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+			 NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 列表网吧(全部) -->
+	<select id="listIntegral" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			MPICTURES_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+
+	<select id="getStoreList"  resultType="pd">
+       select STORE_ID,STORE_NAME from internet_store where INTERNET_ID=#{INTERNET_ID}
+   </select>
+</mapper>

@@ -1,0 +1,623 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ueditor图片背景对话框</title>
+    <script type="text/javascript" src="../internal.js"></script>
+    <!-- jquery -->
+    <script type="text/javascript" src="../../third-party/jquery-3.3.1.min.js"></script>
+
+    <script src="../../third-party/webuploader/webuploader.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../third-party/webuploader/webuploader.css">
+    <link rel="stylesheet" type="text/css" href="../music/upload.css">
+    <link rel="stylesheet" type="text/css" href="../background/background.css">
+<style>
+.tabbody {
+    height: 255px;
+}
+#imageList {height: 215px;}
+input{margin:0;}
+.bgarea {
+    height: 90%;border: 0 none;margin:5px 10px;
+}
+.col-sm-4 {
+    position: relative;min-height: 1px;margin: 0 0 9px 9px;width:180px;display: inline-block;
+}
+.appmsg.selected .icon {
+    background-position: 126px 100px;
+}
+.pagelink {
+    text-align: center;
+}
+.appmsg {
+    position: relative; margin: 5px;border:1px solid #CCC;padding:2px;
+}
+.appmsg img {
+    width: 100%;max-width: 100%;
+}
+.deleteMsg {cursor:pointer;}
+.img-opr input,.uploadfile-toolbar{display: none;}
+</style>
+</head>
+<body>
+	<div id="bg_container" class="wrapper">
+        <div id="tabHeads" class="tabhead">
+            <span class="focus" data-content-id="normal">背景设置</span>
+            <span class="" data-content-id="imgManager">在线背景图片</span>
+            <span class="" data-content-id="mine">我上传的背景图</span>
+        </div>
+        <div id="tabBodys" class="tabbody">
+        	<div id="normal" class="panel  focus" style="overflow-y:auto;">
+        		<div id="bg-dialog-content" style="padding:20px 20px 0;">
+		
+				</div>
+				<div id="upload" style="padding:0 20px 20px;">
+                    <div id="queueList" class="queueList">
+                        <div id="dndArea" class="placeholder">
+                            <div class="filePickerContainer">
+                                <div id="filePickerReady" style="display: inline-block;">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="filelist">
+                            
+                        </ul>
+                    </div>
+                </div>
+        	</div>
+        	<div id="imgManager" class="panel" style="overflow-y:auto;">
+        		<div id="remote-links" style="padding-left:10px;">
+                    <a href="#" class="focus" data-tagid="">全部</a>
+                    <a href="#" data-tagid="1229">方格斜纹</a>                    
+                    <a href="#" data-tagid="545">灰色</a>
+                    <a href="#" data-tagid="1163">粉色</a>
+                    <a href="#" data-tagid="1162">橙色</a>
+                    <a href="#" data-tagid="533">黄色</a>
+                    <a href="#" data-tagid="704">红色</a>                    
+                    <a href="#" data-tagid="428">蓝色</a>
+                    <a href="#" data-tagid="707">绿色</a>
+                    <a href="#" data-tagid="1164">紫色</a>
+                    <a href="#" data-tagid="558">黑色</a>
+
+                    <input id="search-txt" placeholder="搜索词" type="text" style="width:60px;padding: 2px;"><input type="button" value="搜索">
+                </div>
+        		<div id="imageList" style=""></div>
+        	</div>
+        	<div id="mine" class="panel" style="overflow-y:auto;"></div>
+        </div>
+    </div>
+	
+
+<script>
+var imgs = [];
+	$(dialog.anchorEl).find('.135bg').each(function(i){
+		var img = $(this).css('backgroundImage'); 
+		if(img.indexOf('"')> 0 || img.indexOf("'") > 0){
+			img = substr(img,5,-2);
+		}
+		else{
+			img = substr(img,4,-1);
+		}
+		imgs[imgs.length] = img;
+		
+		var repeat = $(this).css('backgroundRepeat');
+		var size = $(this).css('backgroundSize');
+		
+		var height = this.style.height;
+		
+		var html = '<div>'
+		+'<img id="img-'+i+'" src="'+img+'" style="max-height:100px;max-width:100px;float:right;">'
+		+'<p style="margin-bottom:5px;">背景图地址：<input id="bgimg-'+i+'" class="bgimg-'+i+'" style="width:320px;padding:4px;" type="text" value="'+img+'"></p>'	
+		+'<p style="margin-bottom:5px;">背景图重复：<select class="bgimg-repeat-'+i+'"><option value="repeat">重复</option><option value="no-repeat">不重复</option><option value="repeat-x">水平重复</option><option value="repeat-y">垂直重复</option></select></p>'	
+		+'<p style="margin-bottom:5px;">背景图尺寸：<select class="bgimg-size-'+i+'"><option value="auto auto">自动</option><option value="cover">等比缩放覆盖(可能部分超出范围不显示)</option><option value="contain">拉伸缩放自适应（可能水平或垂直出现重复）</option> <option value="100% auto">水平拉伸（等比）</option><option value="auto 100%">垂直拉伸（等比）</option><option value="100% 100%">双向拉伸（拉长）</option></select></p>'	
+		+'</div><p><br></p>'
+		+'<p style="margin-bottom:5px;">背景区域高度：<input class="bgheight-'+i+'" style="width:120px;padding:4px;" type="text" value="'+height+'">&nbsp; 如： 320px</p><p>设置高度后，区域内容超出时可滑动</p>'	
+		+'<hr style="clear:both;margin:15px 0;"/>';
+		
+		$('#bg-dialog-content').append(html);
+		//initial,inherit,unset,
+		 $('.bgimg-repeat-'+i).val(repeat);
+		 $('.bgimg-size-'+i).val(size);
+	});
+(function () {
+	var onlineImage;
+	window.onload = function () {
+        initTabs();
+        editor.undoManger.save();
+
+        $(document).on('click','.deleteMsg',function(e){
+            if(confirm('确认要删除吗？删除后已同步微信的内容不受影响。但135中使用过此图片的将无法显示。')) { 
+                var id= $(this).data('id');
+                top.ajaxAction('/uploadfiles/delete/'+id,null,null,function(){
+                    $('#uploadfile-'+id).remove();
+                });  
+            }
+            e.stopPropagation();
+        });
+        $(document).on('click','.appmsg .icon',function(){
+            var $parent = $(this).parents('.appmsg:first');
+            if ( $parent.hasClass('selected') ) {
+                $parent.removeClass('selected');
+
+                $('#bgimg-0').val(imgs[0]);
+    			$('#img-0').attr('src',imgs[0]);
+            }
+            else{
+                $('#mine').find('.appmsg.selected').removeClass('selected');
+
+                $parent.addClass('selected');
+                var src = $parent.find('img').attr('src');
+
+                $('#bgimg-0').val(src);
+    			$('#img-0').attr('src',src);
+            }
+        });
+    };
+
+    /* 初始化tab标签 */
+    function initTabs(){
+        var tabs = $G('tabHeads').children;
+        for (var i = 0; i < tabs.length; i++) {
+            domUtils.on(tabs[i], "click", function (e) {
+                var target = e.target || e.srcElement;
+                for (var j = 0; j < tabs.length; j++) {
+                    if(tabs[j] == target){
+                        tabs[j].className = "focus";
+                        var contentId = tabs[j].getAttribute('data-content-id');
+                        $G(contentId).style.display = "block";
+                        if(contentId == 'imgManager') {
+                            initImagePanel();
+                        }
+                        else if(contentId == 'mine') {
+                            if($('#mine').html() == "" ) {                  
+                                if(!top.sso.check_userlogin()) {
+                                    var oldfunc = top.rs_callbacks.loginSuccess;
+                                    top.rs_callbacks.loginSuccess = function(request){
+                                        oldfunc(request);
+                                        loadMineImg();
+                                    }
+                                    return false;
+                                }
+                                loadMineImg()
+                            }
+                        }
+                    }else {
+                        tabs[j].className = "";
+                        $G(tabs[j].getAttribute('data-content-id')).style.display = "none";
+                    }
+                }
+            });
+        }
+    }
+
+    function loadMineImg(){
+        
+        function mineImgLoaded(){            
+            $('#mine .pagelink a').click(function(){
+                $('#mine').load(this.href,function(html){
+                    mineImgLoaded();
+                });
+                return false;
+            })
+        }        
+        $('#mine').load('/uploadfiles/mine?modelclass=WxMsg&fieldname=background',function(html){
+            mineImgLoaded();            
+        });
+    }
+	/* 初始化在线图片列表 */
+    function initImagePanel() {
+        onlineImage = onlineImage || new OnlineImage('imageList');
+    }
+
+	/* 在线图片 */
+    function OnlineImage(target) {
+        this.container = utils.isString(target) ? document.getElementById(target) : target;
+        
+        this.init();
+    }
+    OnlineImage.prototype = {
+        init: function () {
+            var $this = this;
+            $('#remote-links a').click(function(){          
+                $('#remote-links a').removeClass('focus');
+                $(this).addClass('focus');
+                $('#remote-links #search-txt').val('');
+                $this.reset();
+            });
+            $('#remote-links :button').click(function(){
+                $('#remote-links a').removeClass('focus');
+                $this.reset();
+            });
+            this.reset();
+            this.initEvents();
+        },
+        /* 初始化容器 */
+        initContainer: function () {
+            this.container.innerHTML = '';
+            this.list = document.createElement('ul');
+            this.clearFloat = document.createElement('li');
+
+            domUtils.addClass(this.list, 'list');
+            domUtils.addClass(this.clearFloat, 'clearFloat');
+
+            this.list.id = 'imageListUl';
+            this.list.appendChild(this.clearFloat);
+            this.container.appendChild(this.list);
+        },
+        /* 初始化滚动事件,滚动到地步自动拉取数据 */
+        initEvents: function () {
+            var _this = this;
+
+            /* 滚动拉取图片 */
+            domUtils.on($G('imageList'), 'scroll', function(e){
+                var panel = this;
+                if (panel.scrollHeight - (panel.offsetHeight + panel.scrollTop) < 10) {
+                    _this.getImageData();
+                }
+            });
+            /* 选中图片 */
+            domUtils.on(this.container, 'click', function (e) {
+                var target = e.target || e.srcElement,
+                    li = target.parentNode,
+                    nodes = $G('imageListUl').childNodes;
+
+                if (li.tagName.toLowerCase() == 'li') {
+                    for (var i = 0, node; node = nodes[i++];) {
+                        if (node == li && !domUtils.hasClass(node, 'selected')) {
+                            domUtils.addClass(node, 'selected');
+                            var src = li.firstChild.getAttribute("_src");
+                            //$('#tabHeads span:first').trigger('click');
+                            jQuery('#bgimg-0').val(src);
+    						jQuery('#img-0').attr('src',src);
+                        } else {
+                            if(domUtils.hasClass(node, 'selected')) {
+                            	domUtils.removeClasses(node, 'selected');
+                            	$('#bgimg-0').val(imgs[0]);
+    							$('#img-0').attr('src',imgs[0]);
+                            }
+                        }
+                    }
+                    return false;
+                }
+            });
+        },
+        /* 初始化第一次的数据 */
+        initData: function () {
+
+            /* 拉取数据需要使用的值 */
+            this.state = 0;
+            this.listSize = editor.getOpt('imageManagerListSize');
+            this.listIndex = 0;
+            this.listEnd = false;
+            this.tagid = $('#remote-links .focus').data('tagid');
+            this.search = $('#remote-links #search-txt').val();
+
+            /* 第一次拉取数据 */
+            this.getImageData();
+        },
+        /* 重置界面 */
+        reset: function() {
+            this.initContainer();
+            this.initData();
+        },
+        /* 向后台拉取图片列表数据 */
+        getImageData: function () {
+            var _this = this;
+
+            if(!_this.listEnd && !this.isLoadingData) {
+                this.isLoadingData = true;
+                var url = editor.getActionUrl(editor.getOpt('imageManagerActionName')),
+                    isJsonp = utils.isCrossDomainUrl(url);
+                url += '&type=bg';
+                
+                ajax.request(url, {
+                    'timeout': 100000,
+                    'dataType': isJsonp ? 'jsonp':'',
+                    'data': utils.extend({
+                            tagid:this.tagid,
+                            search:this.search,
+                            start: this.listIndex,
+                            size: this.listSize
+                        }, editor.queryCommandValue('serverparam')),
+                    'method': 'get',
+                    'onsuccess': function (r) {
+                        try {
+                            var json = isJsonp ? r:eval('(' + r.responseText + ')');
+                            if (json.state == 'SUCCESS') {
+                                _this.pushData(json.list);
+                                _this.listIndex = parseInt(json.start) + parseInt(json.list.length);
+                                if(_this.listIndex >= json.total) {
+                                    _this.listEnd = true;
+                                }
+                                _this.isLoadingData = false;
+                            }
+                        } catch (e) {
+                            if(r.responseText.indexOf('ue_separate_ue') != -1) {
+                                var list = r.responseText.split(r.responseText);
+                                _this.pushData(list);
+                                _this.listIndex = parseInt(list.length);
+                                _this.listEnd = true;
+                                _this.isLoadingData = false;
+                            }
+                        }
+                    },
+                    'onerror': function () {
+                        _this.isLoadingData = false;
+                    }
+                });
+            }
+        },
+        /* 添加图片到列表界面上 */
+        pushData: function (list) {
+            var i, item, img, icon, _this = this,
+                urlPrefix = editor.getOpt('imageManagerUrlPrefix');
+            for (i = 0; i < list.length; i++) {
+                if(list[i] && list[i].url) {
+                    item = document.createElement('li');
+                    img = document.createElement('img');
+                    icon = document.createElement('span');
+
+                    domUtils.on(img, 'load', (function(image){
+                        return function(){
+                            _this.scale(image, image.parentNode.offsetWidth, image.parentNode.offsetHeight);
+                        }
+                    })(img));
+                    img.width = 113;
+                    img.setAttribute('src', urlPrefix + list[i].url );
+                    img.setAttribute('_src', urlPrefix + list[i].url);
+                    domUtils.addClass(icon, 'icon');
+
+                    item.appendChild(img);
+                    item.appendChild(icon);
+                    this.list.insertBefore(item, this.clearFloat);
+                }
+            }
+        },
+        /* 改变图片大小 */
+        scale: function (img, w, h, type) {
+            var ow = img.width,
+                oh = img.height;
+
+            if (type == 'justify') {
+                if (ow >= oh) {
+                    img.width = w;
+                    img.height = h * oh / ow;
+                    img.style.marginLeft = '-' + parseInt((img.width - w) / 2) + 'px';
+                } else {
+                    img.width = w * ow / oh;
+                    img.height = h;
+                    img.style.marginTop = '-' + parseInt((img.height - h) / 2) + 'px';
+                }
+            } else {
+                if (ow >= oh) {
+                    img.width = w * ow / oh;
+                    img.height = h;
+                    img.style.marginLeft = '-' + parseInt((img.width - w) / 2) + 'px';
+                } else {
+                    img.width = w;
+                    img.height = h * oh / ow;
+                    img.style.marginTop = '-' + parseInt((img.height - h) / 2) + 'px';
+                }
+            }
+        },
+        getInsertList: function () {
+            var i, lis = this.list.children, list = [], align = getAlign();
+            for (i = 0; i < lis.length; i++) {
+                if (domUtils.hasClass(lis[i], 'selected')) {
+                    var img = lis[i].firstChild,
+                        src = img.getAttribute('_src');
+                    list.push({
+                        src: src,
+                        _src: src,
+                        floatStyle: align
+                    });
+                }
+
+            }
+            return list;
+        }
+    };
+
+	dialog.onok = function () {
+		$(dialog.anchorEl).find('.135bg').each(function(i){
+			$(this).css('backgroundImage','url("'+$('.bgimg-'+i).val()+'")');
+			$(this).css('backgroundRepeat',$('.bgimg-repeat-'+i).val());
+			$(this).css('backgroundSize',$('.bgimg-size-'+i).val());
+			if( $('.bgheight-'+i).val() ){
+				$(this).css('height',$('.bgheight-'+i).val());
+				$(this).css('overflow-y','auto');
+			}
+			else{
+				$(this).css('overflow-y','initial');
+				$(this).css('height','auto');
+			}
+		});
+	}	
+})();
+	
+
+	
+	
+	
+function substr(str, start, len) {
+	  //  discuss at: http://phpjs.org/functions/substr/
+	  //     version: 909.322
+	  // original by: Martijn Wieringa
+	  // bugfixed by: T.Wild
+	  // improved by: Onno Marsman
+	  // improved by: Brett Zamir (http://brett-zamir.me)
+	  //  revised by: Theriault
+	  //        note: Handles rare Unicode characters if 'unicode.semantics' ini (PHP6) is set to 'on'
+	  //   example 1: substr('abcdef', 0, -1);
+	  //   returns 1: 'abcde'
+	  //   example 2: substr(2, 0, -6);
+	  //   returns 2: false
+	  //   example 3: ini_set('unicode.semantics',  'on');
+	  //   example 3: substr('a\uD801\uDC00', 0, -1);
+	  //   returns 3: 'a'
+	  //   example 4: ini_set('unicode.semantics',  'on');
+	  //   example 4: substr('a\uD801\uDC00', 0, 2);
+	  //   returns 4: 'a\uD801\uDC00'
+	  //   example 5: ini_set('unicode.semantics',  'on');
+	  //   example 5: substr('a\uD801\uDC00', -1, 1);
+	  //   returns 5: '\uD801\uDC00'
+	  //   example 6: ini_set('unicode.semantics',  'on');
+	  //   example 6: substr('a\uD801\uDC00z\uD801\uDC00', -3, 2);
+	  //   returns 6: '\uD801\uDC00z'
+	  //   example 7: ini_set('unicode.semantics',  'on');
+	  //   example 7: substr('a\uD801\uDC00z\uD801\uDC00', -3, -1)
+	  //   returns 7: '\uD801\uDC00z'
+
+	  var i = 0,
+	    allBMP = true,
+	    es = 0,
+	    el = 0,
+	    se = 0,
+	    ret = '';
+	  str += '';
+	  var end = str.length;
+
+	  // BEGIN REDUNDANT
+	  this.php_js = this.php_js || {};
+	  this.php_js.ini = this.php_js.ini || {};
+	  // END REDUNDANT
+	  switch ((this.php_js.ini['unicode.semantics'] && this.php_js.ini['unicode.semantics'].local_value.toLowerCase())) {
+	    case 'on':
+	      // Full-blown Unicode including non-Basic-Multilingual-Plane characters
+	      // strlen()
+	      for (i = 0; i < str.length; i++) {
+	        if (/[\uD800-\uDBFF]/.test(str.charAt(i)) && /[\uDC00-\uDFFF]/.test(str.charAt(i + 1))) {
+	          allBMP = false;
+	          break;
+	        }
+	      }
+
+	      if (!allBMP) {
+	        if (start < 0) {
+	          for (i = end - 1, es = (start += end); i >= es; i--) {
+	            if (/[\uDC00-\uDFFF]/.test(str.charAt(i)) && /[\uD800-\uDBFF]/.test(str.charAt(i - 1))) {
+	              start--;
+	              es--;
+	            }
+	          }
+	        } else {
+	          var surrogatePairs = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+	          while ((surrogatePairs.exec(str)) != null) {
+	            var li = surrogatePairs.lastIndex;
+	            if (li - 2 < start) {
+	              start++;
+	            } else {
+	              break;
+	            }
+	          }
+	        }
+
+	        if (start >= end || start < 0) {
+	          return false;
+	        }
+	        if (len < 0) {
+	          for (i = end - 1, el = (end += len); i >= el; i--) {
+	            if (/[\uDC00-\uDFFF]/.test(str.charAt(i)) && /[\uD800-\uDBFF]/.test(str.charAt(i - 1))) {
+	              end--;
+	              el--;
+	            }
+	          }
+	          if (start > end) {
+	            return false;
+	          }
+	          return str.slice(start, end);
+	        } else {
+	          se = start + len;
+	          for (i = start; i < se; i++) {
+	            ret += str.charAt(i);
+	            if (/[\uD800-\uDBFF]/.test(str.charAt(i)) && /[\uDC00-\uDFFF]/.test(str.charAt(i + 1))) {
+	              se++; // Go one further, since one of the "characters" is part of a surrogate pair
+	            }
+	          }
+	          return ret;
+	        }
+	        break;
+	      }
+	      // Fall-through
+	    case 'off':
+	      // assumes there are no non-BMP characters;
+	      //    if there may be such characters, then it is best to turn it on (critical in true XHTML/XML)
+	    default:
+	      if (start < 0) {
+	        start += end;
+	      }
+	      end = typeof len === 'undefined' ? end : (len < 0 ? len + end : len + start);
+	      // PHP returns false if start does not fall within the string.
+	      // PHP returns false if the calculated end comes before the calculated start.
+	      // PHP returns an empty string if start and end are the same.
+	      // Otherwise, PHP returns the portion of the string from start to end.
+	      return start >= str.length || start < 0 || start > end ? !1 : str.slice(start, end);
+	  }
+	  return undefined; // Please Netbeans
+	}
+
+
+var mimeTypes = 'image/gif,image/png,image/jpeg,image/jpg',
+actionUrl = editor.getActionUrl('uploadimage'),
+acceptExtensions = 'png,jpg,jpeg,gif,bmp',
+imageMaxSize = 2048000; //2M
+
+editor.options.imageFieldName = 'background';
+editor.options.uploadFormData = {'file_post_name':'background','file_model_name':'WxMsg'}
+editor.options.uploadCallback = function(json){
+    $('#bgimg-0').val(json.url);
+    $('#img-0').attr('src',json.url);
+}
+lang = {
+    'static':{
+            'lang_background_normal':'背景设置',
+            'lang_background_local':'在线背景图片',
+            'lang_background_set':'选项',
+            'lang_background_none':'无背景色',
+            'lang_background_colored':'有背景色',
+            'lang_background_color':'颜色设置',
+            'lang_background_netimg':'网络图片',
+            'lang_background_align':'对齐方式',
+            'lang_background_position':'精确定位',
+            'repeatType':{'options':["居中", "横向重复", "纵向重复", "平铺","自定义"]}
+
+        },
+        'noUploadImage':"当前未上传过任何图片！",
+        'toggleSelect':"单击可切换选中状态\n原图尺寸: ",
+
+        'uploadSelectFile':'上传本地背景图片',
+        'uploadAddFile':'继续添加',
+        'uploadStart':'开始上传',
+        'uploadPause':'暂停上传',
+        'uploadContinue':'继续上传',
+        'uploadRetry':'重试上传',
+        'uploadDelete':'删除',
+        'uploadTurnLeft':'向左旋转',
+        'uploadTurnRight':'向右旋转',
+        'uploadPreview':'预览中',
+        'uploadNoPreview':'不能预览',
+        'updateStatusReady': '选中_张图片，共_KB。',
+        'updateStatusConfirm': '已成功上传_张照片，_张照片上传失败',
+        'updateStatusFinish': '共_张（_KB），_张上传成功',
+        'updateStatusError': '，_张上传失败。',
+        'errorNotSupport': 'WebUploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器。',
+        'errorLoadConfig': '后端配置项没有正常加载，上传插件不能正常使用！',
+        'errorExceedSize':'文件大小超出',
+        'errorFileType':'文件格式不允许',
+        'errorInterrupt':'文件传输中断',
+        'errorUploadRetry':'上传失败，请重试',
+        'errorHttp':'http请求错误',
+        'errorServerUpload':'服务器返回出错',
+        'remoteLockError':"宽高不正确,不能所定比例",
+        'numError':"请输入正确的长度或者宽度值！例如：123，400",
+        'imageUrlError':"不允许的图片格式或者图片域！",
+        'imageLoadError':"图片加载失败！请检查链接地址或网络状态！",
+        'searchRemind':"请输入搜索关键词",
+        'searchLoading':"图片加载中，请稍后……",
+        'searchRetry':" :( ，抱歉，没有找到图片！请重试一次！"
+    };
+</script>    
+<script src="../music/upload.js"></script>
+</body>
+</html>

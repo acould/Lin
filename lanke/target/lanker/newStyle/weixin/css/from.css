@@ -1,0 +1,154 @@
+@charset "utf-8";
+html,body,div,p,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font:inherit;font-size:100%;vertical-align:baseline}
+article,aside,details,figcaption,figure,footer,header,hgroup,nav,section{display:block}
+html {
+    height:100%;
+    overflow-y:scroll;
+    cursor:default;
+    overflow-y:scroll;
+    -webkit-tap-highlight-color:transparent;
+    -ms-text-size-adjust:100%;
+    -webkit-text-size-adjust:100%}
+body {
+    background-size: 100% 100%;
+    background-color:#f3f3f3!important;
+    max-width: 768px;
+    margin: 0 auto !important;
+    padding:0;
+    overflow-x: hidden;
+    height:100%;
+    position:relative;
+}
+p {
+    margin: 0;
+}
+a {
+    text-decoration: none;
+}
+ul,li {
+    list-style: none!important;
+}
+
+
+.modal-neirong {
+    width:85%;
+    margin:0 auto;
+    background-color: #fff;
+    margin-top:30%;
+    border-radius: 10px;
+    height: 318px;
+    overflow: hidden;
+    position:relative;
+}
+.fromWid {
+    display: inline-block;
+    text-align: center;
+}
+.fromOne {
+    float:left;
+    width:32%;
+    overflow-y: scroll;
+}
+.fromOne div {
+    padding: 16px 0;
+    font-size: 15px;
+    color:#333;
+    width:100%;
+}
+.nomal {
+    background-color: #f3f3f3;
+    color:#f33a70!important;
+}
+.fromTwo {
+    float:left;
+    width:68%;
+    background-color: #f3f3f3;
+    height: 100%;
+    overflow-y: scroll;
+    padding-right: 10px;
+    padding-top: 4px;
+}
+.fromDian {
+    float: left;
+    width:90%;
+    text-align: center;
+    margin: 0;
+    color:#666;
+    font-size: 14px;
+}
+
+.fromDianActive {
+    float: left;
+    width:90%;
+    text-align: center;
+    margin: 0;
+    color:#f33a70;
+    font-size: 14px;
+}
+
+.fromImg {
+    float: right;
+    display: inline-block;
+    line-height: 50px;
+}
+.fromImg img {
+    width:13px;
+    vertical-align: middle;
+}
+.fromLine {
+    line-height: 50px;
+}
+
+@media only screen and (max-width:375px){
+
+}
+@media only screen and (max-width:320px){
+    .fromOne div {
+        font-size: 14px;
+    }
+    .fromDian {
+        font-size: 13px;
+    }
+    .modal-neirong {
+        height: 264px;
+        width:86%;
+    }
+}
+@media only screen and (max-width:414px) and (min-width:376px) {
+
+}
+@media only screen and (max-width:768px) and (min-width:415px) {
+
+}
+
+
+.cityed {
+    position:absolute;
+    top:53px;
+    left:0;
+    z-index: 1000;
+    background-color: #fff;
+    overflow-y: auto;
+    height: 265px;
+}
+
+.bodyBj {
+    background-color: rgba(0,0,0,0.4);
+    width:100%;
+    height: 100%;
+    position:absolute;
+    top:0;
+}
+
+.defaultColor{
+	color: #f33a70!important;
+}
+
+.hiddenArea{
+	display: none;	
+}
+
+.showArea{
+	display: block;
+}
+

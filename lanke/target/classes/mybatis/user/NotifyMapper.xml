@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="NotifyMapper">
+
+    <!--表名-->
+    <sql id="tableName">
+		user_notify
+	</sql>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Field">
+        id,
+        internet_id,
+        user_id,
+        open_id,
+        send_id,
+        foreign_id,
+        type,
+        is_read,
+        create_time,
+        read_time
+
+    </sql>
+
+    <sql id="FieldValue">
+        #{id},
+        #{internet_id},
+        #{user_id},
+        #{open_id},
+        #{send_id},
+        #{foreign_id},
+        #{type},
+        #{is_read},
+        #{create_time},
+        #{read_time}
+
+    </sql>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="pd">
+        insert into
+        <include refid="tableName"></include>(<include refid="Field"></include>)
+        values
+        (<include refid="FieldValue"></include>)
+    </insert>
+
+    <!-- 删除-->
+    <delete id="delete" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        id = #{id}
+    </delete>
+    <update id="edit" parameterType="pd">
+        update
+        user_notify
+        set
+        <if test="is_read != null and is_read != ''">
+            is_read = #{is_read},
+        </if>
+        <if test="read_time != null and read_time != ''">
+            read_time = #{read_time},
+        </if>
+        id = #{id}
+        where
+        id = #{id}
+    </update>
+
+
+    <!-- 通过ID获取数据 -->
+    <select id="findById" parameterType="String" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        id = #{id}
+    </select>
+
+    <select id="findByOpenId" parameterType="String" resultType="pd">
+        select
+            a.*,
+            b.foreign_id as bforeign_id,
+            b.title,
+            b.content,
+            b.ad_content,
+            (select enroll_start_time from internet_matches where id = b.foreign_id and a.type = 'matches') as enroll_start_time,
+            (select enroll_end_time from internet_matches where id = b.foreign_id and a.type = 'matches') as enroll_end_time,
+            (select imp.url from internet_new_pictures imp where imp.foreign_id = b.foreign_id and a.type = 'matches' and imp.type = 6) as matches_img,
+            (select TYPE from card where card_id = b.foreign_id and a.type = 'card' ) as card_time_type,
+            (select FAV_TYPE from in_scene t where t.scene_id in (select scene_id from card where card_id = b.foreign_id and a.type = 'card')) as FAV_TYPE,
+            (select BEGIN_TIMESTAMP from card where card_id = b.foreign_id and a.type = 'card' ) as BEGIN_TIMESTAMP,
+            (select END_TIMESTAMP from card where card_id = b.foreign_id and a.type = 'card' ) as END_TIMESTAMP,
+            (select FIXED_BEGIN_TERM from card where card_id = b.foreign_id and a.type = 'card' ) as FIXED_BEGIN_TERM,
+            (select FIXED_TERM from card where card_id = b.foreign_id and a.type = 'card' ) as FIXED_TERM
+        from user_notify a left join internet_send_manager b on a.send_id = b.id
+        where 1=1
+        and a.open_id = #{open_id}
+        order by a.create_time desc
+    </select>
+
+
+    <select id="findUnreadByOpenId" parameterType="pd" resultType="pd">
+        select
+            a.*,
+            b.title,
+            b.content,
+            b.ad_content
+        from user_notify a left join internet_send_manager b on a.send_id = b.id
+        where 1=1
+        and a.open_id = #{open_id}
+        <if test="is_read != null and is_read != ''">
+          and a.is_read = #{is_read}
+        </if>
+        order by a.create_time desc
+    </select>
+</mapper>

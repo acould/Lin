@@ -1,0 +1,320 @@
+body {
+    padding: 0;
+    margin:0;
+}
+.bottomBtn {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    height: 50px;
+    background-color: #40abe0;
+    text-align: center;
+}
+.bottomBtn a {
+    color:#fff;
+    line-height: 50px;
+    font-size: 16px;
+}
+.widthFluid {
+    width: 100%;
+}
+.bottomBtn a:hover {
+    text-decoration: none;
+    color:#fff;
+}
+.fidelod {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    top:0;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 100;
+    display: none;
+}
+.tips {
+    width: 75%;
+    margin: auto;
+    position: absolute;
+    top:23%;
+    left: 0;
+    right:0;
+    background-color: #fff;
+    border-radius: 5px;
+    z-index: 1000;
+    padding:20px;
+    padding-bottom: 8px;
+}
+.futeambox {
+    width: 100%;
+    background-color: #fff;
+    padding:25px 20px 7px 20px;
+    display: none;
+    border-radius: 5px;
+}
+.tips .tipText {
+    text-indent: 30px;
+    font-size: 13px;
+    color:#333;
+    line-height: 21px;
+    margin-top: 5px;
+}
+ .tipBtn {
+    width: 100%;
+    margin-top: 44px;
+    text-align: center;
+    background-color: #40abe0;
+    padding: 11px 0;
+    border-radius: 100px;
+    margin-bottom: 13px;
+    cursor: pointer;
+    box-shadow: 0px 2px 14px 0px #64beea;
+}
+ .tipBtn span {
+    color:#fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+.bjImg1,.bjImg2 {
+    display: inline-block;
+    width: 58px;
+    height: 58px;
+    margin: 0 auto;
+    background: url("../images/one.png") no-repeat center center;
+    background-size: 100%;
+}
+.lolImg{
+    display: inline-block;
+    width: 58px;
+    height: 58px;
+    margin: 0 auto;
+    background: url("../images/lolImg.png") no-repeat center center;
+    background-size: 100%;
+}
+.bjImg2 {
+    background: url("../images/zuju.png") no-repeat center center;
+    background-size: 100%;
+    margin-top: 15px;
+}
+.onep h4 {
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 10px;
+    margin-bottom: 12px;
+    color:#333;
+}
+.onep p {
+    color:#999;
+    font-size: 12px;
+    margin-bottom: 5px;
+    margin-top: 8px;
+}
+.onep {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+
+.tipheader {
+    height: 37px;
+    line-height: 37px;
+    text-align: center;
+    color:#999;
+    font-size: 12px;
+    margin: 0;
+}
+.inputBox {
+    width: 100%;
+    height: 46px;
+    display: table;
+    background-color: #fff;
+    border-bottom: 1px solid #e1e1e1;
+    padding: 0 10px;
+}
+.iconRight {
+    position: absolute;
+    right:0;
+    top:15px;
+    color:#999;
+}
+.yanzheng {
+    padding: 5px 0px 5px 15px;
+    color:#666;
+    font-size: 12px;
+    position: absolute;
+    right:15px;
+    top:12px;
+    border-left: 1px solid #e1e1e1;
+}
+.tipfoot {
+    padding: 10px 15px;
+    font-size: 12px;
+    color:#a2a2a2;
+}
+.icon-success {
+    margin-top: 65px;
+}
+.icon-success .successimg {
+   width: 150px;
+    height: 100px;
+    display: inline-block;
+    background: url("../images/succer.png") no-repeat center center;
+    background-size: 100%;
+}
+.icon-success .kong {
+   width: 150px;
+    height: 103px;
+    display: inline-block;
+    background: url("../images/kong2.png") no-repeat center center;
+    background-size: 100%;
+}
+.success-text {
+    margin-top: 14px;
+    color:#f05559;
+    font-size: 20px;
+}
+.ganmeTips {
+    color:#999;
+    font-size: 13px;
+    text-align: center;
+    padding: 10px 56px;
+    line-height: 20px;
+}
+
+
+.headerFuture {
+    height: 45px;
+    background-color: #fff;
+}
+.navlist {
+    line-height: 45px;
+    color:#333;
+    padding-bottom: 13px;
+    font-size: 15px;
+}
+.borbottom {
+    border-bottom: 1px solid #d7d7d7;
+}
+.navActive .navlist {
+    color:#40abe0;
+    border-bottom: 2px solid #40abe0;
+}
+.team_title {
+    line-height: 32px;
+    padding: 0 5px;
+    height: 32px;
+    border-bottom: 1px solid #e1e1e1;
+}
+.team_title span  {
+    font-size: 12px;
+}
+.team_title span:last-child {
+    color:#f23975;
+    float: right;
+}
+.team_img {
+    width: 100%;
+    background: url("../images/normal.png") no-repeat center center;
+    background-size: 100%;
+    height: 40px;
+    margin: 11px 0;
+    overflow: hidden;
+}
+.active_Img .team_img {
+    background: url("../images/active.png") no-repeat center center;
+    background-size: 100%;
+}
+
+
+#center .colx:last-child {
+	margin-bottom: 100px;
+}
+
+.zb-center {
+    width: 100%;
+}
+.zh-widthFluid {
+    padding: 12px 13px;
+    height: 70px;
+    border-bottom: 1px solid #e1e1e1;
+    background-color: #fff;
+}
+.zb-img {
+    width: 23%;
+    height: 100%;
+    overflow: hidden;
+}
+.zb-center h3{
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+    color:#292929;
+    -webkit-line-clamp: 2;    /*用来限制在一个块元素显示的文本的行数*/
+    display: -webkit-box;    /*必须结合的属性，将对象作为弹性伸缩盒子模型显示*/
+    -webkit-box-orient: vertical;    /*必须结合的属性 ，设置或检索伸缩盒对象的子元素的排列方式*/
+    overflow: hidden;
+}
+.floatleft {
+    float:left;
+}
+.zb-title {
+    float: right;
+    width: 73%;
+    position: relative;
+    height: 100%;
+}
+.zb-text {
+    position: absolute;
+    bottom: 0;
+    margin: 0;
+    color:#999;
+    font-size: 12px;
+    width: 100%;
+}
+.zb-text .alianjie {
+    float: right;
+    color:#40abe0;
+}
+.zb-tips {
+    width: 32%;
+    height: 200px;
+    background: url("../images/zb-tips.png") no-repeat center center;
+    margin:0 auto;
+    background-size: 100%;
+}
+.text-center {
+    text-align: center;
+}
+.zb-foot {
+    font-size: 12px;
+    color:#999;
+    margin-top: 30px;
+}
+
+
+@media only screen and (max-width:375px){
+    .team_img {
+        margin: 11px 0;
+    }
+}
+@media only screen and (max-width:320px){
+    .team_img {
+        margin: 10px 0;
+        height: 34px;
+    }
+    .zb-center h3 {
+        font-size: 16px;
+    }
+}
+@media only screen and (max-width:414px) and (min-width:376px) {
+    .team_img {
+        margin: 12px 0;
+        height: 44px;
+    }
+}
+@media only screen and (max-width:768px) and (min-width:415px) {
+    .team_img {
+        margin: 5px 0;
+    }
+}
+

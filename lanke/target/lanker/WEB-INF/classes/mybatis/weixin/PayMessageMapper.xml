@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PayMessageMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		tb_paymessage
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		id
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id}
+	</sql>
+
+	<!-- 新增 -->
+	<insert id="addMessage" parameterType="String">
+		insert into
+		<include refid="tableName"></include>
+		(id)
+		values (#{id})
+	</insert>
+
+
+	<!-- 修改 -->
+	<update id="editMessage" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<!-- 支付请求 -->
+		<if test="pay_request != null and pay_request != ''">
+				pay_request = #{pay_request},
+				pay_requesttime=#{pay_requesttime},
+		</if>
+		<!-- 支付回跳 -->
+		<if test="pay_jumpback != null and pay_jumpback != ''">
+				pay_jumpback = #{pay_jumpback},
+				pay_jumpbacktime=#{pay_jumpbacktime},
+		</if>
+		<!-- 接收支付结果通知 -->
+		<if test="pay_receivenotice != null and pay_receivenotice != ''">
+				pay_receivenotice = #{pay_receivenotice},
+				pay_receivenoticetime=#{pay_receivenoticetime},
+		</if>
+		<!-- 充值请求 -->
+		<if test="recharge_request != null and recharge_request != ''">
+				recharge_request = #{recharge_request},
+				recharge_requesttime=#{recharge_requesttime},
+		</if>
+		<!-- 充值接收 -->
+		<if test="recharge_receivenotice != null and recharge_receivenotice != ''">
+				recharge_receivenotice = #{recharge_receivenotice},
+				recharge_receivenoticetime=#{recharge_receivenoticetime},
+		</if>
+		id=#{order_number}
+		where
+		id = #{order_number}
+	</update>
+
+</mapper>

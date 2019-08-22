@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LotteryMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		INTERNET_LOTTERY
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		INTERNET_ID,	
+		LOTTERY_NAME,	
+		STATE,	
+		LOTTERY_NUMBER,	
+		LOTTERY_ID,
+		USING_STATE,
+		CONTENT,
+		EXPIRY_DATE,
+		D_STATE,
+		CREATETIME
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{INTERNET_ID},	
+		#{LOTTERY_NAME},	
+		#{STATE},	
+		#{LOTTERY_NUMBER},	
+		#{LOTTERY_ID},
+		#{USING_STATE},
+		#{CONTENT},
+		#{EXPIRY_DATE},
+		#{D_STATE},
+		#{CREATETIME}
+		
+	</sql>
+	
+	<!-- 新增(保存新增的抽奖设置信息)-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			LOTTERY_ID = #{LOTTERY_ID}
+	</delete>
+	
+	<!-- 修改(通过LOTTERY_ID保存修改后的抽奖设置信息) -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			<if test="LOTTERY_NAME != null and LOTTERY_NAME != ''">
+				LOTTERY_NAME = #{LOTTERY_NAME},
+			</if>
+			<if test="STATE != null and STATE != ''">
+				STATE = #{STATE},
+			</if>
+			<if test="LOTTERY_NUMBER != null and LOTTERY_NUMBER != ''">
+				LOTTERY_NUMBER = #{LOTTERY_NUMBER},
+			</if>
+			<if test="USING_STATE != null and USING_STATE != ''">
+				USING_STATE = #{USING_STATE},
+			</if>
+			<if test="EXPIRY_DATE != null and EXPIRY_DATE != ''">
+				EXPIRY_DATE = #{EXPIRY_DATE},
+			</if>
+			<if test="CONTENT != null and CONTENT != ''">
+				CONTENT = #{CONTENT},
+			</if>
+			<if test="CREATETIME != null and CREATETIME != ''">
+				CREATETIME = #{CREATETIME},
+			</if>
+			<if test="D_STATE != null and D_STATE != ''">
+				D_STATE = #{D_STATE},
+			</if>
+			LOTTERY_ID = #{LOTTERY_ID}
+		where 
+			LOTTERY_ID = #{LOTTERY_ID}
+	</update>
+	
+	<!-- 通过ID获取数据(通过LOTTERY_ID获取抽奖设置) -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			LOTTERY_ID = #{LOTTERY_ID}
+	</select>
+	
+	<!-- 列出Lottery列表(通过网吧id查询抽奖设置) -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and LOTTERY_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		</if>
+		<if test="pd.INTERNET_ID!= null and pd.INTERNET_ID != ''"><!-- 关键词检索 -->
+			and  INTERNET_ID = #{pd.INTERNET_ID}
+		</if>
+		and D_STATE	= 1
+		order by CREATETIME DESC
+	</select>
+	
+	<!-- 列表(查询全部抽奖设置) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where
+		<if test="D_STATE != null and D_STATE != ''">
+			D_STATE = #{D_STATE} and  
+		</if>
+		<if test="USING_STATE != null and USING_STATE != ''">
+			USING_STATE = #{USING_STATE} and 
+		</if>
+		1=1
+		order by CREATETIME DESC
+	</select>
+	<!-- 网吧id查询 -->
+	<select id="listByInternet" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="internetId != null and internetId != ''">
+			and  INTERNET_ID = #{internetId}
+			and USING_STATE = 1
+		</if>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			LOTTERY_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	
+</mapper>

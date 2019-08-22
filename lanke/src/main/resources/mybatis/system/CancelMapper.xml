@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CancelMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		CARD_CANCEL
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		USER_ID,
+		CREAT_TIME,
+		CARD,
+		STATE,
+		OPEN_ID,
+		CARD_ID,
+		INTERNET_ID,
+		UPDATE_TIME,
+		MONEY_STATE,
+		ORDER_ID,
+		CONSUME_SOURCE,
+		STAFF_OPEN_ID,
+		OUTER_STR,
+		STORE_ID,
+		MEMO,
+		CANCEL_ID
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{USER_ID},
+		#{CREAT_TIME},
+		#{CARD},
+		#{STATE},
+		#{OPEN_ID},
+		#{CARD_ID},
+		#{INTERNET_ID},
+		#{UPDATE_TIME},
+
+		#{MONEY_STATE},
+		#{ORDER_ID},
+		#{CONSUME_SOURCE},
+		#{STAFF_OPEN_ID},
+		#{OUTER_STR},
+		#{STORE_ID},
+		#{MEMO},
+		#{CANCEL_ID}
+	</sql>
+
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除 -->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		CANCEL_ID = #{CANCEL_ID}
+	</delete>
+
+	<!-- 修改(通过CANCEL_ID保存修改信息) -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="USER_ID != null and USER_ID != ''">
+			USER_ID = #{USER_ID},
+		</if>
+
+		<if test="STATE != null and STATE != ''">
+			STATE = #{STATE},
+		</if>
+
+		<if test="MONEY_STATE != null and MONEY_STATE != ''">
+			MONEY_STATE = #{MONEY_STATE},
+		</if>
+		<if test="ORDER_ID != null and ORDER_ID != ''">
+			ORDER_ID = #{ORDER_ID},
+		</if>
+		<if test="CONSUME_SOURCE != null and CONSUME_SOURCE != ''">
+			CONSUME_SOURCE = #{CONSUME_SOURCE},
+		</if>
+		<if test="STAFF_OPEN_ID != null and STAFF_OPEN_ID != ''">
+			STAFF_OPEN_ID = #{STAFF_OPEN_ID},
+		</if>
+		<if test="OUTER_STR != null and OUTER_STR != ''">
+			OUTER_STR = #{OUTER_STR},
+		</if>
+		<if test="STORE_ID != null and STORE_ID != ''">
+			STORE_ID = #{STORE_ID},
+		</if>
+		<if test="MEMO != null and MEMO != ''">
+			MEMO = #{MEMO},
+		</if>
+		CANCEL_ID = CANCEL_ID
+		where
+		CANCEL_ID = #{CANCEL_ID}
+	</update>
+
+	<!-- 通过卡劵id,卡劵信息修改信息 -->
+	<update id="editByCard" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="STATE != null and STATE != ''">
+			STATE = #{STATE},
+		</if>
+		<if test="UPDATE_TIME != null and UPDATE_TIME != ''">
+			UPDATE_TIME = #{UPDATE_TIME},
+		</if>
+		<if test="USER_ID != null and USER_ID != ''">
+			USER_ID = #{USER_ID},
+		</if>
+
+		<if test="MONEY_STATE != null and MONEY_STATE != ''">
+			MONEY_STATE = #{MONEY_STATE},
+		</if>
+		<if test="ORDER_ID != null and ORDER_ID != ''">
+			ORDER_ID = #{ORDER_ID},
+		</if>
+		<if test="CONSUME_SOURCE != null and CONSUME_SOURCE != ''">
+			CONSUME_SOURCE = #{CONSUME_SOURCE},
+		</if>
+		<if test="STAFF_OPEN_ID != null and STAFF_OPEN_ID != ''">
+			STAFF_OPEN_ID = #{STAFF_OPEN_ID},
+		</if>
+		<if test="OUTER_STR != null and OUTER_STR != ''">
+			OUTER_STR = #{OUTER_STR},
+		</if>
+		<if test="STORE_ID != null and STORE_ID != ''">
+			STORE_ID = #{STORE_ID},
+		</if>
+		<if test="MEMO != null and MEMO != ''">
+			MEMO = #{MEMO},
+		</if>
+		CARD_ID = #{CARD_ID}
+		where
+		CARD_ID = #{CARD_ID} and OPEN_ID = #{OPEN_ID} and CARD = #{CARD}
+	</update>
+
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		CANCEL_ID = #{CANCEL_ID}
+	</select>
+
+	<!-- 通过CARDID获取数据 -->
+	<select id="findByCardId" parameterType="pd" resultType="pd">
+		select
+		a.*,
+		(select SUB_TITLE from card where card_id = #{CARD_ID}) as SUB_TITLE
+		from
+		<include refid="tableName"></include>
+		a
+		where
+		a.CARD_ID = #{CARD_ID}
+	</select>
+
+	<!-- 通过ID获取数据 -->
+	<select id="findByUser" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="OPEN_ID != null and OPEN_ID != ''">
+			and OPEN_ID = #{OPEN_ID}
+		</if>
+		<if test="CARD_ID != null and CARD_ID != ''">
+			and CARD_ID = #{CARD_ID}
+		</if>
+		order by CREAT_TIME desc LIMIT 1
+	</select>
+
+	<!-- 通过ID获取数据 -->
+	<select id="findByCode" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="INTERNET_ID != null and INTERNET_ID != ''">
+			and INTERNET_ID = #{INTERNET_ID}
+		</if>
+		<if test="CARD != null and CARD != ''">
+			and CARD = #{CARD}
+		</if>
+		<if test="STATE != null and STATE != ''">
+			and STATE = #{STATE}
+		</if>
+		limit 1
+	</select>
+
+	<!-- 列表 (通过用户id/卡劵id/门店id查询Cancel信息) -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		A.USER_ID,
+		A.CREAT_TIME,
+		A.CARD,
+		A.STATE,
+		A.MONEY_STATE,
+		A.OPEN_ID,
+		A.CARD_ID,
+		A.INTERNET_ID,
+		A.UPDATE_TIME,
+		A.CANCEL_ID,
+		A.CONSUME_SOURCE,
+		A.STAFF_OPEN_ID,
+		(select neck_name from wechat_user where open_id = A.STAFF_OPEN_ID) as STAFF_NECK_NAME,
+		B.NAME,
+		C.NECK_NAME,
+		D.TITLE,
+		E.CARDED,
+		D.SUB_TITLE,
+		D.CARD_TICKET,
+		D.CASH_NUMBER
+		from
+		<include refid="tableName"></include>
+		A,SYS_USER B,WECHAT_USER C ,CARD D,BUND_USER E
+		where
+		A.USER_ID=B.USER_ID
+		AND A.OPEN_ID=C.OPEN_ID
+		AND A.CARD_ID=D.CARD_ID
+		AND C.USER_ID=E.USER_ID
+
+		<if test="pd.store_ids != null and pd.store_ids != ''"><!-- 角色的门店 -->
+			and a.store_id in ('${pd.store_ids}')
+		</if>
+		<if test="pd.INTERNET_ID != null and pd.INTERNET_ID != ''">
+			and A.INTERNET_ID = #{pd.INTERNET_ID}
+		</if>
+		<!-- 筛选 条件 -->
+		<!-- <if test="pd.STORE_ID != null and pd.STORE_ID != ''"> and B.USER_ID 
+			in (select user_id from store_user where store_id = #{pd.STORE_ID}) </if> -->
+		<if test="pd.CARD_ID !=null and pd.CARD_ID !=''">
+			and D.CARD_ID=#{pd.CARD_ID}
+		</if>
+		<if test="pd.USER_ID != null and pd.USER_ID != ''">
+			and (B.USER_ID = #{pd.USER_ID} or A.STAFF_OPEN_ID = #{pd.USER_ID})
+		</if>
+		<if test="pd.lastLoginStart != null and pd.lastLoginStart != '' ">
+			and A.UPDATE_TIME <![CDATA[>]]>
+			#{pd.lastLoginStart}
+		</if>
+		<if test="pd.lastLoginEnd != null and pd.lastLoginEnd != '' ">
+			and A.UPDATE_TIME <![CDATA[<]]>
+			#{pd.lastLoginEnd}
+		</if>
+		<!-- 搜索条件 -->
+		<if test="pd.keywords!= null and pd.keywords != ''">
+			and
+			(
+			B.NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or C.NECK_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or E.CARDED LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or A.CARD LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or D.SUB_TITLE LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+
+			or B.NAME LIKE CONCAT(CONCAT('%', #{pd.word}),'%')
+			or C.NECK_NAME LIKE CONCAT(CONCAT('%', #{pd.word}),'%')
+			)
+		</if>
+			
+			<![CDATA[ and datediff(curdate(),A.UPDATE_TIME) < 90 ]]>
+		AND A.STATE != 1
+		ORDER BY A.UPDATE_TIME DESC
+	</select>
+
+	<!-- 通过条件查询到需要导出的数据 -->
+	<select id="listExcel" parameterType="pd" resultType="pd">
+		select
+		A.USER_ID,
+		A.CREAT_TIME,
+		A.CARD,
+		A.OPEN_ID,
+		A.CARD_ID,
+		A.INTERNET_ID,
+		A.UPDATE_TIME,
+		A.CANCEL_ID,B.NAME,C.NECK_NAME,D.TITLE,E.CARDED,D.SUB_TITLE,
+        D.CARD_TICKET,
+        D.CASH_NUMBER
+		from
+		<include refid="tableName"></include>
+		A,SYS_USER B,WECHAT_USER C ,CARD D,BUND_USER E
+		where
+		A.USER_ID=B.USER_ID
+		AND A.OPEN_ID=C.OPEN_ID
+		AND A.CARD_ID=D.CARD_ID
+		AND C.USER_ID=E.USER_ID
+
+		<if test="INTERNET_ID != null and INTERNET_ID != ''">
+			and A.INTERNET_ID = #{INTERNET_ID}
+		</if>
+		<if test="storeId != null and storeId != ''"><!-- 分店 -->
+			AND B.USER_ID in (select user_id from store_user where store_id =
+			#{storeId})
+		</if>
+		<!-- 关键词检索 -->
+		<if test="keywords!= null and keywords != ''">
+			and
+			(
+			B.NAME LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or C.NECK_NAME LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or E.CARDED LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or A.CARD LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or D.SUB_TITLE LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or B.NAME LIKE CONCAT(CONCAT('%', #{word}),'%')
+			or C.NECK_NAME LIKE CONCAT(CONCAT('%', #{word}),'%')
+			)
+		</if>
+		<!-- 筛选 条件 -->
+		<if test="lastLoginStart != null and lastLoginStart != '' ">
+			and A.UPDATE_TIME <![CDATA[>]]>
+			#{lastLoginStart}
+		</if>
+		<if test="lastLoginEnd != null and lastLoginEnd != '' ">
+			and A.UPDATE_TIME <![CDATA[<]]>
+			#{lastLoginEnd}
+		</if>
+		<!-- <if test="STORE_ID != null and STORE_ID != ''"> and B.USER_ID in (select 
+			user_id from store_user where store_id = #{STORE_ID}) </if> -->
+		<if test="USER_ID != null and USER_ID != ''">
+			and B.USER_ID = #{USER_ID}
+		</if>
+		<if test="CARD_ID !=null and CARD_ID !=''">
+			and D.CARD_ID=#{CARD_ID}
+		</if>
+		
+		<![CDATA[ and datediff(curdate(),A.UPDATE_TIME) < 90 ]]>
+		AND A.STATE = 2<!-- 已核销 -->
+		ORDER BY A.UPDATE_TIME DESC
+
+	</select>
+
+	<!-- 列表,操作用户 -->
+	<select id="listUser" parameterType="pd" resultType="pd">
+		SELECT A.USER_ID,A.NAME
+		FROM sys_user A,store_user B
+		WHERE A.USER_ID = B.USER_ID AND
+		A.INTENET_ID = #{internetId}
+		<if test="storeId != null and storeId != ''"><!-- 分店只能看到他自己的操作用户组 -->
+			and A.USER_ID in (select user_id from store_user where store_id = #{storeId} )
+		</if>
+		group by a.user_id
+		ORDER BY A.NAME DESC
+	</select>
+
+	<!--核销员列表-->
+	<select id="listStaff" parameterType="pd" resultType="pd">
+		select
+			a.staff_open_id as USER_ID,
+			B.NECK_NAME
+		from wechat_user b left join card_cancel a on a.staff_open_id = b.open_id
+		where a.internet_id = #{internetId}
+		group by a.staff_open_id
+	</select>
+
+	<!-- 列表，全部 -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		A.USER_ID,
+		A.CREAT_TIME,
+		A.CARD,
+		A.OPEN_ID,
+		A.CARD_ID,
+		A.INTERNET_ID,
+		A.UPDATE_TIME,
+		A.CANCEL_ID,B.NAME,C.NECK_NAME,D.TITLE,D.SUB_TITLE
+		from
+		<include refid="tableName"></include>
+		A,SYS_USER B,WECHAT_USER C ,CARD D
+		where A.USER_ID=B.USER_ID
+		AND
+		A.OPEN_ID=C.OPEN_ID
+		AND A.CARD_ID=D.CARD_ID
+		<if test="USER_ID != null and USER_ID != ''">
+			and B.USER_ID = #{USER_ID}
+		</if>
+		<if test="NAME != null and NAME!= ''">
+			and B.NAME = #{NAME}
+		</if>
+		<if test="INTENET_ID != null and INTENET_ID != ''">
+			and A.INTERNET_ID = #{INTENET_ID}
+		</if>
+	</select>
+
+	<!-- 列表，优惠券 -->
+	<select id="listCard" parameterType="pd" resultType="pd">
+		select
+		CARD_ID,TITLE,BRAND_NAME,SUB_TITLE
+		FROM CARD
+		WHERE INTENET_ID = #{internetId}
+		<if test="storeId != null and storeId != ''"><!-- 分店只能筛选他自己有的卡券 -->
+			and CARD_ID IN (SELECT CARD_ID FROM CARD_STORE WHERE STORE_ID =
+			#{storeId})
+		</if>
+	</select>
+
+	<!-- 列表(全部) -->
+	<select id="listMy" parameterType="pd" resultType="pd">
+		select
+		C.USER_ID,
+		A.CREAT_TIME,
+		A.CARD,
+		A.OPEN_ID,
+		A.CARD_ID,
+		A.INTERNET_ID,
+		A.UPDATE_TIME,
+		A.CANCEL_ID,
+		B. NAME,
+		C.NECK_NAME,
+		D.TITLE,
+		D.SUB_TITLE,
+		A.STATE,
+		D.BEGIN_TIMESTAMP,
+		D.END_TIMESTAMP,
+		D.NOTICE
+		from
+		<include refid="tableName"></include>
+		A,SYS_USER B,WECHAT_USER C,CARD D
+		where C.USER_ID = B.USER_ID
+		AND A.OPEN_ID = C.OPEN_ID
+		AND A.CARD_ID = D.CARD_ID
+		<if test="OPEN_ID != null and OPEN_ID != ''">
+			and A.OPEN_ID = #{OPEN_ID}
+		</if>
+		<if test="INTENET_ID != null and INTENET_ID != ''">
+			and A.INTERNET_ID = #{INTENET_ID}
+		</if>
+		<if test="STATE == 1">
+			and A.STATE = #{STATE}
+		</if>
+		<if test="STATE == 2">
+			and A.STATE = #{STATE}
+		</if>
+		<if test="STATE == 3">
+			and A.STATE = 1 AND #{nowdate} <![CDATA[>]]>
+			D.END_TIMESTAMP
+		</if>
+	</select>
+
+	<!-- 列表(全部) -->
+	<select id="listPageMyAll" parameterType="page" resultType="pd">
+		select
+		C.USER_ID,
+		A.CARD,
+		A.OPEN_ID,
+		A.CARD_ID,
+		A.INTERNET_ID,
+		A.UPDATE_TIME,
+		A.CANCEL_ID,
+		B.NAME,
+		C.NECK_NAME,
+		D.TITLE,
+		D.SUB_TITLE,
+		A.STATE,
+		D.BEGIN_TIMESTAMP,
+		D.END_TIMESTAMP,
+		D.NOTICE,
+		D.TYPE,
+		D.FIXED_TERM,
+		D.FIXED_BEGIN_TERM,
+		D.CREATE_TIME
+		from
+		<include refid="tableName"></include>
+		A,SYS_USER B,WECHAT_USER C,CARD D
+		where C.USER_ID = B.USER_ID
+		AND A.OPEN_ID = C.OPEN_ID
+		AND A.CARD_ID = D.CARD_ID
+		<if test="pd.OPEN_ID != null and pd.OPEN_ID != ''">
+			and A.OPEN_ID = #{pd.OPEN_ID}
+		</if>
+		<if test="pd.INTENET_ID != null and pd.INTENET_ID != ''">
+			and A.INTERNET_ID = #{pd.INTENET_ID}
+		</if>
+		<if test="pd.STATE == 1">
+			and A.STATE = #{pd.STATE} AND #{pd.nowdate} <![CDATA[<]]>
+			D.END_TIMESTAMP
+		</if>
+		<if test="pd.STATE == 2">
+			and A.STATE = #{pd.STATE}
+		</if>
+		<if test="pd.STATE == 3">
+			and A.STATE = 1 AND #{pd.nowdate} <![CDATA[>]]>
+			D.END_TIMESTAMP
+		</if>
+	</select>
+
+	<!-- 我的优惠券 -->
+	<select id="listPageCeshi" parameterType="page" resultType="pd">
+		select
+		C.USER_ID,
+		A.CARD,
+		A.OPEN_ID,
+		A.CARD_ID,
+		A.INTERNET_ID,
+		A.UPDATE_TIME,
+		A.CANCEL_ID,
+		A.CREAT_TIME,
+		B.NAME,
+		C.NECK_NAME,
+		D.TITLE,
+		D.SUB_TITLE,
+		A.STATE,
+		D.BEGIN_TIMESTAMP,
+		D.END_TIMESTAMP,
+		D.NOTICE,
+		D.TYPE,
+		D.FIXED_TERM,
+		D.FIXED_BEGIN_TERM,
+		D.CREATE_TIME
+		from
+		<include refid="tableName"></include>
+		A,SYS_USER B,WECHAT_USER C,CARD D
+		where C.USER_ID = B.USER_ID
+		AND A.OPEN_ID = C.OPEN_ID
+		AND A.CARD_ID = D.CARD_ID
+		<if test="pd.OPEN_ID != null and pd.OPEN_ID != ''">
+			and A.OPEN_ID = #{pd.OPEN_ID}
+		</if>
+		<if test="pd.INTENET_ID != null and pd.INTENET_ID != ''">
+			and A.INTERNET_ID = #{pd.INTENET_ID}
+		</if>
+		<if test="pd.STATE == 1">
+			and A.STATE = #{pd.STATE}
+		</if>
+		<if test="pd.STATE == 2">
+			and A.STATE = #{pd.STATE}
+		</if>
+		<if test="pd.STATE == 3">
+			and A.STATE = 1
+		</if>
+	</select>
+	<select id="wxlistCeshi" parameterType="page" resultType="pd">
+		select
+		C.USER_ID,
+		A.CARD,
+		A.OPEN_ID,
+		A.CARD_ID,
+		A.INTERNET_ID,
+		A.UPDATE_TIME,
+		A.CANCEL_ID,
+		A.CREAT_TIME,
+		B.NAME,
+		C.NECK_NAME,
+		D.TITLE,
+		D.SUB_TITLE,
+		A.STATE,
+		D.BEGIN_TIMESTAMP,
+		D.END_TIMESTAMP,
+		D.NOTICE,
+		D.TYPE,
+		D.FIXED_TERM,
+		D.FIXED_BEGIN_TERM,
+		D.CREATE_TIME
+		from
+		<include refid="tableName"></include>
+		A,SYS_USER B,WECHAT_USER C,CARD D
+		where C.USER_ID = B.USER_ID AND
+		A.OPEN_ID = C.OPEN_ID AND A.CARD_ID = D.CARD_ID
+		<if test="pd.OPEN_ID != null and pd.OPEN_ID != ''">
+			and A.OPEN_ID = #{pd.OPEN_ID}
+		</if>
+		<if test="pd.INTENET_ID != null and pd.INTENET_ID != ''">
+			and A.INTERNET_ID = #{pd.INTENET_ID}
+		</if>
+		<if test="pd.STATE == 1">
+			and A.STATE = #{pd.STATE}
+		</if>
+		<if test="pd.STATE == 2">
+			and A.STATE = #{pd.STATE}
+		</if>
+		<if test="pd.STATE == 3">
+			and A.STATE = 1
+		</if>
+	</select>
+
+
+	<!-- 列表(全部) -->
+	<select id="listByUser" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="CARD_ID != null and CARD_ID != ''">
+			and CARD_ID = #{CARD_ID}
+		</if>
+		<if test="OPEN_ID != null and OPEN_ID != ''">
+			and OPEN_ID = #{OPEN_ID}
+		</if>
+		<if test="STATE != null and STATE != ''">
+			and STATE = #{STATE}
+		</if>
+		<if
+			test="START_TIME != null and START_TIME != '' and END_TIME != null and END_TIME != ''  ">
+			and UPDATE_TIME between #{START_TIME} and #{END_TIME}
+		</if>
+
+	</select>
+
+	<!-- 批量删除(通过CANCEL_ID批量删除) -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		CANCEL_ID in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- 通过open_id获取user_id -->
+	<select id="selectUserId" parameterType="pd" resultType="pd">
+		SELECT
+		user_id
+		FROM
+		wechat_user
+		WHERE 1=1 and OPEN_ID = #{open_id}
+	</select>
+</mapper>

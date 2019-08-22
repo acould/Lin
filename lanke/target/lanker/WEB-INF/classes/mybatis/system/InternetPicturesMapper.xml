@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="InternetPicturesMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		INTERNET_PICTURES
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		PICTURE_ID,
+		NAME,	
+		PATH,	
+		CREATE_TIME,	
+		INTERNET_ID,
+		MEDIA_ID,
+		URL
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{PICTURE_ID},
+		#{NAME},	
+		#{PATH},	
+		#{CREATE_TIME},	
+		#{INTERNET_ID},	
+		#{MEDIA_ID},
+		#{URL}
+	</sql>	
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			a.*
+		from 
+			<include refid="tableName"></include> a , internet_material b,internet_recordmaterial c
+		where a.picture_id = c.picture_id and b.internetmaterial_id = c.internetmaterial_id
+			<if test="pd.INTERNET_ID != null and pd.INTERNET_ID != ''"><!-- 关键词检索 -->
+				and a.INTERNET_ID =#{pd.INTERNET_ID}
+			</if>
+	</select>	
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into <include refid="tableName"></include>(
+			<include refid="Field"></include>
+		) values (
+			<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from <include refid="tableName"></include>
+		where 
+			PICTURE_ID = #{PICTURE_ID}
+	</delete>
+	
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update  
+			<include refid="tableName"></include>
+		set 
+			<if test="NAME != null and NAME != ''">
+				NAME = #{NAME},
+			</if>	
+			<if test="PATH != null and PATH != ''">
+				PATH = #{PATH},
+			</if>	
+			<if test="CREATE_TIME != null and CREATE_TIME != ''">
+				CREATE_TIME = #{CREATE_TIME},
+			</if>
+			<if test="MEDIA_ID != null and MEDIA_ID != ''">
+				MEDIA_ID = #{MEDIA_ID},
+			</if>
+			<if test="URL != null and URL != ''">
+				URL = #{URL},
+			</if>
+			PICTURE_ID = #{PICTURE_ID}
+		where 
+			PICTURE_ID = #{PICTURE_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			PICTURE_ID = #{PICTURE_ID}
+	</select>
+	<select id="findByMediaId" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			MEDIA_ID = #{MEDIA_ID}
+	</select>
+	
+	<!-- 通过InternetId获取数据 -->
+	<select id="findByInternetId" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			INTERNET_ID = #{INTERNET_ID}
+			AND MEDIA_ID is not null
+		order by create_time desc
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from <include refid="tableName"></include>
+		where 
+			PICTURE_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	
+</mapper>

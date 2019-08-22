@@ -1,0 +1,206 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>图片样式设置</title>
+    <script type="text/javascript" src="../internal.js"></script>
+    <!-- jquery -->
+    <script type="text/javascript" src="../third-party/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="./slider.js"></script>
+
+<style>
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#img-dialog-content{background:#f8f8f8;}
+.item{display:inline-block;width:240px;margin-top:15px;box-sizing: border-box;height:auto;text-align:center;padding:10px;vertical-align: top;border-top: 1px solid #aaa;}
+.item img{max-height:150px;max-width:100%;width:auto !important;}
+.item p{margin-bottom:10px;}
+.item:hover{background:#fff;border:1px solid red;}
+.item.active{background:#fff;border:2px solid red;}
+button{margin-right:10px;padding:5px 15px;}
+.slider {
+    height: 16px !important;
+    width: auto;
+    position: relative;
+    background-color: #FFF;
+    margin-bottom: 5px;
+    border:1px solid #aaa;
+}
+.slider .complete {
+    height: 100%;
+    width: auto;
+    color:#333;font-size:10px;line-height:16px;text-align:center;
+    background-color: #ccc;
+    z-index: 2;
+}
+.slider .marker {
+    height: 16px;
+    width: 12px;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #999;
+    z-index: 3;
+}
+</style>
+</head>
+<body>
+	<p>提示：点击选择想要的图片边框阴影式样后，再点击底部的确认按钮应用效果。</p>
+	<div style="    margin: 10px 0; font-size: 16px;">
+		<span style="vertical-align: top;">圆角：</span> <input type="hidden" id="img-radius" placeholder="如20px;">
+		<div class="_imgradius slider" style="display:inline-block;height:16px;margin-bottom:5px;width: 200px;    vertical-align: middle;">
+			<span id="radius-width" style="float:right;z-index: 5;color: #999;line-height: 16px;font-size: 10px;">0px</span>
+		</div>
+		<span style="font-size:14px;">（提示：拖地调整圆角大小）</span>
+	 </div>
+	
+
+	<div id="img-dialog-content" style="padding:0;height:360px;overflow-y:auto;">
+		
+		
+	</div>
+<div style="text-align:center;margin-top:15px;">
+	     	<button type="button" onclick="applyParagraph('active');" class="btn btn-primary" data-dismiss="modal">应用到当前图片</button>
+	     	<button type="button" onclick="applyParagraph('all');" class="btn btn-warning" data-dismiss="modal">应用到全文所有图片</button>
+	     	<button type="button" onclick="dialog.close(false);" class="btn btn-warning" data-dismiss="modal">取消</button>
+	     </div>
+<script>	
+	
+
+
+var rules = [
+	{'css':{'border':'0 none'},'name':'无边框'}
+	,{'css':{'border':'2px dashed #333','padding':'5px'},'name':'虚线边框'}
+	,{'css':{'border':'2px dotted #333','padding':'5px'},'name':'点边框'}
+	
+	,{'css':{'box-shadow':'rgb(102, 102, 101) 3.53553px 3.53553px 8px','margin':'0 8px 8px 0'},'name':'右下阴影'}
+	,{'css':{'box-shadow':'rgb(102, 102, 101) -0.2em -0.2em 0.8em','margin':'0.5em 0px 0px 0.5em'},'name':'左上阴影'}
+	,{'css':{'border':'1px solid rgb(220,220,221)','border-radius':'2px','padding':'10px','box-shadow':'rgb(200,200,200) 0px 0px 6px'},'name':'四周边框四周阴影'}
+	,{'css':{'border':'1px solid rgb(208, 208, 209)','box-shadow':'rgba(7, 1, 3, 0.4) 2px 2px 5px','padding':'10px'},'name':'四周边框右下阴影'}
+	,{'css':{'-webkit-box-reflect':'below 0px -webkit-gradient(linear, 0% 0%, 0% 100%, from(transparent), color-stop(0.7, transparent), to(rgba(250, 250, 250, 0.298039)))','margin-bottom':'60px;'},'name':'倒影'}
+	
+	,{'css':{'-webkit-mask':'-webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(0, 0, 0)), to(rgba(0, 0, 0, 0)))'},'name':'底部虚化'}
+	,{'css':{'-webkit-mask':'-webkit-gradient(linear, 0% 100%, 0% 0%, from(rgb(0, 0, 0)), to(rgba(0, 0, 0, 0)))'},'name':'顶部虚化'}
+	,{'css':{'-webkit-mask':'-webkit-gradient(linear, 0% 0%, 100% 0%, from(rgb(0, 0, 0)), to(rgba(0, 0, 0, 0)))'},'name':'右部虚化'}
+	,{'css':{'-webkit-mask':'-webkit-gradient(linear, 100% 0%, 0% 0%, from(rgb(0, 0, 0)), to(rgba(0, 0, 0, 0)))'},'name':'左部虚化'}
+	,{'css':{'box-shadow':'0px 0px 10px rgb(239, 112, 96) inset','border':'1px solid rgb(239, 112, 96)','padding':'4px'},'name':'内阴影'}
+	,{'css':{'box-shadow':'0px 0px 10px rgb(239, 112, 96)','border':'1px solid rgb(239, 112, 96)','padding':'1px'},'name':'外阴影'}
+	,{'css':{'border':'5px solid rgb(239, 112, 96)'},'name':'实线边框'}
+	,{'css':{'box-shadow':'0 0 5px 5px rgb(239, 112, 96)'},'name':'宽阴影'}
+
+	//,{'css':{'border-width':'10px','border-color':'rgb(198, 198, 198) rgb(235, 234, 225) rgb(235, 234, 225) rgb(198, 198, 198)','border-style':'solid','width':'210px','box-sizing':'content-box'},'oprate':'circle','name':'圆形双色边框'} // 圆形图片边距无法生效 'padding':'2px',
+	//,{'css':{'border':'10px solid rgba(159, 136, 127,0.9)','padding':'0','height':'210px','width':'210px','box-sizing':'content-box'},'oprate':'circle','name':'圆形图片边框'}
+];
+
+(function () {	
+
+var $img;
+var img = editor.selection.getRange().getClosedNode();
+if (img && img.tagName && img.tagName.toLowerCase() == 'img') {
+	$img = $(img).clone();
+	dialog.anchorEl = img;
+}
+else{
+	$img = $('<img src="http://image3.135editor.com/cache/remote/aHR0cHM6Ly9tbWJpei5xbG9nby5jbi9tbWJpei96aWFkRERReGJDSkhpYWx2VzhDaWNodmlhY2RoWGliT2JiWmdWYmczOHl3cnBJN0FmcnFWaGVoZjdKczBPRVFDMzFCOHNPQ2pkdWJHTlVCaWF6c3NyQk9mNjZYdy8wP3d4X2ZtdD1qcGVn">');
+}
+
+
+
+
+
+var src = $img.attr('src');
+
+for(var i in rules) {
+	var $newImg = $img.clone().removeAttr('style');
+
+	if(rules[i].oprate == 'circle') {
+		$newImg = $('<section data-role="circle" style="border-radius: 100%;overflow: hidden;margin: 0 auto;width:100%;padding-bottom:100%;height:0px;background-image:url('+src+');background-position:50% 50%;background-size: cover;"><img src="'+src+'" style="opacity:0;width:100%;"></section>');
+	}
+
+
+	for(var cn in rules[i]['css']) {
+		$newImg.css(cn,rules[i]['css'][cn]);		
+	}
+	
+	var img_html = $newImg.prop('outerHTML');
+
+	var html = '<div class="item" data-rule="'+i+'" style="">'
+		+ '<p>'+rules[i]['name']+'</p>'
+		+ img_html
+		+'</div>';
+		
+	$('#img-dialog-content').append(html);
+}
+
+	$('.item').click(function(){
+		$('.active').removeClass('active');
+		$(this).addClass('active');
+	});
+
+	$('#img-radius').keyup(function(){
+		if($(this).val()) {
+			$('#img-dialog-content img').css('border-radius',$(this).val());
+		}
+	});
+
+
+var init_width = 0;
+if ( $img.css('border-radius') ){
+	init_width = parseInt( $img.css('border-radius') );
+}
+
+	jQuery('._imgradius').attr('data-param-init-value',init_width)	
+		.on('inited',function(e, val){
+	        jQuery(this).find('#radius-width').html(val+'px');
+	        $('#img-radius').val(val+'px').trigger('keyup'); 
+	    })
+		.slider({'initAll':false,'initValue':init_width})
+		.on("change", function(e, val){
+	        // e is event
+	        // val is current value
+	    	var width = val;//parseInt(100*val/100);
+	    	jQuery(this).find('#radius-width').html(width+'px');   
+	    	//p.find('> .layout').eq(0).css('width',width+'px');
+	    	$('#img-radius').val(width+'px').trigger('keyup'); 
+	    });
+	
+})();
+	
+function applyParagraph(type) {
+	var object ;
+	if(type == 'all') {
+		var editor_document = editor.selection.document;
+		object = $(editor_document).find('img');
+	}
+	else{
+		object = dialog.anchorEl;
+	}
+	if( $('.active').length == 0 ) {
+		alert("请先选择需要的样式");
+	}
+	var idx = $('.active').attr('data-rule') ;
+	$(object).each(function(){
+		if($(this).hasClass('assistant')) {
+			return;
+		}
+		$(this).removeAttr('style');
+
+		for(var cn in rules[idx]['css']) {
+			$(this).css(cn,rules[idx]['css'][cn]);		
+		}
+		if('#img-radius') {
+			$(this).css('border-radius',$('#img-radius').val());
+		}
+
+	});
+	dialog.close(false);
+}	
+	
+</script>    
+
+</body>
+</html>

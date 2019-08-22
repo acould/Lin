@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TerraceMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		TB_TERRACE
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		INTENET_ID,
+		APP_ID,
+		AUTH_CODE,
+		AUTHORIZER_ACCESS_TOKEN,
+		AUTHORIZER_REFRESH_TOKEN,
+		INSERT_TIME,
+		TERRACE_ID
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{INTENET_ID},
+		#{APP_ID},
+		#{AUTH_CODE},
+		#{AUTHORIZER_ACCESS_TOKEN},
+		#{AUTHORIZER_REFRESH_TOKEN},
+		#{INSERT_TIME},
+		#{TERRACE_ID}
+	</sql>
+
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除 -->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		TERRACE_ID = #{TERRACE_ID}
+	</delete>
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if
+			test="AUTHORIZER_ACCESS_TOKEN != null and AUTHORIZER_ACCESS_TOKEN != ''">
+			AUTHORIZER_ACCESS_TOKEN = #{AUTHORIZER_ACCESS_TOKEN},
+		</if>
+		<if
+			test="AUTHORIZER_REFRESH_TOKEN != null and AUTHORIZER_REFRESH_TOKEN != ''">
+			AUTHORIZER_REFRESH_TOKEN = #{AUTHORIZER_REFRESH_TOKEN},
+		</if>
+		<if test="INSERT_TIME != null and INSERT_TIME != ''">
+			INSERT_TIME = #{INSERT_TIME},
+		</if>
+		<if test="AUTH_CODE != null and AUTH_CODE != ''">
+			AUTH_CODE = #{AUTH_CODE},
+		</if>
+		TERRACE_ID = TERRACE_ID
+		where
+		TERRACE_ID = #{TERRACE_ID}
+	</update>
+
+	<!--修改 2 -->
+	<update id="update" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		TERRACE_ID=#{TERRACE_ID},
+		APP_ID=#{APP_ID},
+		AUTHORIZER_ACCESS_TOKEN=#{AUTHORIZER_ACCESS_TOKEN},
+		AUTHORIZER_REFRESH_TOKEN=#{AUTHORIZER_REFRESH_TOKEN},
+		INSERT_TIME=#{INSERT_TIME},
+		AUTH_CODE=#{AUTH_CODE}
+		where INTENET_ID =
+		#{INTENET_ID}
+	</update>
+
+	<!--修改 2 -->
+	<update id="update1" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		AUTHORIZER_ACCESS_TOKEN = #{AUTHORIZER_ACCESS_TOKEN},
+		AUTHORIZER_REFRESH_TOKEN = #{AUTHORIZER_REFRESH_TOKEN},
+		INSERT_TIME = #{INSERT_TIME},
+		AUTH_CODE = #{AUTH_CODE}
+		where
+		APP_ID = #{APP_ID}
+	</update>
+
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		APP_ID = #{APP_ID}
+	</select>
+
+	<!-- 通过appid获取数据 -->
+	<select id="findByappId" parameterType="pd" resultType="pd">
+		SELECT
+		a.`APP_ID`
+		FROM
+		tb_terrace a
+		WHERE a.`APP_ID` = #{APP_ID}
+	</select>
+
+	<!-- 通过网吧ID获取数据 -->
+	<select id="findByIntenet_id" parameterType="pd" resultType="pd">
+		SELECT
+		a.`STATE` AS STATE
+		FROM
+		sys_intenet a,
+		tb_terrace b
+		WHERE
+		a.`INTENET_ID` = b.`INTENET_ID`
+		AND b.`APP_ID` = #{APP_ID}
+		AND
+		a.`INTENET_ID` = #{INTENET_ID}
+	</select>
+
+	<!--根据appid查询 (获取AUTHORIZER_REFRESH_TOKEN) -->
+	<select id="findByAppId" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		APP_ID = #{APP_ID}
+		<if test="INSERT_TIME != null and INSERT_TIME != ''"><!-- 关键词检索 -->
+			 <![CDATA[ and  INSERT_TIME > #{INSERT_TIME}   ]]>
+		</if>
+	</select>
+
+	<!-- 通过网吧id去获取授权信息 -->
+	<select id="findByInternetId" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		INTENET_ID = #{INTENET_ID}
+	</select>
+
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+			(
+			<!-- 根据需求自己加检索条件 字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') or 字段2 
+				LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') -->
+			)
+		</if>
+	</select>
+
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+	</select>
+
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		TERRACE_ID in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+
+</mapper>

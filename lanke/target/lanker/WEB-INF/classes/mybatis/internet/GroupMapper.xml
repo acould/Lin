@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GroupMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		TB_GROUP
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		NAME,	
+		BEGIN_TIME,	
+		BM_TIME,	
+		TEAM_NUMBER,	
+		MIN_NUMBER,	
+		MAX_NUMBER,	
+		STATE,	
+		CREATE_TIME,	
+		CREATE_USER,	
+		INTERNET_ID,
+		CONTENT,
+		GROUP_ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{NAME},	
+		#{BEGIN_TIME},	
+		#{BM_TIME},	
+		#{TEAM_NUMBER},	
+		#{MIN_NUMBER},	
+		#{MAX_NUMBER},	
+		#{STATE},	
+		#{CREATE_TIME},	
+		#{CREATE_USER},	
+		#{INTERNET_ID},	
+		#{CONTENT},	
+		#{GROUP_ID}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			GROUP_ID = #{GROUP_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+			<include refid="tableName"></include>
+		set 
+			<if test="NAME != null and NAME != ''">
+				NAME = #{NAME},
+			</if>
+			<if test="BEGIN_TIME != null and BEGIN_TIME != ''">
+				BEGIN_TIME = #{BEGIN_TIME},
+			</if>
+			<if test="BM_TIME != null and BM_TIME != ''">
+				BM_TIME = #{BM_TIME},
+			</if>
+			<if test="TEAM_NUMBER != null and TEAM_NUMBER != ''">
+				TEAM_NUMBER = #{TEAM_NUMBER},
+			</if>
+			<if test="MIN_NUMBER != null and MIN_NUMBER != ''">
+				MIN_NUMBER = #{MIN_NUMBER},
+			</if>
+			<if test="MAX_NUMBER != null and MAX_NUMBER != ''">
+				MAX_NUMBER = #{MAX_NUMBER},
+			</if>
+			<if test="CONTENT != null and CONTENT != ''">
+				CONTENT = #{CONTENT},
+			</if>
+			<if test="CREATE_USER != null and CREATE_USER != ''">
+				CREATE_USER = #{CREATE_USER},
+			</if>
+			<if test="CREATE_TIME != null and CREATE_TIME != ''">
+				CREATE_TIME = #{CREATE_TIME},
+			</if>
+			<if test="STATE != null and STATE != ''">
+				STATE = #{STATE},
+			</if>
+			GROUP_ID = GROUP_ID
+		where 
+			GROUP_ID = #{GROUP_ID}
+	</update>
+	
+	<!-- 通过主键ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			GROUP_ID = #{GROUP_ID}
+	</select>
+	<!-- 通过storeid查询 -->
+	<select id="findByGroupId" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			GROUP_ID in (select GROUP_ID FROM TB_GROUPSTORE WHERE STORE_ID = #{STORE_ID})
+	</select>
+	
+	<!-- 列表 -->
+ 	<select id="datalistPage02" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''">
+			and
+				(
+					CREATE_USER LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
+		<if test="pd.INTERNET_ID!= null and pd.INTERNET_ID != ''">
+			AND INTERNET_ID = #{pd.INTERNET_ID}
+		</if>
+		<if test="pd.STORE_ID!= null and pd.STORE_ID!= ''">
+			and STORE_ID IN ('${pd.STORE_ID}')
+		</if>
+		<if test="pd.lastLoginStart != null and pd.lastLoginStart != '' ">
+			and BEGIN_TIME <![CDATA[>]]> #{pd.lastLoginStart}
+		</if>
+		<if test="pd.lastLoginEnd != null and pd.lastLoginEnd != '' ">
+			and BEGIN_TIME <![CDATA[<]]> #{pd.lastLoginEnd}
+		</if>
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		A.GROUP_ID,
+		A.NAME,
+		A.BEGIN_TIME,	
+		A.BM_TIME,	
+		A.TEAM_NUMBER,	
+		A.MIN_NUMBER,	
+		A.MAX_NUMBER,	
+		A.STATE,	
+		A.CREATE_TIME,	
+		A.CREATE_USER,	
+		A.INTERNET_ID,
+		A.CONTENT,
+		B.STORE_NAME,
+		C.STORE_ID,
+		D.NAME AS USER_NAME
+		from
+		TB_GROUP A,INTERNET_STORE B,TB_GROUPSTORE C,SYS_USER D
+		where 1=1
+		AND A.GROUP_ID = C.GROUP_ID 
+		AND C.STORE_ID = B.STORE_ID
+		AND A.CREATE_USER = D.USER_ID
+		<if test="pd.keywords!= null and pd.keywords != ''">
+			and
+				(
+					CREATE_USER LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
+		<if test="pd.INTERNET_ID!= null and pd.INTERNET_ID != ''">
+			AND A.INTERNET_ID = #{pd.INTERNET_ID}
+		</if>
+		<if test="pd.STORE_ID != null and pd.STORE_ID !=''">
+				AND A.GROUP_ID IN (SELECT GROUP_ID FROM TB_GROUPSTORE WHERE STORE_ID = #{pd.STORE_ID})
+			</if>
+		<if test="pd.lastLoginStart != null and pd.lastLoginStart != '' ">
+			and BEGIN_TIME <![CDATA[>]]> #{pd.lastLoginStart}
+		</if>
+		<if test="pd.lastLoginEnd != null and pd.lastLoginEnd != '' ">
+			and BEGIN_TIME <![CDATA[<]]> #{pd.lastLoginEnd}
+		</if>
+		GROUP BY A.GROUP_ID
+	</select>
+	<!-- 通过分店id查询 -->
+	<select id="storeList" parameterType="String" resultType="pd">
+		select A.*,B.* 
+		FROM TB_GROUPSTORE A LEFT JOIN tb_group B ON A.GROUP_ID = B.GROUP_ID 
+		WHERE
+		A.STORE_ID IN 
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		GROUP BY B.GROUP_ID
+	</select>
+	
+	<!--通过网吧id列表 -->
+	<select id="listGroupAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		WHERE 1=1
+		<if test="INTERNET_ID != null and INTERNET_ID != ''">
+			AND A.INTERNET_ID =#{INTERNET_ID}
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+		<!-- 通过groupid查询 -->
+	<select id="listByGroupId" parameterType="pd" resultType="pd">
+		select 
+			B.*
+		from 
+			TB_GROUPSTORE A,internet_store B,TB_GROUP C
+		where 
+			A.GROUP_ID = C.GROUP_ID AND A.STORE_ID = B.STORE_ID 
+			<if test="GROUP_ID != null and GROUP_ID != ''">
+				and C.GROUP_ID = #{GROUP_ID}
+			</if>
+	</select>
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			GROUP_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+
+	
+</mapper>

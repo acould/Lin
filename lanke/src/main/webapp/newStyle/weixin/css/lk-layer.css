@@ -1,0 +1,142 @@
+body .lk-onebtn .layui-m-layerbtn{
+    background: linear-gradient(to right, #2283e5, #37a8ff);font-size: 16px;
+    border: 0;
+    box-shadow: 0px 4px 20px rgba(35,133,231,0.5);
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 24px;
+    border-radius: 100px;
+}
+body .lk-onebtn .layui-m-layerbtn span[yes],body .lk-pay-defeated .layui-m-layerbtn span[yes],body .lk-pay-successful .layui-m-layerbtn span[yes],body .lk-pay-overtime .layui-m-layerbtn span[yes] {color:#fff!important}
+body .msg .layui-m-layercont {padding: 10px 20px;}
+body .layui-m-layer .msg {
+    width: auto;
+    max-width: 90%;
+    margin: 0 auto;
+    background-color: rgba(0,0,0,.7);
+    color: #fff;
+} 
+
+body .lk-onebtn .layui-m-layerbtn span:active {
+    opacity: 1;
+}
+body .lk-onebtn .layui-m-layerbtn span:active {
+	background: linear-gradient(to right, #2283e5, #37a8ff);
+	border-radius: 100px;
+	 opacity: 0.9;
+}
+
+body .lk-pay-defeated  .layui-m-layercont,body .lk-pay-successful .layui-m-layercont,body .lk-pay-overtime .layui-m-layercont{
+	padding: 26px 30px;
+}
+body .lk-pay-defeated .layui-m-layerbtn,body .lk-pay-successful .layui-m-layerbtn,body .lk-pay-overtime .layui-m-layerbtn {
+    font-size: 16px;
+    border: 0;
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 24px;
+    border-radius: 100px;
+    background: -moz-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: -webkit-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: -o-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: -ms-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    color:#fff;
+    box-shadow: 0px 4px 20px rgba(239,77,48,0.4);
+}
+body .lk-pay-successful .layui-m-layerbtn {
+	background: linear-gradient(to right, #2283e5, #37a8ff);font-size: 16px;
+    box-shadow: 0px 4px 20px rgba(35,133,231,0.5);
+}
+body .lk-pay-overtime .layui-m-layerbtn {
+	background: linear-gradient(to right, #07c8f0, #08dcec);font-size: 16px;
+    box-shadow: 0px 4px 20px rgba(7,207,239,0.5);
+}
+body .lk-pay-defeated .layui-m-layerbtn span:active,body .lk-pay-successful .layui-m-layerbtn span:active,body .lk-pay-overtime .layui-m-layerbtn span:active {
+    opacity: 1;
+}
+body .lk-pay-defeated .layui-m-layerbtn span:active {
+	background: -moz-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: -webkit-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: -o-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: -ms-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+	border-radius: 100px;
+	 opacity: 0.9;
+}
+body .lk-pay-successful .layui-m-layerbtn span:active {
+	background: linear-gradient(to right, #2283e5, #37a8ff);font-size: 16px;
+	border-radius: 100px;
+	opacity: 0.9;
+}
+body .lk-pay-overtime .layui-m-layerbtn span:active {
+	background: linear-gradient(to right, #07c8f0, #08dcec);font-size: 16px;
+	border-radius: 100px;
+	opacity: 0.9;
+}
+
+body .load .layui-m-layercont {padding: 25px 20px;}
+body .layui-m-layer2 .load .layui-m-layercont i {
+	width:16px;
+    height:16px;
+}                    
+body .layui-m-layer .load {
+	width: auto;
+	max-width: 90%;
+    margin: 0 auto;
+    background-color: rgba(0,0,0,.7);
+    color: #fff;
+}
+body  .layui-m-layer2 .notext .layui-m-layercont p {
+    margin-top: 0;
+}
+body .load .layui-m-layercont {padding: 20px 20px;}
+body .layui-m-layer2 .load .layui-m-layercont i {
+    width:12px;
+    height:12px;
+}
+body .layui-m-layer .load {
+    width: auto;
+    max-width: 90%;
+    margin: 0 auto;
+    background-color: rgba(0,0,0,.7);
+    color: #fff;
+}  
+body .confirm,body .lk-onebtn,body .lk-pay-defeated,body .lk-pay-successful,body .lk-pay-overtime {width:80%!important;}
+body .confirm .layui-m-layercont {font-size:14px;}
+body .confirm .layui-m-layerbtn {
+    background: #fff;
+    border-color:#eee;
+}
+body .confirm .layui-m-layerbtn span[no] {
+    border-color:#eee;
+    color:#666;
+    font-size:15px;
+}
+body .confirm .layui-m-layerbtn span[yes] {
+    color:#2283e5;
+    font-size:15px;
+}
+.lk-success-icon {
+	font-size:60px!important;
+	color:#1ab394;
+	display: inline-block!important;
+    margin-bottom: 30px!important;
+}                 
+@font-face {
+  font-family: 'iconfont';  /* project id 622913 */
+  src: url('//at.alicdn.com/t/font_622913_546gvxohiq55ewmi.eot');
+  src: url('//at.alicdn.com/t/font_622913_546gvxohiq55ewmi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_622913_546gvxohiq55ewmi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_622913_546gvxohiq55ewmi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_622913_546gvxohiq55ewmi.svg#iconfont') format('svg');
+}
+
+.iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}        

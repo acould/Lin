@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DatumMapper">
+
+	<!--附件资料上传存储表 -->
+	<sql id="tableName">
+		tb_datum
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		intenetdatum_id,
+		url,
+		type,
+		createtime,
+		sort
+
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{intenetdatum_id},
+		#{url},
+		#{type},
+		#{createtime},
+		#{sort}
+
+	</sql>
+
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		)
+		values
+		(
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除 -->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		intenetdatum_id = #{intenetdatum_id} and type = #{type}
+	</delete>
+	<delete id="deleteByInternetAdnType" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		id = #{id}
+	</delete>
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="url != null and url != ''">
+			url = #{url},
+		</if>
+		id = #{id}
+		where
+		id = #{id}
+	</update>
+	<update id="editByInternetAdnType" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="url != null and url != ''">
+			url = #{url},
+		</if>
+		intenetdatum_id = #{intenetdatum_id}
+		where
+		intenetdatum_id = #{intenetdatum_id} and type = #{type}
+	</update>
+
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		id = #{id}
+	</select>
+	
+	<select id="findByInternetAdnType" parameterType="pd"
+		resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		intenetdatum_id = #{intenetdatum_id} and type = #{type}
+	</select>
+
+	<select id="findByInternet" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		intenetdatum_id = #{intenetdatum_id}
+		<if test="sort != null and sort != ''">
+			and sort = #{sort}
+		</if>
+		<if test="type != null and type != ''">
+			and type = #{type}
+		</if>
+	</select>
+
+	<!-- 删除全部图片(代理商) -->
+	<delete id="deleteAll" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		intenetdatum_id = #{intenetdatum_id}
+		and sort = #{sort}
+	</delete>
+
+
+</mapper>

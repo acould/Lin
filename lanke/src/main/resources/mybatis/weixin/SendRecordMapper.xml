@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SendRecordMapper">
+
+	
+	<!--表名 -->
+	<sql id="tableName">
+		INTERNET_SENDRECORD
+	</sql>
+	<!-- 字段 -->
+	<sql id="Field">
+		SENDRECORD_ID,
+		INTERNET_ID,
+		WECHAT_ID,
+		CREATE_TIME,
+		MEDIA_ID,
+		STATE,
+		SEND_TIME,
+		
+		GROUP_ID,
+		GROUP_SEX,
+		GROUP_PROVINCE,
+		GROUP_CITY,
+		D_STATE
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{SENDRECORD_ID},
+		#{INTERNET_ID},
+		#{WECHAT_ID},
+		#{CREATE_TIME},
+		#{MEDIA_ID},
+		#{STATE},
+		#{SEND_TIME},
+		
+		#{GROUP_ID},
+		#{GROUP_SEX},
+		#{GROUP_PROVINCE},
+		#{GROUP_CITY},
+		#{D_STATE}
+	</sql>
+	
+	<!-- 增 -->
+	<insert id="save" parameterType="pd" >
+		insert into 
+			<include refid="tableName"></include> 
+		(
+			<include refid="Field"></include>
+		)
+		values 
+		(
+			<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="pd" flushCache="false">
+		delete from 
+			<include refid="tableName"></include>
+		where 
+			SENDRECORD_ID = #{SENDRECORD_ID}
+	</delete>
+	<!-- 删-图文 -->
+	<delete id="deleteMaterialByRecord" parameterType="pd" flushCache="false">
+		delete from internet_material
+		where
+		INTERNETMATERIAL_ID in (
+			select INTERNETMATERIAL_ID from internet_recordmaterial where sendrecord_id = #{SENDRECORD_ID}
+			<if test="SEQUENCE != null and SEQUENCE != ''">
+				and SEQUENCE = #{SEQUENCE}
+			</if>
+		)
+	</delete>
+	<!-- 删-关系 -->
+	<delete id="deleteRelationByRecord" parameterType="pd" flushCache="false">
+		delete from internet_recordmaterial
+		where sendrecord_id = #{SENDRECORD_ID}
+		<if test="SEQUENCE != null and SEQUENCE != ''">
+			and SEQUENCE = #{SEQUENCE}
+		</if>
+	</delete>
+	
+	<!-- 改 -->
+	<update id="edit" parameterType="pd" >
+		update  
+			<include refid="tableName"></include>
+		set 
+			<if test="MEDIA_ID != null and MEDIA_ID != ''">
+				MEDIA_ID = #{MEDIA_ID},
+			</if>
+			<if test="STATE != null and STATE != ''">
+				STATE = #{STATE},
+			</if>
+			<if test="SEND_TIME != null and SEND_TIME != ''">
+				SEND_TIME = #{SEND_TIME},
+			</if>
+			
+			<if test="GROUP_ID != null and GROUP_ID != ''">
+				GROUP_ID = #{GROUP_ID},
+			</if>
+			<if test="GROUP_SEX != null and GROUP_SEX != ''">
+				GROUP_SEX = #{GROUP_SEX},
+			</if>
+			<if test="GROUP_PROVINCE != null and GROUP_PROVINCE != ''">
+				GROUP_PROVINCE = #{GROUP_PROVINCE},
+			</if>
+			<if test="GROUP_CITY != null and GROUP_CITY != ''">
+				GROUP_CITY = #{GROUP_CITY},
+			</if>
+			<if test="D_STATE != null and D_STATE != ''">
+				D_STATE = #{D_STATE},
+			</if>
+			CREATE_TIME = #{CREATE_TIME}
+		where 
+			SENDRECORD_ID = #{SENDRECORD_ID}
+	</update>
+	
+	<!-- 通过主键id获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd" >
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			SENDRECORD_ID = #{SENDRECORD_ID}
+	</select>
+	<select id="findByMediaId" parameterType="pd" resultType="pd" >
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			MEDIA_ID = #{MEDIA_ID}
+	</select>
+	<!-- 通过internet_id获取数据 -->
+	<select id="findByInternetId" parameterType="pd" resultType="pd" >
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			INTERNET_ID = #{INTERNET_ID}
+	</select>
+
+	<select id="listByInternetId" parameterType="pd" resultType="pd" >
+		select
+			a.SENDRECORD_ID,
+			a.STATE,
+			a.MEDIA_ID,
+			a.CREATE_TIME,
+			a.SEND_TIME
+		from
+			internet_sendrecord a
+		where 1=1 and a.internet_id = #{internet_id} and a.d_state = '0'
+			<!-- 筛选条件 -->
+			<if test="state != null and state != ''">
+				and a.state = #{state}
+			</if>
+		GROUP BY a.SENDRECORD_ID
+		ORDER BY a.send_time desc, a.CREATE_TIME DESC
+
+	</select>
+	<!-- 查询列表 -->
+	<select id="datalist" parameterType="page" resultType="pd" >
+		select 
+			a.SENDRECORD_ID,
+			a.STATE,
+			a.MEDIA_ID,
+			a.CREATE_TIME,
+			a.SEND_TIME
+		from 
+			<include refid="tableName"></include> a, internet_recordmaterial b, internet_material c
+		where 
+			a.sendrecord_id = b.sendrecord_id and b.internetmaterial_id = c.internetmaterial_id
+			<if test="pd.INTERNET_ID != null and pd.INTERNET_ID != ''">
+				and a.INTERNET_ID = #{pd.INTERNET_ID}
+			</if>
+			<!-- <if test="pd.WECHAT_ID != null and pd.WECHAT_ID != ''">
+				and a.WECHAT_ID = #{pd.WECHAT_ID}
+			</if> -->
+			
+			<if test="pd.STATE != null and pd.STATE != ''">
+				and a.STATE = #{pd.STATE}
+			</if>
+			<if test="pd.MENUTITLE != null and pd.MENUTITLE != ''"><!-- 自定义菜单中所用 -->
+				and c.TITLE LIKE CONCAT(CONCAT('%', #{pd.MENUTITLE}),'%')
+			</if>
+			
+			<![CDATA[ and datediff(curdate(),a.CREATE_TIME) < 90 ]]><!-- 只显示最新三个月 -->
+		GROUP BY a.SENDRECORD_ID
+		ORDER BY a.CREATE_TIME DESC
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String" >
+		delete from 
+			<include refid="tableName"></include>
+		where 
+			USER_ID in
+  			 <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                  #{item}
+             </foreach>
+	</delete>
+	
+	
+	<!-- 当前月份是否发满4条 -->
+	<select id="isOutSend" parameterType="pd" resultType="pd" >
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			INTERNET_ID = #{INTERNET_ID}
+			and SEND_TIME <![CDATA[>]]> #{BEFORE}
+			and SEND_TIME <![CDATA[<]]> #{AFTER}
+	</select>
+	<!-- ******************************************************分割线********************************************************* -->
+
+	<select id="listIndex" parameterType="page" resultType="pd" >
+		select
+		a.SENDRECORD_ID,
+		a.STATE,
+		a.MEDIA_ID,
+		a.CREATE_TIME,
+		a.SEND_TIME
+		from
+		<include refid="tableName"></include> a
+		where 1=1 and a.state = '1' <!-- 只显示未群发 -->
+		<if test="pd.INTERNET_ID != null and pd.INTERNET_ID != ''">
+			and a.INTERNET_ID = #{pd.INTERNET_ID}
+		</if>
+		<if test="pd.STATE != null and pd.STATE != ''">
+			and a.STATE = #{pd.STATE}
+		</if>
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and a.SENDRECORD_ID in(select a.sendrecord_id from internet_recordmaterial a left join internet_material b on a.internetmaterial_id = b.internetmaterial_id
+			where b.title LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') group by a.sendrecord_id)
+		</if>
+		GROUP BY a.SENDRECORD_ID
+		ORDER BY a.CREATE_TIME DESC
+	</select>
+	<select id="findRecordBySendId" parameterType="pd" resultType="pd" >
+		select a.*,b.PATH
+		from internet_recordmaterial a left join internet_pictures b on a.picture_id = b.picture_id
+		where sendrecord_id = #{SENDRECORD_ID} order by sequence asc
+	</select>
+
+	<select id="findPicBySendAndSequence" parameterType="pd" resultType="pd" >
+		select
+		c.*
+		from
+		internet_recordmaterial a, internet_sendrecord b, internet_pictures c
+		where a.sendrecord_id = b.sendrecord_id and a.picture_id = c.picture_id
+		and b.sendrecord_id = #{SENDRECORD_ID} and a.sequence = #{SEQUENCE}
+	</select>
+	
+</mapper>

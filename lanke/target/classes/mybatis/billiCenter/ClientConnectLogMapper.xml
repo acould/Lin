@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ClientConnectLogMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		client_connect_log
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		store_id,
+		create_time,
+		status
+
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{store_id},	
+		#{create_time},
+		#{status}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+			<include refid="tableName"></include>(<include refid="Field"></include>) 
+		values 
+			(<include refid="FieldValue"></include>)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="String">
+		delete from
+			<include refid="tableName"></include>
+		where
+		id = #{id}
+	</delete>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="String" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where
+		id = #{id}
+	</select>
+
+    <select id="dataList" parameterType="page" resultType="pd">
+        select
+         a.*,
+         b.store_name
+        from
+          client_connect_log a left join internet_store b on a.store_id = b.store_id
+        where a.store_id = #{pd.store_id}
+        group by a.create_time
+        order by a.create_time desc
+        limit 10
+    </select>
+	
+</mapper>

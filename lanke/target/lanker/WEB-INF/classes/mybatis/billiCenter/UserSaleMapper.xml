@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserSaleMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		user_sale
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		sale_id,
+		pubwin_store_id,
+		store_id,
+		card_id,
+		sale_name,
+		sale_type,
+		pay_type,
+		pay_from,
+		amount,
+		reward,
+		order_id,
+		order_from,
+		memo,
+		guid
+
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{sale_id},	
+		#{pubwin_store_id},	
+		#{store_id},	
+		#{card_id},	
+		#{sale_name},
+		#{sale_type},
+		#{pay_type},
+		#{pay_from},
+		#{amount},
+		#{reward},
+		#{order_id},
+		#{order_from},
+		#{memo},
+		#{guid}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+			<include refid="tableName"></include>(<include refid="Field"></include>) 
+		values 
+			(<include refid="FieldValue"></include>)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			sale_id = #{sale_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+			<include refid="tableName"></include>
+		set 
+			<if test="sale_name != null and sale_name != ''">
+				sale_name = #{sale_name},
+			</if>
+			<if test="sale_type != null and sale_type != ''">
+				sale_type = #{sale_type},
+			</if>
+			<if test="pay_type != null and pay_type != ''">
+				pay_type = #{pay_type},
+			</if>
+			<if test="pay_from != null and pay_from != ''">
+				pay_from = #{pay_from},
+			</if>
+			<if test="amount != null and amount != ''">
+				amount = #{amount},
+			</if>
+			<if test="reward != null and reward != ''">
+				reward = #{reward},
+			</if>
+			<if test="order_from != null and order_from != ''">
+				order_from = #{order_from},
+			</if>
+			<if test="memo != null and memo != ''">
+				memo = #{memo},
+			</if>
+			sale_id = #{sale_id}
+		where 
+			sale_id = #{sale_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			sale_id = #{sale_id}
+	</select>
+	<select id="findByGuid" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			guid = #{guid}
+	</select>
+	
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 1=1
+			
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			sale_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	
+</mapper>

@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WechatMenuMapper">
+	
+	
+	<!--表名 -->
+	<sql id="tableName">
+		wechat_menu
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		MENU_ID,
+		NAME,
+		TYPE,
+		URL,
+		VALUE,
+		CONTENT,
+		CARD_ID,
+		MEDIA_ID,
+		PATH,
+		MINI_APPID,
+		MINI_PAGEPATH,
+		PARENT_ID,
+		INTERNET_ID,
+		APP_ID,
+		STATE,
+		SEQUENCE
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{MENU_ID},	
+		#{NAME},	
+		#{TYPE},
+		#{URL},
+		#{VALUE},
+		#{CONTENT},
+		#{CARD_ID},
+		#{MEDIA_ID},
+		#{PATH},
+		#{MINI_APPID},
+		#{MINI_PAGEPATH},
+		#{PARENT_ID},
+		#{INTERNET_ID},
+		#{APP_ID},
+		#{STATE},
+		#{SEQUENCE}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+			<include refid="tableName"></include>(<include refid="Field"></include>) 
+		values (<include refid="FieldValue"></include>)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			MENU_ID = #{MENU_ID}
+	</delete>
+	<!-- 根据序号删除-->
+	<delete id="deleteByOrder" parameterType="pd">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			<if test="APP_ID != null and APP_ID != ''">
+				APP_ID = #{APP_ID}
+			</if>
+			
+			<choose>
+				<when test="SECOND != null and SECOND != ''">
+					and PARENT_ID = (select a.menu_id from (select menu_id from wechat_menu where app_id = #{APP_ID} and SEQUENCE = #{FIRST} and PARENT_ID = '0') a)
+					and SEQUENCE = #{SECOND}
+				</when>
+				<otherwise>
+					and PARENT_ID = '0' and SEQUENCE = #{FIRST}
+				</otherwise>
+			</choose>
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+			<include refid="tableName"></include>
+		set 
+			<if test="NAME != null and NAME != ''">
+				NAME = #{NAME},
+			</if>
+			<if test="TYPE != null and TYPE != ''">
+				TYPE = #{TYPE},
+			</if>
+			<if test="URL != null and URL != ''">
+				URL = #{URL},
+			</if>
+			<if test="VALUE != null and VALUE != ''">
+				VALUE = #{VALUE},
+			</if>
+			<if test="CONTENT != null and CONTENT != ''">
+				CONTENT = #{CONTENT},CARD_ID = '',
+			</if>
+			<if test="CARD_ID != null and CARD_ID != ''">
+				CARD_ID = #{CARD_ID},CONTENT = '',
+			</if>
+			
+			<if test="MEDIA_ID != null and MEDIA_ID != ''">
+				MEDIA_ID = #{MEDIA_ID},
+			</if>
+			<if test="TUWEN == 1">
+				PATH = '',
+			</if>
+			<if test="PATH != null and PATH != ''">
+				PATH = #{PATH},
+			</if>
+			
+			<if test="MINI_APPID != null and MINI_APPID != ''">
+				MINI_APPID = #{MINI_APPID},
+			</if>
+			<if test="MINI_PAGEPATH != null and MINI_PAGEPATH != ''">
+				MINI_PAGEPATH = #{MINI_PAGEPATH},
+			</if>
+			<if test="PARENT_ID != null and PARENT_ID != ''">
+				PARENT_ID = #{PARENT_ID},
+			</if>
+			
+			<if test="STATE != null and STATE != ''">
+				STATE = #{STATE},
+			</if>
+			<if test="SEQUENCE != null and SEQUENCE != ''">
+				SEQUENCE = #{SEQUENCE},
+			</if>
+			
+			<if test="TYPE == 'click'">
+				URL = '',MEDIA_ID='',PATH='',MINI_APPID='',MINI_PAGEPATH='',
+			</if>
+			<if test="TYPE == 'media_id'">
+				URL='',VALUE='',CONTENT='',CARD_ID='',MINI_APPID='',MINI_PAGEPATH='',
+			</if>
+			<if test="TYPE == 'view'">
+				VALUE='',CONTENT='',CARD_ID='',MEDIA_ID='',PATH='',MINI_APPID='',MINI_PAGEPATH='',
+			</if>
+			<if test="TYPE == 'miniprogram'">
+				VALUE='',CONTENT='',CARD_ID='',MEDIA_ID='',PATH='',
+			</if>
+			
+			MENU_ID = #{MENU_ID}
+		where 
+			MENU_ID = #{MENU_ID}
+	</update>
+
+	<update id="editFu" parameterType="pd" >
+		update
+		<include refid="tableName"></include>
+		set
+			TYPE = '', URL = '', value = '', content='',card_id='', MEDIA_ID='',PATH='',MINI_APPID='',MINI_PAGEPATH='',
+		MENU_ID = #{MENU_ID}
+		where
+			MENU_ID = #{MENU_ID}
+	</update>
+
+
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			MENU_ID = #{MENU_ID}
+	</select>
+	<!-- 通过序号获取数据 -->
+	<select id="findByOrder" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 1=1
+			<if test="APP_ID != null and APP_ID != ''">
+				and APP_ID = #{APP_ID}
+			</if>
+			<choose>
+				<when test="SECOND != null and SECOND != ''">
+					and PARENT_ID = (select menu_id from wechat_menu where app_id = #{APP_ID} and SEQUENCE = #{FIRST} and PARENT_ID = '0') and SEQUENCE = #{SECOND}
+				</when>
+				<otherwise>
+					and PARENT_ID = '0' and SEQUENCE = #{FIRST}
+				</otherwise>
+			</choose>
+			
+	</select>
+	<!-- 根据列查询是否有子菜单 -->
+	<select id="findSonByLie" parameterType="pd" resultType="pd">
+		select * from wechat_menu where parent_id = 
+		(select menu_id from wechat_menu where app_id = #{APP_ID} and parent_id = '0' and SEQUENCE = #{FIRST}) 
+		order by sequence asc
+	</select>
+	<!-- 根据appId查询该公众号下的所有一级菜单 -->
+	<select id="findByAppId" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			APP_ID = #{APP_ID} and PARENT_ID = '0'
+		order by SEQUENCE asc
+	</select>
+	<!-- 根据value值查询该菜单下的文字或者卡券id -->
+	<select id="findByKey" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			APP_ID = #{APP_ID} and VALUE = #{VALUE} and TYPE = 'click'
+	</select>
+	
+	
+	
+	<!-- 分页列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 1 = 1 
+			<if test="pd.INTERNET_ID != null and pd.INTERNET_ID != ''">
+				and INTERNET_ID = #{pd.INTERNET_ID}
+			</if>
+		order by SEQUENCE ASC
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			MENU_ID = #{MENU_ID}
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			MENU_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	<!-- 删除公众号的所有菜单 -->
+	<delete id="deleteByAppId" parameterType="pd">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			APP_ID = #{APP_ID}
+	</delete>
+	
+	
+</mapper>

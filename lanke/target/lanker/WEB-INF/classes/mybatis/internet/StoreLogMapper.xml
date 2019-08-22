@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StoreLogMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		internet_store_log
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+        id,
+        store_id,
+        foreign_id,
+        type,
+        apply_person,
+        apply_time,
+        price_package,
+        checker,
+        check_period,
+        is_checked,
+        check_reason,
+        check_time
+
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+        #{store_id},
+        #{foreign_id},
+        #{type},
+        #{apply_person},
+        #{apply_time},
+        #{price_package},
+        #{checker},
+        #{check_period},
+        #{is_checked},
+        #{check_reason},
+        #{check_time}
+
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+			<include refid="tableName"></include>(<include refid="Field"></include>) 
+		values 
+			(<include refid="FieldValue"></include>)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="String">
+		delete from
+			<include refid="tableName"></include>
+		where
+		id = #{id}
+	</delete>
+	<update id="edit" parameterType="pd">
+		update internet_store_log
+		set
+		<if test="checker != null and checker != ''">
+			checker = #{checker},
+		</if>
+		<if test="check_period != null and check_period != ''">
+			check_period = #{check_period},
+		</if>
+		<if test="is_checked != null and is_checked != ''">
+			is_checked = #{is_checked},
+		</if>
+		<if test="check_reason != null and check_reason != ''">
+			check_reason = #{check_reason},
+		</if>
+		<if test="check_time != null and check_time != ''">
+			check_time = #{check_time},
+		</if>
+		id = #{id}
+		where
+		id = #{id}
+	</update>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="String" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where
+		id = #{id}
+	</select>
+	<select id="findByForeignId" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from
+			<include refid="tableName"></include>
+		where
+		foreign_id = #{foreign_id}
+		order by apply_time desc
+	</select>
+
+</mapper>

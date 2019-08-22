@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrderMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		dingdan
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		ORDER_ID,
+		ORDER_NUMBER,
+		USER_ID,
+		Auction_ID,
+		STATE,
+		INTERNET_ID,
+		SEND_TIME,
+		CREATE_TIME,
+		DELIVERY,
+		STORE_ID,
+		COUNT,
+		payInt,
+		payCash,
+		intTotal,
+		cashTotal
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{ORDER_ID},
+		#{ORDER_NUMBER},
+		#{USER_ID},
+		#{Auction_ID},
+		#{STATE},
+		#{INTERNET_ID},
+		#{SEND_TIME},
+		#{CREATE_TIME},
+		#{DELIVERY},
+		#{STORE_ID},
+		#{COUNT},
+		#{payInt},
+		#{payCash},
+		#{intTotal},
+		#{cashTotal}
+	</sql>
+
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除 -->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		ORDER_ID = #{ORDER_ID}
+	</delete>
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="STATE != null and STATE != ''">
+			STATE = #{STATE},
+		</if>
+		<if test="SEND_TIME != null and SEND_TIME != ''">
+			SEND_TIME = #{SEND_TIME},
+		</if>
+		ORDER_ID = #{ORDER_ID}
+		where
+		ORDER_ID = #{ORDER_ID}
+		<if test="Auction_ID != null and Auction_ID != ''">
+			and Auction_ID = #{Auction_ID}
+		</if>
+		<if test="USER_ID != null and USER_ID != ''">
+			and USER_ID = #{USER_ID}
+		</if>
+
+	</update>
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		o.*
+		from
+		<include refid="tableName"></include>
+		o
+		where
+		o.ORDER_ID = #{ORDER_ID}
+	</select>
+	<select id="findByAuctionId" parameterType="pd" resultType="pd">
+		select
+		O.*,
+		A.ANAME
+		from
+		<include refid="tableName"></include>
+		O,auction A
+		where O.Auction_ID = A.Auction_ID
+		and O.Auction_ID = #{Auction_ID}
+	</select>
+
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		o.Auction_ID,
+		o.ORDER_ID,
+		o.ORDER_NUMBER,
+		o.CREATE_TIME,
+		o.DELIVERY,
+		o.SEND_TIME,
+		o.STATE,
+		o.COUNT,
+		o.payInt,
+		o.payCash,
+		a.ANAME,
+		a.INTEGRAL,
+		u.NAME,
+		b.CARDED,
+		s.STORE_NAME
+		from
+		<include refid="tableName"></include>
+		o,auction a,sys_user u,bund_user b,internet_store s
+		where s.STORE_ID =
+		o.STORE_ID and b.USER_ID = o.USER_ID and o.USER_ID = u.USER_ID and
+		o.Auction_ID = a.Auction_ID
+		and o.INTERNET_ID = #{pd.internetId}
+		<if test="pd.list!= null and pd.list!=''">
+			and o.STORE_ID in ('${pd.list}')
+		</if>
+		<if test="pd.USER_ID != null and pd.USER_ID != ''">
+			and o.USER_ID = #{pd.USER_ID}
+		</if>
+		<if test="pd.STORE_ID == null or pd.STORE_ID == ''">
+			<if test="pd.list!= null and pd.list!=''">
+				and o.STORE_ID in ('${pd.list}')
+			</if>
+		</if>
+		<!-- 关键词检索 -->
+		<if test="pd.keywords!= null and pd.keywords != ''">
+			and
+			(
+			o.ORDER_NUMBER LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or b.CARDED LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or u.NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or a.ANAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+
+			or u.NAME LIKE CONCAT(CONCAT('%', #{pd.word}),'%')
+			)
+		</if>
+		<!-- 筛选条件 -->
+		<if test="pd.lastLoginStart != null and pd.lastLoginStart != '' ">
+			and o.CREATE_TIME <![CDATA[>]]>
+			#{pd.lastLoginStart}
+		</if>
+		<if test="pd.lastLoginEnd != null and pd.lastLoginEnd != '' ">
+			and o.CREATE_TIME <![CDATA[<]]>
+			#{pd.lastLoginEnd}
+		</if>
+		<if test="pd.STORE_ID != null and pd.STORE_ID != ''">
+			and o.STORE_ID = #{pd.STORE_ID}
+		</if>
+		<if test="pd.STATE != null and pd.STATE != ''">
+			and o.STATE = #{pd.STATE}
+		</if>
+		<!-- 微信端筛选 -->
+		<if test="pd.typeId == 1 ">
+			and o.STATE in ('1','2')
+		</if>
+		<if test="pd.typeId == 3 ">
+				<![CDATA[ and o.STATE = 3]]>
+		</if>
+		<!-- 最近3个月 -->
+			<![CDATA[ and datediff(curdate(),o.CREATE_TIME) < 90 ]]>
+		ORDER BY FIELD(o.STATE,2,3,1),o.CREATE_TIME DESC
+	</select>
+
+	<!-- 微信的用户订单列表 -->
+	<select id="wxdatalist" parameterType="page" resultType="pd">
+		select
+		o.Auction_ID,
+		o.ORDER_ID,
+		o.ORDER_NUMBER,
+		o.CREATE_TIME,
+		o.DELIVERY,
+		o.SEND_TIME,
+		o.STATE,
+		o.COUNT,
+		o.payInt,
+		o.payCash,
+		o.cashTotal,
+		o.intTotal,
+		a.ANAME,
+		a.price,
+		u.NAME,
+		b.CARDED,
+		s.STORE_NAME
+		from
+		<include refid="tableName"></include>
+		o,auction a,sys_user u,bund_user b,internet_store s
+		where s.STORE_ID =
+		o.STORE_ID and b.USER_ID = o.USER_ID and o.USER_ID = u.USER_ID and
+		o.Auction_ID = a.Auction_ID
+		<if test="pd.INTERNET_ID != null and pd.INTERNET_ID != ''">
+			and o.INTERNET_ID = #{pd.INTERNET_ID}
+		</if>
+		<if test="pd.USER_ID != null and pd.USER_ID != ''">
+			and o.USER_ID = #{pd.USER_ID}
+		</if>
+		<!-- 微信端筛选 -->
+		<if test="pd.typeId == 1 ">
+			and o.STATE in ('1','2')
+		</if>
+		<if test="pd.typeId == 3 ">
+				<![CDATA[ and o.STATE = 3]]>
+		</if>
+		ORDER BY o.STATE DESC,o.CREATE_TIME DESC
+	</select>
+
+	<!-- 导出列表 全部(修改导出时只有一页问题) -->
+	<select id="exportExcel" parameterType="pd" resultType="pd">
+		select
+		o.Auction_ID,
+		o.ORDER_ID,
+		o.ORDER_NUMBER,
+		o.CREATE_TIME,
+		o.DELIVERY,
+		o.SEND_TIME,
+		o.STATE,
+		a.ANAME,
+		a.INTEGRAL,
+		u.NAME,
+		b.CARDED,
+		s.STORE_NAME
+		from
+		<include refid="tableName"></include>
+		o,auction a,sys_user u,bund_user b,internet_store s
+		where s.STORE_ID =
+		o.STORE_ID and b.USER_ID = o.USER_ID and o.USER_ID = u.USER_ID and
+		o.Auction_ID = a.Auction_ID
+		<if test="INTERNET_ID != null and INTERNET_ID != ''">
+			and o.INTERNET_ID = #{INTERNET_ID}
+		</if>
+		<if test="STORE_ID2 != null and STORE_ID2 != ''">
+			and o.STORE_ID = #{STORE_ID2}
+		</if>
+		<!-- 关键词检索 -->
+		<if test="keywords!= null and keywords != ''">
+			and
+			(
+			o.ORDER_NUMBER LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or b.CARDED LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or u.NAME LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or a.ANAME LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or s.STORE_NAME LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or u.NAME LIKE CONCAT(CONCAT('%', #{word}),'%')
+			)
+		</if>
+		<!-- 筛选条件 -->
+		<if test="lastLoginStart != null and lastLoginStart != '' ">
+			and o.CREATE_TIME <![CDATA[>]]>
+			#{lastLoginStart}
+		</if>
+		<if test="lastLoginEnd != null and lastLoginEnd != '' ">
+			and o.CREATE_TIME <![CDATA[<]]>
+			#{lastLoginEnd}
+		</if>
+		<if test="STORE_ID != null and STORE_ID != ''">
+			and o.STORE_ID = #{STORE_ID}
+		</if>
+		<if test="STATE != null and STATE != ''">
+			and o.STATE = #{STATE}
+		</if>
+		<!-- 最近3个月 -->
+			<![CDATA[ and datediff(curdate(),o.CREATE_TIME) < 90 ]]>
+		ORDER BY o.CREATE_TIME DESC
+	</select>
+
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		s.STORE_NAME,o.ORDER_NUMBER,o.CREATE_TIME,a.ANAME,o.DELIVERY,u.NAME,b.CARDED,o.STATE,o.SEND_TIME
+		from
+		<include refid="tableName"></include>
+		o,auction a,sys_user u,bund_user b,internet_store s
+		where
+		s.STORE_ID = b.STORE_ID and b.USER_ID = o.USER_ID and o.USER_ID = u.USER_ID and
+		o.Auction_ID = a.Auction_ID
+		ORDER BY o.CREATE_TIME DESC
+	</select>
+</mapper>

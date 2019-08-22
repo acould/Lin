@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CardStoreMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		card_store
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		CARD_STORE_ID,	
+		CARD_ID,	
+		STORE_ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{CARD_STORE_ID},	
+		#{CARD_ID},	
+		#{STORE_ID}
+	</sql>
+	
+	<!-- 新建卡劵(更换门店),新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			CARD_STORE_ID = #{CARD_STORE_ID}
+	</delete>
+	
+	<!--通过卡劵id删除卡劵(更换门店)-->
+	<delete id="deleteByCardId" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			CARD_ID = #{CARD_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			CARD_ID = #{CARD_ID},
+			STORE_ID = #{STORE_ID}
+		where 
+			CARD_STORE_ID = #{CARD_STORE_ID}
+	</update>
+	
+	<!-- 删除-->
+	<delete id="deleteByMatchId" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			MATCH_ID = #{MATCH_ID}
+	</delete>
+	
+	<!-- 查询一个cardId对应的分店 -->
+	<select id="list" parameterType="pd" resultType="pd">
+		select 
+			C.*
+		from 
+			<include refid="tableName"></include> A,internet_store B,CARD C
+		where 
+			 A.CARD_ID = C.CARD_ID AND A.STORE_ID = B.STORE_ID 
+			<if test="STORE_ID != null and STORE_ID != ''">
+				AND A.STORE_ID = #{STORE_ID}	
+			</if>
+			<if test="INTENET_ID != null and INTENET_ID != ''">
+				AND B.INTERNET_ID = #{INTENET_ID}	
+			</if>
+	
+	</select>
+	
+	<!-- 通过ID获取数据(通过卡劵号和门店id获取信息) -->
+	<select id="findByCardId" parameterType="pd" resultType="pd">
+		select 
+			C.*,
+			B.STORE_ID,
+			B.STORE_NAME
+		from 
+			<include refid="tableName"></include> A,internet_store B,CARD_CANCEL C
+		where 
+			 A.CARD_ID = C.CARD_ID AND A.STORE_ID = B.STORE_ID 
+			<if test="CARD != null and CARD != ''">
+				AND C.CARD = #{CARD}	
+			</if>
+			<if test="STORE_ID != null and STORE_ID != ''">
+				AND B.STORE_ID = #{STORE_ID}	
+			</if>
+		
+	</select>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findByCardIdAndStoreId" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			CARD_ID = #{CARD_ID} AND STORE_ID = #{STORE_ID}
+	</select>
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			MATCH_STORE_ID = #{MATCH_STORE_ID}
+	</select>
+	
+	
+	
+	<!-- 通过MATCH_ID获取数据 -->
+	<select id="listByMatchID" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			MATCH_ID = #{MATCH_ID}
+			<if test="MATCH_STORE_ID != null and MATCH_STORE_ID != ''">
+				and MATCH_STORE_ID = #{MATCH_STORE_ID}
+			</if>
+	</select>
+	
+	
+	
+	
+	<select id="listByMatchId" parameterType="pd" resultType="pd">
+		select 
+		A.MATCH_STORE_ID,
+		B.STORE_NAME,
+		B.STORE_ID,
+		A.MATCH_ID
+		from 
+		<include refid="tableName"></include> A,internet_store B,sys_match C
+		where 
+			 A.MATCH_ID = C.SYSMATCH_ID AND A.STORE_ID = B.STORE_ID 
+			<if test="MATCH_ID != null and MATCH_ID != ''">
+				AND A.MATCH_ID = #{MATCH_ID}	
+			</if>
+			<if test="INTENET_ID != null and INTENET_ID != ''">
+				AND B.INTERNET_ID = #{INTENET_ID}	
+			</if>
+	</select>
+	
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			MATCH_STORE_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	
+</mapper>

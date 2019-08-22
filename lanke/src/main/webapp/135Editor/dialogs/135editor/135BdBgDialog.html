@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>区域边框设置</title>
+    <script type="text/javascript" src="../internal.js"></script>
+    <!-- jquery -->
+    <script type="text/javascript" src="../../third-party/jquery-3.3.1.min.js"></script>
+<style>
+p{line-height:28px;}
+fieldset{border:0 none;}
+img {vertical-align: baseline;}
+/* fix Firefox - max-width images not working within fieldset */
+fieldset img{width: 100%;max-width: -moz-fit-content;max-width: -webkit-fit-content;}
+
+</style>
+</head>
+<body>
+	<div style="background-color: #f39c12;border-color: #f39c12;color: #ffffff;padding: 15px;"><strong>提示：</strong>设置区域边框时，相应位置会闪动。如果有空格隔开的四个值，则依次表示“上”、“右”、“下”、“左”</div>
+	<div style="width:320px;position: fixed;height:320px;overflow-y: auto;right: 0;margin-right:20px;margin-top:20px;">
+		<p><strong style="font-size:16px;">预览</strong></p>
+		<div id="obj-clone" style="transform: scale(0.9);"></div>
+	</div>
+	
+	<div id="bdbg-dialog-content" style="padding:20px;width:400px;">
+		
+	</div>
+
+<script>
+$.browser = {};
+$.browser.mozilla = /firefox/.test(navigator.userAgent.toLowerCase());
+$.browser.webkit = /webkit/.test(navigator.userAgent.toLowerCase());
+$.browser.opera = /opera/.test(navigator.userAgent.toLowerCase());
+$.browser.msie = /msie/.test(navigator.userAgent.toLowerCase());
+	
+
+(function () {
+	$(dialog.anchorEl).clone().appendTo($('#obj-clone'));
+	//$('#obj-clone').append($(dialog.anchorEl).html());
+	
+	var clone_objs = jQuery('#obj-clone ._135editor:first').removeAttr('style').find('*');
+	var area = 0;
+	
+	$(dialog.anchorEl).find('*').each(function(i){
+		var $this = clone_objs.eq(i);
+		var html = '';
+		var styles = $(this).css('borderStyle');
+		if( $.browser.webkit && (this.style.border || this.style.backgroundColor)) {
+			
+			html += '<div id="style-border-'+i+'"><p><strong>边框:</strong><br/>'
+			+'宽度：<input id="bdbg-width-'+i+'" class="bdbg-width" style="width:320px;padding:4px;" type="text" value="'+$(this).css('borderWidth')+'"><br/>'
+			+ ( (styles.indexOf(' ') > 0) ? '类型：<input id="bdbg-style-'+i+'" class="bdbg-style" style="width:320px;padding:4px;" type="text" value="'+styles+'"><br/>' :
+			'类型：<select id="bdbg-style-'+i+'"  class="bdbg-style"><option value="solid">实线</option><option value="dashed">虚线</option><option value="dotted">点线</option><option value="double">双线</option><option value="groove">3D凹槽</option><option value="ridge">菱形边框</option><option value="inset">3D凹边</option><option value="outset">3D凸边</option></select><br/>'	
+			)
+			+'颜色：<input id="bdbg-color-'+i+'"  class="bdbg-color" type="text" style="width:320px;padding:4px;" value="'+$(this).css('borderColor')+'">'	
+			+'</p></div>';
+		}
+		/*else{
+			if(this.style.border || this.style.backgroundColor ){
+				html += '<div id="style-border-'+i+'"><p><strong>边框:</strong>'
+					+'宽度：<input id="bdbg-width-'+i+'" class="bdbg-width" style="width:30px;padding:4px;" type="text" value="'+$(this).css('borderWidth')+'">'	
+					+'类型：<select id="bdbg-style-'+i+'"  class="bdbg-style"><option value="solid">实线</option><option value="dashed">虚线</option><option value="dotted">点线</option><option value="double">双线</option><option value="groove">3D凹槽</option><option value="ridge">菱形边框</option><option value="inset">3D凹边</option><option value="outset">3D凸边</option></select>'	
+					+'颜色：<input id="bdbg-color-'+i+'"  class="bdbg-color" type="text" style="width:80px;padding:4px;" value="'+$(this).css('border-color')+'">'	
+					+'</p></div>';
+			}
+			if(this.style.borderLeft && this.style.borderLeft != this.style.border){
+				html += '<div id="style-border-left-'+i+'"><strong>左边框:</strong>'
+					+'宽度：<input id="bdbg-width-'+i+'" class="bdbg-width" style="width:30px;padding:4px;" type="text" value="'+$(this).css('borderLeftWidth')+'">'	
+					+'类型：<select id="bdbg-style-'+i+'"  class="bdbg-style"><option value="solid">实线</option><option value="dashed">虚线</option><option value="dotted">点线</option><option value="double">双线</option><option value="groove">3D凹槽</option><option value="ridge">菱形边框</option><option value="inset">3D凹边</option><option value="outset">3D凸边</option></select>'	
+					+'颜色：<input id="bdbg-color-'+i+'"  class="bdbg-color" type="text" style="width:80px;padding:4px;">'	
+					+'</p></div>';
+			}
+			if(this.style.borderRight && this.style.borderRight != this.style.border){
+				html += '<div id="style-border-right-'+i+'"><p><strong>右边框:</strong>'
+					+'宽度：<input id="bdbg-width-'+i+'" class="bdbg-width" style="width:30px;padding:4px;" type="text" value="'+$(this).css('borderRightWidth')+'">'	
+					+'类型：<select id="bdbg-style-'+i+'"  class="bdbg-style"><option value="solid">实线</option><option value="dashed">虚线</option><option value="dotted">点线</option><option value="double">双线</option><option value="groove">3D凹槽</option><option value="ridge">菱形边框</option><option value="inset">3D凹边</option><option value="outset">3D凸边</option></select>'	
+					+'颜色：<input id="bdbg-color-'+i+'"  class="bdbg-color" type="text" style="width:80px;padding:4px;">'	
+					+'</p></div>';
+			}
+			if(this.style.borderTop && this.style.borderTop != this.style.border){
+				html += '<div id="style-border-top-'+i+'"><p><strong>顶边框:</strong>'
+					+'宽度：<input id="bdbg-width-'+i+'" class="bdbg-width" style="width:30px;padding:4px;" type="text" value="'+$(this).css('borderTopWidth')+'">'	
+					+'类型：<select id="bdbg-style-'+i+'"  class="bdbg-style"><option value="solid">实线</option><option value="dashed">虚线</option><option value="dotted">点线</option><option value="double">双线</option><option value="groove">3D凹槽</option><option value="ridge">菱形边框</option><option value="inset">3D凹边</option><option value="outset">3D凸边</option></select>'	
+					+'颜色：<input id="bdbg-color-'+i+'"  class="bdbg-color" type="text" style="width:80px;padding:4px;">'	
+					+'</p></div>';
+			}
+			if(this.style.borderBottom && this.style.borderBottom != this.style.border){
+				html += '<div id="style-border-bottom-'+i+'"><p><strong>底边框:</strong>'
+					+'宽度：<input id="bdbg-width-'+i+'" class="bdbg-width" style="width:30px;padding:4px;" type="text" value="'+$(this).css('borderBottomWidth')+'">'	
+					+'类型：<select id="bdbg-style-'+i+'"  class="bdbg-style"><option value="solid">实线</option><option value="dashed">虚线</option><option value="dotted">点线</option><option value="double">双线</option><option value="groove">3D凹槽</option><option value="ridge">菱形边框</option><option value="inset">3D凹边</option><option value="outset">3D凸边</option></select>'	
+					+'颜色：<input id="bdbg-color-'+i+'"  class="bdbg-color" type="text" style="width:80px;padding:4px;">'	
+					+'</p></div>';
+			}
+		}*/
+		
+		if(html != ''){
+			html += '<hr style="clear:both;margin:5px 0;"/>';
+			area ++ ;
+			var intval;
+			$('#bdbg-dialog-content').append('<div class="border-area" data-index="'+i+'" id="border-'+i+'"><p><strong style="font-size:16px;">区域'+area+'</strong></p>'+html+'</div>');
+			$('#border-'+i).find('#bdbg-width-'+i).val($(this).css('borderWidth'));
+			$('#border-'+i).find('#bdbg-style-'+i).val($(this).css('borderStyle'));
+			$('#border-'+i).find('#bdbg-color-'+i).val($(this).css('borderColor'));
+			
+			$('#border-'+i + ' :input').on('change keyup',function(){
+				setBorder(i);
+			})
+			
+			
+			$('#bdbg-dialog-content #border-'+i).hover(function(){
+				$(this).css('background','#DDD');
+				
+				$this.fadeOut(200).fadeIn(200);
+				intval = setInterval(function(){ $this.fadeOut(200).fadeIn(200); },1000);
+				
+			},function(){
+				$(this).css('background','#FFF');
+				clearInterval(intval);
+			})
+		}
+	});
+	
+	function setBorder(i){
+		clone_objs.eq(i).css('border-width',$('#bdbg-width-'+i).val());
+		clone_objs.eq(i).css('border-style',$('#bdbg-style-'+i).val());
+		clone_objs.eq(i).css('border-color',$('#bdbg-color-'+i).val());
+	}
+	
+	dialog.onok = function () {
+		$('#bdbg-dialog-content').find('.border-area').each(function(){
+			var i = $(this).data('index');
+			$(dialog.anchorEl).find('*').eq(i).css('border-width',$('#bdbg-width-'+i).val());
+			$(dialog.anchorEl).find('*').eq(i).css('border-style',$('#bdbg-style-'+i).val());
+			$(dialog.anchorEl).find('*').eq(i).css('border-color',$('#bdbg-color-'+i).val());
+		});
+	}	
+})();
+	
+	
+</script>    
+
+</body>
+</html>

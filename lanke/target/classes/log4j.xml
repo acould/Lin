@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- Appenders -->
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<param name="Threshold" value="DEBUG" /><!--Target-->
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p] %c{1}\:%L \: - %m%n" />
+		</layout>
+	</appender>
+
+	<!--输出到文件（debug-error）-->
+	<!--将生成“info.log.2014-06-11”这样的日志文件-->
+	<appender name="fileAppenderDebug" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/logs/lk_log/debug.log" />
+		<param name="Encoding" value="UTF-8" />
+		<param name="DatePattern" value=".yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{HH:mm:ss:SSS}] [%-5p] %c{1}\:%L \: - %m%n"/>
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="DEBUG" />
+			<param name="LevelMax" value="ERROR" />
+		</filter>
+	</appender>
+
+
+
+	<!--
+
+	
+	<logger name="org.springframework.core">
+		<level value="debug" />
+	</logger>	
+	
+	<logger name="org.springframework.beans">
+		<level value="debug" />
+	</logger>
+	
+	<logger name="org.springframework.context">
+		<level value="debug" />
+	</logger>
+
+
+
+	<logger name="org.springframework.web">
+		<level value="info" />
+	</logger>
+
+	<logger name="org.mybatis.spring">
+		<level value="debug" />
+	</logger>
+
+	<logger name="java.sql">
+		<level value="debug" />
+	</logger>
+	<root>
+		<priority value="debug" />
+		<appender-ref ref="console" />
+	</root>
+	-->
+
+
+	<!--屏蔽所有org.springframework.*输出的Debug（及以下）信息-->
+	<logger name="org.springframework">
+		<level value="debug"></level>
+	</logger>
+	<logger name="org.springframework.transaction">
+		<level value="info"></level>
+	</logger>
+	<logger name="org.springframework.jdbc">
+		<level value="info"></level>
+	</logger>
+	<logger name="org.mybatis.spring">
+		<level value="info"></level>
+	</logger>
+	<logger name="org.springframework.web">
+		<level value="info"></level>
+	</logger>
+	<logger name="org.springframework.beans">
+		<level value="info"></level>
+	</logger>
+
+	<root>
+		<level value="ALL"/>
+		<appender-ref ref="console" />
+		<appender-ref ref="fileAppenderDebug" />
+		<appender-ref ref="fileAppenderError" />
+	</root>
+	
+</log4j:configuration>

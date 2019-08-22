@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="IntenetMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		SYS_INTENET
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		INTENET_NAME,
+		WECHAT_ID,
+		WECHAT_KET,
+		STATE,
+		PROVINCE,
+		CITY,
+		ADDRESS,
+		PHONE,
+		TAO_BAO,
+		EMAIL,
+		CREATE_USER,
+		CREATE_TIME,
+		UPDATE_USER,
+		UPDATE_TIME,
+		USER_ID,
+		INTENET_ID,
+		HEAD_IMG,
+		QRCODE_URL,
+		auth_time
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{INTENET_NAME},
+		#{WECHAT_ID},
+		#{WECHAT_KET},
+		#{STATE},
+		#{PROVINCE},
+		#{CITY},
+		#{ADDRESS},
+		#{PHONE},
+		#{TAO_BAO},
+		#{EMAIL},
+		#{CREATE_USER},
+		#{CREATE_TIME},
+		#{UPDATE_USER},
+		#{UPDATE_TIME},
+		#{USER_ID},
+		#{INTENET_ID},
+		#{HEAD_IMG},
+		#{QRCODE_URL},
+		#{auth_time}
+	</sql>
+
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除 -->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		INTENET_ID = #{INTENET_ID}
+	</delete>
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="INTENET_NAME != null and INTENET_NAME != ''">
+			INTENET_NAME = #{INTENET_NAME},
+		</if>
+		<if test="WECHAT_KET != null and WECHAT_KET != ''">
+			WECHAT_KET = #{WECHAT_KET},
+		</if>
+		<if test="STATE != null and STATE != ''">
+			STATE = #{STATE},
+		</if>
+		<if test="WECHAT_ID != null and WECHAT_ID != ''">
+			WECHAT_ID = #{WECHAT_ID},
+		</if>
+		<if test="HEAD_IMG != null and HEAD_IMG != ''">
+			HEAD_IMG = #{HEAD_IMG},
+		</if>
+
+		<if test="PROVINCE != null and PROVINCE != ''">
+			PROVINCE = #{PROVINCE},
+		</if>
+		<if test="CITY != null and CITY != ''">
+			CITY = #{CITY},
+		</if>
+		<if test="ADDRESS != null and ADDRESS != ''">
+			ADDRESS = #{ADDRESS},
+		</if>
+		<if test="PHONE != null and PHONE != ''">
+			PHONE = #{PHONE},
+		</if>
+		<if test="TAO_BAO != null and TAO_BAO != ''">
+			TAO_BAO = #{TAO_BAO},
+		</if>
+		<if test="EMAIL != null and EMAIL != ''">
+			EMAIL = #{EMAIL},
+		</if>
+		<if test="UPDATE_TIME != null and UPDATE_TIME != ''">
+			UPDATE_TIME = #{UPDATE_TIME},
+		</if>
+		<if test="UPDATE_USER != null and UPDATE_USER != ''">
+			UPDATE_USER = #{UPDATE_USER},
+		</if>
+		<if test="QRCODE_URL != null and QRCODE_URL != ''">
+			QRCODE_URL = #{QRCODE_URL},
+		</if>
+		INTENET_ID = INTENET_ID
+		where
+		INTENET_ID = #{INTENET_ID}
+	</update>
+
+	<!-- 通过公众号帐号基本信息修改 -->
+	<update id="update" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="HEAD_IMG != null and HEAD_IMG != ''">
+			HEAD_IMG = #{HEAD_IMG},
+		</if>
+		<if test="INTENET_NAME != null and INTENET_NAME != ''">
+			INTENET_NAME = #{INTENET_NAME},
+		</if>
+		<if test="WECHAT_KET != null and WECHAT_KET != ''">
+			WECHAT_KET = #{WECHAT_KET},
+		</if>
+		<if test="STATE != null and STATE != ''">
+			STATE = #{STATE},
+		</if>
+		<if test="WECHAT_ID != null and WECHAT_ID != ''">
+			WECHAT_ID = #{WECHAT_ID},
+		</if>
+		<if test="QRCODE_URL != null and QRCODE_URL != ''">
+			QRCODE_URL = #{QRCODE_URL},
+		</if>
+		<if test="auth_time != null and auth_time != ''">
+			auth_time = #{auth_time},
+		</if>
+		INTENET_ID = #{INTENET_ID}
+		where
+		INTENET_ID = #{INTENET_ID}
+	</update>
+
+	<!-- 通过ID获取数据(通过网吧id获取网吧信息) -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		INTENET_ID = #{INTENET_ID}
+		limit 0,1
+	</select>
+
+	<!-- 通过ID获取数据(通过网吧id获取网吧信息) -->
+	<select id="findById1" parameterType="pd" resultType="pd">
+		SELECT
+		a.`STATE`,
+		a.`WECHAT_ID`
+		FROM
+		sys_intenet a
+		WHERE
+		a.`INTENET_ID` =
+		#{INTENET_ID}
+	</select>
+
+	<!-- 通过ID获取数据(通过网吧id获取网吧信息) -->
+	<select id="findByappid" parameterType="pd" resultType="pd">
+		SELECT
+		<include refid="Field"></include>
+		FROM
+		sys_intenet a
+		WHERE a.`WECHAT_ID` =#{APP_ID}
+	</select>
+
+	<!-- 通过ID获取数据(通过网吧id获取用户手机号) -->
+	<select id="getPhone" parameterType="pd" resultType="pd">
+		select
+		PHONE
+		from
+		<include refid="tableName"></include>
+		where
+		INTENET_ID = #{INTENET_ID}
+	</select>
+
+	<!-- 通过网吧id获取网吧信息 -->
+	<select id="getIntenetById" parameterType="String"
+		resultType="com.lk.entity.system.Intenet">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		INTENET_ID = #{INTENET_ID}
+	</select>
+
+	<!-- 通过USERNAME获取揽客绑定手机号 -->
+	<select id="findByUserName" parameterType="pd" resultType="pd">
+		SELECT
+		a.`PHONE` AS PHONE
+		FROM
+		sys_user a
+		WHERE a.`USERNAME` = #{USERNAME}
+	</select>
+
+
+	<!-- 通过ID获取数据 -->
+	<select id="getIntenetByWeiXinId" parameterType="String"
+		resultType="com.lk.entity.system.Intenet">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		WECHAT_ID = #{WECHAT_ID}
+	</select>
+
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+			INTENET_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		</if>
+		<if test="pd.userId!= null and pd.userId != ''"><!-- 关键词检索 -->
+			and USER_ID = #{pd.userId}
+
+		</if>
+	</select>
+
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+	</select>
+
+	<!-- 默认显示网吧信息列表admin(全部) -->
+	<select id="IntenetlistPage" parameterType="page"
+		resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where state !='0'
+	</select>
+
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		INTENET_ID in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- fh313596790qq(青苔) -->
+	<!-- 揽客用户列表 -->
+	<select id="userlistPage" parameterType="page" resultType="pd">
+		SELECT
+		USERNAME,
+		b.PHONE AS PHONE,
+		b.EMAIL AS EMAIL,
+		INTENET_NAME,
+		UPDATE_TIME,
+		STATE,
+		a.INTENET_ID AS INTENET_ID,
+		a.CREATE_TIME,
+		a.USER_ID AS USER_ID,
+		a.auth_time
+		FROM
+		sys_intenet a,
+		sys_user b
+		WHERE a.USER_ID = b.USER_ID
+		AND a.USER_ID != '1'
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+			(
+			USERNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or
+			b.PHONE
+			LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or
+			b.EMAIL LIKE
+			CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or
+			INTENET_NAME LIKE
+			CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or
+			UPDATE_TIME LIKE
+			CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			)
+		</if>
+		<if test="pd.STATE != null and pd.STATE != ''"><!-- 用户状态 -->
+			and STATE=#{pd.STATE}
+		</if>
+		<if test="pd.ASTATE != null and pd.ASTATE != ''"><!-- 有无门店 -->
+			AND a.INTENET_ID ${pd.ASTATE}
+			(SELECT a.`INTERNET_ID` AS INTERNET_ID
+			FROM internet_store a,sys_intenet b
+			WHERE
+			a.`INTERNET_ID`=b.`INTENET_ID` GROUP BY a.`INTERNET_ID`)
+		</if>
+		order by CREATE_TIME DESC
+	</select>
+
+	<!-- 通过网吧id查询授权时间 -->
+	<select id="getTime" parameterType="page" resultType="pd">
+		SELECT
+		a.INTENET_ID AS INTENET_ID,
+		c.`INSERT_TIME` AS INSERT_TIME
+		FROM
+		sys_intenet a,
+		sys_user b,
+		tb_terrace c
+		WHERE a.USER_ID = b.USER_ID AND
+		b.`INTENET_ID`=c.`INTENET_ID`
+		order by CREATE_TIME DESC
+	</select>
+
+	<!-- 揽客用户门店列表 -->
+	<select id="listStores" parameterType="page" resultType="pd">
+		select
+		b.STORE_NAME,
+		b.TELEPHONE,
+		b.STATE
+		from
+		<include refid="tableName"></include>
+		a,
+		INTERNET_STORE b
+		where a.INTENET_ID=b.INTERNET_ID and INTENET_ID =
+		#{pd.INTENET_ID}
+		order by a.CREATE_TIME desc
+	</select>
+
+	<!-- 停用用户 -->
+	<update id="disableUsers" parameterType="page">
+		update
+		<include refid="tableName"></include>
+		set
+		STATE='3'
+		where
+		INTENET_ID = #{pd.INTENET_ID}
+	</update>
+
+	<!-- 启用用户 -->
+	<update id="enableUser" parameterType="page">
+		update
+		<include refid="tableName"></include>
+		set
+		STATE='2'
+		where
+		INTENET_ID = #{pd.INTENET_ID}
+	</update>
+
+	<!-- 取消授权(正式变流失) -->
+	<update id="updateState" parameterType="pd">
+		UPDATE
+		sys_intenet a, tb_terrace b
+		SET
+			a.`STATE` = '4'
+		WHERE a.`INTENET_ID` = b.`INTENET_ID`
+		AND b.`APP_ID` = #{APPID}
+	</update>
+
+
+	<select id="findByState" parameterType="pd" resultType="pd">
+		select * from sys_intenet where 1=1
+		<if test="state != null and state != ''"><!-- 状态 -->
+			and state = #{state}
+		</if>
+
+	</select>
+
+
+    <select id="findByUserIdAndInternetId" parameterType="pd" resultType="pd">
+        select
+          *
+        from sys_intenet
+        where user_id = #{user_id} and intenet_id = #{internet_id}
+    </select>
+</mapper>

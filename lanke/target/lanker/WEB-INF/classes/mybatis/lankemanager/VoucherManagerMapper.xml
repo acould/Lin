@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VoucherManagerMapper">
+
+
+    <!--展示模板列表-->
+    <select id="datalistPage" parameterType="page" resultType="pd">
+                select f.*,g.name from (select d.*,e.user_id from
+                (select (select INTENET_NAME from sys_intenet b
+                 where a.internet_id=b.INTENET_ID) as INTENET_NAME,
+                (select SUB_TITLE from card c where a.card_id=c.card_id)  as SUB_TITLE,
+                need_time,state,id,full_term,sequence,open_id,type,order_id,internet_id,card_id  from card_open a) d
+                left join wechat_user e on d.open_id = e.open_id) f
+                left join bund_user g on f.user_id = g.user_id
+                where  1=1
+                and f.state in (0,2)
+                and  f.type = 'RUSH'
+                <![CDATA[and need_time < #{pd.datetime}]]>
+                <if test="pd.keywords != null and pd.keywords != ''">
+                    and (
+                    f.SUB_TITLE LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+                    or f.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+                    or g.name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+                    )
+                </if>
+                and INTENET_NAME is not null
+                and order_id is not null
+                 ORDER BY internet_id ,order_id
+    </select>
+
+</mapper>

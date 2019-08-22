@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>插入音乐</title>
+    <script type="text/javascript" src="../internal.js?v=1531"></script>
+        <!-- jquery -->
+    <script type="text/javascript" src="../../third-party/jquery-3.3.1.min.js"></script>
+<!-- webuploader -->
+<script src="../../third-party/webuploader/webuploader.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../third-party/webuploader/webuploader.css">
+
+<link rel="stylesheet" type="text/css" href="./music.css">
+<link rel="stylesheet" type="text/css" href="./upload.css">
+</head>
+<body>
+<div class="wrapper">
+    <div id="tabHeads" class="tabhead">
+        <span class="focus" data-content-id="qqmusic">QQ音乐</span>
+        <span class="" data-content-id="audio">Audio音乐（微信不支持）</span>
+    </div>
+    <div id="tabBodys" class="tabbody">
+        <div id="qqmusic" class="panel focus">
+            <div>
+                <div class="searchBar">
+                    <input id="searchName" type="text" class="searchTxt" placeholder="输入歌手/歌曲/专辑，搜索您感兴趣的音乐">
+                    <input type="button" value="搜索" class="searchBtn" id="searchBtn">
+                </div>
+                <div class="resultBar" id="resultBar">
+                    <div class="loading" style="display:none"></div>
+                    <div class="empty"></div>
+                </div>
+                <div id="preview"></div>
+            </div>
+        </div>
+        
+        <div id="audio" class="panel">
+
+            <div style="font-size:18px;color:red;"> Audio形式音乐<strong>微信不支持</strong>，可用于其它网站</div>
+            <div class="">
+                	音乐地址：<input placeholder="输入音频地址或点击上传mp3,wav文件" id="ImageUrl" style="width:360px;" type="text"/> <br/>
+            </div>
+            <div class="">
+                	是否自动播放：<input type="checkbox" id="autoPlay"/> <br/>
+            </div>
+            <div class="">
+                	是否显示：<input type="checkbox" checked="checked" id="controls"/> <br/>
+            </div>
+            <div class="">
+                	循环播放：<input type="checkbox" checked="checked" id="loop"/> <br/>
+            </div>
+            <div id="upload">
+                <div id="queueList" class="queueList">
+                    
+                    <div id="dndArea" class="placeholder">
+                        <div class="filePickerContainer">
+                            <div id="filePickerReady" style="display: inline-block;">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="filelist">
+                        
+                    </ul>
+                </div>
+            </div>
+            <p><br/></p>
+            <!--<div style="color:red">
+            	<p>提示：</p>
+            		<p style="text-indent:2em">1. 插入音乐后，如果通过复制粘贴到微信，音乐会被过滤掉。</p>
+            		<p style="text-indent:2em">2. 公众号授权后，从135直接将图文保存到微信，音乐才会保存到微信图文中。</p>
+            		<p style="text-indent:2em">3. 保存到微信后，直接点开网址预览。不能通过编辑预览，否则音乐也会被过滤掉。</p>
+            </div>-->
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="./music.js"></script>
+<script>
+var mimeTypes = 'audio/mp3,audio/mpeg,audio/wav,audio/ogg,audio/amr',
+actionUrl = editor.getActionUrl('uploadmusic'),
+acceptExtensions = 'mp3,wav,ogg,amr',
+imageMaxSize = 4096000; //4M
+if(actionUrl.indexOf('http') != 0) {
+    actionUrl = '../../'+actionUrl;
+}
+
+editor.options.imageFieldName = 'music';
+editor.options.uploadFormData = {'file_post_name':'music','file_model_name':'WxMsg'}
+editor.options.uploadCallback = function(json){
+    console.log(json);
+    $('#ImageUrl').val(json.url);
+}
+
+lang = {
+        'static':{           
+            'lang_imgLoading':"　图片加载中……",
+            'lang_start_upload':"开始上传",
+            'lock':{'title':"锁定宽高比例"}, //属性
+            'searchType':{'title':"图片类型", 'options':["新闻", "壁纸", "表情", "头像"]}, //select的option
+            'searchTxt':{'value':"请输入搜索关键词"},
+            'searchBtn':{'value':"搜索"},
+            'searchReset':{'value':"清空搜索"},
+            'noneAlign':{'title':'无浮动'},
+            'leftAlign':{'title':'左浮动'},
+            'rightAlign':{'title':'右浮动'},
+            'centerAlign':{'title':'居中独占一行'}
+        },
+        'uploadSelectFile':'上传音乐文件',
+        'uploadAddFile':'继续添加',
+        'uploadStart':'开始上传',
+        'uploadPause':'暂停上传',
+        'uploadContinue':'继续上传',
+        'uploadRetry':'重试上传',
+        'uploadDelete':'删除',
+        'uploadTurnLeft':'向左旋转',
+        'uploadTurnRight':'向右旋转',
+        'uploadPreview':'预览中',
+        'uploadNoPreview':'不能预览',
+        'updateStatusReady': '选中_张图片，共_KB。',
+        'updateStatusConfirm': '已成功上传_张照片，_张照片上传失败',
+        'updateStatusFinish': '共_张（_KB），_张上传成功',
+        'updateStatusError': '，_张上传失败。',
+        'errorNotSupport': 'WebUploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器。',
+        'errorLoadConfig': '后端配置项没有正常加载，上传插件不能正常使用！',
+        'errorExceedSize':'文件大小超出',
+        'errorFileType':'文件格式不允许',
+        'errorInterrupt':'文件传输中断',
+        'errorUploadRetry':'上传失败，请重试',
+        'errorHttp':'http请求错误',
+        'errorServerUpload':'服务器返回出错',
+        'remoteLockError':"宽高不正确,不能所定比例",
+        'numError':"请输入正确的长度或者宽度值！例如：123，400",
+        'imageUrlError':"不允许的图片格式或者图片域！",
+        'imageLoadError':"图片加载失败！请检查链接地址或网络状态！",
+        'searchRemind':"请输入搜索关键词",
+        'searchLoading':"图片加载中，请稍后……",
+        'searchRetry':" :( ，抱歉，没有找到图片！请重试一次！"
+    };
+</script>
+<script src="./upload.js"></script>
+<script type="text/javascript">
+
+    var music = new Music;
+
+    var qqmusic = new QQMusic;
+    
+    dialog.onok = function () {
+        var e =  qqmusic.exec();
+        if(e['error']==0){
+            var str  = '<iframe class="res_iframe qqmusic_iframe js_editor_qqmusic" style="height:64px;" scrolling="no" frameborder="0" musicid="'+e['musicid']+'" mid="'+e['mid']+'" albumurl="'+e['albumurl']+'" audiourl="'+e['audiourl']+'" music_name="'+e['music_name']+'" commentid="443066293" singer="'+e['singer']+'" play_length=""  src="https://mp.weixin.qq.com/cgi-bin/readtemplate?t=tmpl/qqmusic_tmpl&singer='+e['singer']+'&music_name='+e['music_name']+'"></iframe>';
+            
+            
+            editor.focus();
+        
+            editor.execCommand('inserthtml','<section class="_135editor">' + str + '</section>');            
+        }
+        else{
+            music.exec();
+        }
+    };
+    dialog.oncancel = function () {
+    };
+
+    
+</script>
+</body>
+</html>

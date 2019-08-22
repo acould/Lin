@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ProductNewsMapper">
+	<!--表名 -->
+	<sql id="tableName">
+		tb_productnews
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		title,
+		content,
+		onlinetime
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{title},
+		#{content},
+		#{onlinetime}
+	</sql>
+
+	<!-- 查询版本预告信息 -->
+	<select id="list" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+	</select>
+	
+	<!--新增版本预告信息 -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 编辑版本预告信息 -->
+	<update id="edit" parameterType="pd">
+		UPDATE
+		<include refid="tableName"></include>
+		SET
+		title = #{title},
+		content = #{content},
+		onlinetime = #{onlinetime}
+	</update>
+
+	<!-- 删除版本预告 -->
+	<delete id="deleteNews" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+	</delete>
+</mapper>

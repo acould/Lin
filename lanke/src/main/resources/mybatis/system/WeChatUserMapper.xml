@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WeChatUserMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		WECHAT_USER
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		USER_ID,	
+		OPEN_ID,	
+		INTENET_ID,	
+		NECK_NAME,	
+		SEX,	
+		PROVICNE,	
+		CITY,	
+		CREATE_TIME,	
+		STATE,	
+		IMGURL,
+		WECHAT_ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{USER_ID},	
+		#{OPEN_ID},	
+		#{INTENET_ID},	
+		#{NECK_NAME},	
+		#{SEX},	
+		#{PROVICNE},	
+		#{CITY},	
+		#{CREATE_TIME},	
+		#{STATE},
+		#{IMGURL},	
+		#{WECHAT_ID}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			WECHAT_ID = #{WECHAT_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			<if test="STATE != null and STATE != ''">
+				STATE = #{STATE},	
+			</if>
+			<if test="CREATE_TIME != null and CREATE_TIME != ''">
+				CREATE_TIME = #{CREATE_TIME},	
+			</if>
+			WECHAT_ID = WECHAT_ID
+		where 
+			WECHAT_ID = #{WECHAT_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			WECHAT_ID = #{WECHAT_ID}
+	</select>
+	<!-- 通过OPEN_ID获取数据 -->
+	<select id="findByOpenId" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			OPEN_ID = #{OPEN_ID}
+	</select>
+	<select id="findWechatUserByOpenId" parameterType="String" resultType="com.lk.wechat.response.WechatUser">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		OPEN_ID = #{OPEN_ID}
+	</select>
+
+	<!-- 获取用户所在省份 -->
+	<select id="findAreaByProvince" parameterType="String" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where PROVICNE != '' and INTENET_ID = #{INTERNET_ID}
+		group by PROVICNE
+	</select>
+	<!-- 获取用户所在城市 -->
+	<select id="findAreaByCity" parameterType="String" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where CITY != '' and INTENET_ID = #{INTERNET_ID}
+		group by CITY
+	</select>
+	<!-- 通过群发设置找人-->
+	<select id="findBySend" parameterType="pd" resultType="pd">
+		select 
+			OPEN_ID
+		from 
+			<include refid="tableName"></include>
+		where INTENET_ID = #{INTERNET_ID}
+			<if test="GROUP_ID == 1"><!-- 会员 -->
+				and USER_ID in(select USER_ID from bund_user)
+			</if>
+			<if test="GROUP_ID == 2"><!-- 非会员 -->
+				and USER_ID not in(select USER_ID from bund_user)
+			</if>
+			<if test="GROUP_SEX == 1"><!-- 0表示全部 -->
+				and SEX = #{GROUP_SEX}
+			</if>
+			<if test="GROUP_SEX == 2"><!-- 0表示全部 -->
+				and SEX = #{GROUP_SEX}
+			</if>
+			<if test="GROUP_PROVINCE != null and GROUP_PROVINCE != ''">
+				<if test="GROUP_PROVINCE != 'all'">
+					and PROVICNE = #{GROUP_PROVINCE}
+				</if>
+			</if>
+	</select>
+	
+	<!-- 通过USER_ID获取数据 (通过用户id获取微信用户的open_id)-->
+	<select id="findByUserId" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			USER_ID = #{USER_ID}
+	</select>
+    <select id="findWechatUserByUserId" parameterType="String" resultType="com.lk.wechat.response.WechatUser">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        USER_ID = #{USER_ID}
+    </select>
+	
+	<!-- 通过新用户openid查找推荐用户获取数据 -->
+	<select id="findByOldwithId" parameterType="pd" resultType="pd">
+		select 
+		C.USER_ID,	
+		C.OPEN_ID,	
+		C.INTENET_ID,	
+		C.WECHAT_ID
+		from 
+		WECHAT_USER A,TB_OLDWITH B,WECHAT_USER C
+		where 
+		     A.USER_ID=B.USER_ID AND B.OLD_ID=C.USER_ID AND
+			A.OPEN_ID = #{OPEN_ID}
+	</select>
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			a.*,
+			b.CARDED,
+			b.STORE_ID,
+			b.OVERAGE,
+			c.STORE_NAME,
+			d.consume_high,
+			d.consume_low,
+			d.balance_high,
+			d.balance_low,
+			d.live_high,
+			d.live_low
+		from wechat_user a left join bund_user b on a.user_id = b.user_id
+		left join internet_store c on b.store_id = c.store_id
+		left join store_user_tips d on c.store_id = d.store_id
+		where 1=1
+		<!-- 1表示关注的，0表示取消关注的 -->
+		and a.state = '1' and a.intenet_id = #{pd.internet_id}
+		<!-- 管理员/分店 -->
+		<if test="pd.storeId != null and pd.storeId != ''">
+			and b.STORE_ID = #{pd.storeId}
+		</if>
+		<!-- 关键词检索 -->
+			<if test="pd.keywords!= null and pd.keywords != ''">
+				and(
+				  a.NECK_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				  or a.NECK_NAME LIKE CONCAT(CONCAT('%', #{pd.encrypt}),'%')
+				  or b.CARDED LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+			</if>
+		<!-- 筛选条件 -->
+			<if test="pd.PROVINCE != null and pd.PROVINCE != ''">
+				and  a.PROVICNE = #{pd.PROVINCE}
+			</if>
+			<if test="pd.CITY != null and pd.CITY != ''">
+				and  a.CITY = #{pd.CITY}
+			</if>
+			<if test="pd.SEX != null and pd.SEX != ''">
+				and  a.SEX = #{pd.SEX}
+			</if>
+			<if test="pd.huiyuan  == 'shi'">
+				and  b.CARDED is not null
+			</if>
+			<if test="pd.huiyuan  == 'bushi'">
+				and  b.CARDED is null
+			</if>
+			<if test="pd.STORE_ID != null and pd.STORE_ID != ''">
+				and b.STORE_ID = #{pd.STORE_ID}
+			</if>
+		ORDER BY  b.CREATE_TIME DESC
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	<select id="listByCity" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 1=1
+			<if test="CITY != null and CITY != ''">
+				and CITY = #{CITY}
+			</if>
+	</select>
+	
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			WECHAT_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+		<!-- 获取总数 -->
+	<select id="getAppUserCount" parameterType="pd" resultType="pd">
+		select 
+			INTENET_ID, count(*) appUserCount
+		from 
+		<include refid="tableName"></include>
+		WHERE 
+		<if test="INTENET_ID!=null and INTENET_ID!=''">
+		INTENET_ID=#{INTENET_ID} 
+		</if>
+		group by INTENET_ID order by count(*) desc;
+	</select>
+
+	<select id="findByCondition" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from
+			<include refid="tableName"></include>
+		WHERE 1=1
+			<if test="internet_id !=null and internet_id !=''">
+				and INTENET_ID = #{internet_id}
+			</if>
+			<if test="state !=null and state !=''">
+				and state = #{state}
+			</if>
+		order by CREATE_TIME desc
+	</select>
+
+
+    <select id="findByStoreIds" parameterType="pd" resultType="pd">
+        select
+            a.*,
+            b.OPEN_ID,
+            b.IMGURL
+        from bund_user a left join wechat_user b on a.user_id = b.user_id
+        where b.intenet_id = #{internet_id}
+        <!-- 已关注的 -->
+        and b.state = 1
+        <if test="store_ids != null and store_ids != ''">
+            and a.store_id in
+            <foreach item="item" index="index" collection="store_ids" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+
+
+</mapper>

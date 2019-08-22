@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RecordMaterialMapper">
+
+	
+	<!--表名 -->
+	<sql id="tableName">
+		INTERNET_RECORDMATERIAL
+	</sql>
+	<!-- 字段 -->
+	<sql id="Field">
+		RECORDMATERIAL_ID,
+		SENDRECORD_ID,
+		INTERNETMATERIAL_ID,
+		PICTURE_ID,
+		SEQUENCE
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{RECORDMATERIAL_ID},
+		#{SENDRECORD_ID},
+		#{INTERNETMATERIAL_ID},
+		#{PICTURE_ID},
+		#{SEQUENCE}
+	</sql>
+	
+	<!-- 增 -->
+	<insert id="save" parameterType="pd" >
+		insert into 
+			<include refid="tableName"></include> 
+		(
+			<include refid="Field"></include>
+		)
+		values 
+		(
+			<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="pd" flushCache="false">
+		delete from 
+			<include refid="tableName"></include>
+		where 
+			RECORDMATERIAL_ID = #{RECORDMATERIAL_ID}
+	</delete>
+	
+	<!-- 改 -->
+	<update id="edit" parameterType="pd" >
+		update  
+			<include refid="tableName"></include>
+		set 
+			<if test="INTERNETMATERIAL_ID != null and INTERNETMATERIAL_ID != ''">
+				INTERNETMATERIAL_ID = #{INTERNETMATERIAL_ID},
+			</if>
+			<if test="SEQUENCE != null and SEQUENCE != ''">
+				SEQUENCE = #{SEQUENCE},
+			</if>
+			<if test="PICTURE_ID != null and PICTURE_ID != ''">
+				PICTURE_ID = #{PICTURE_ID},
+			</if>
+		RECORDMATERIAL_ID = #{RECORDMATERIAL_ID}
+		where 
+			RECORDMATERIAL_ID = #{RECORDMATERIAL_ID}
+	</update>
+	
+	<!-- 通过主键id获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd" >
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include> a
+		where 
+			RECORDMATERIAL_ID = #{RECORDMATERIAL_ID}
+	</select>
+	<!-- 查找当前图文后面的图文 -->
+	<select id="findRecordBySendRecordId" parameterType="pd" resultType="pd" >
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			SENDRECORD_ID = #{SENDRECORD_ID} and SEQUENCE > #{SEQUENCE}
+		ORDER BY SEQUENCE ASC
+	</select>
+	<!-- 根据SENDRECORD_ID和序号查找 -->
+	<select id="findByMediaIdAndSequence" parameterType="pd" resultType="pd" >
+		select 
+			c.*
+		from 
+			<include refid="tableName"></include> a, internet_sendrecord b, internet_material c
+		where a.sendrecord_id = b.sendrecord_id and a.internetmaterial_id = c.internetmaterial_id
+			and b.sendrecord_id = #{SENDRECORD_ID} and a.sequence = #{SEQUENCE}
+	</select>
+	<!-- 通过sendRecord_id获取数据 -->
+	<select id="findBySendRecordId" parameterType="pd" resultType="pd" >
+		select 
+			a.RECORDMATERIAL_ID,
+			a.INTERNETMATERIAL_ID,
+			a.PICTURE_ID,
+			a.SEQUENCE,
+			b.TITLE,
+			b.CREATE_USER,
+			b.DIGEST,
+			b.CONTENT_SOURCE_URL,
+			b.CONTENT,
+			b.THUMB_MEDIA_ID,
+			b.MEDIA_ID,
+			c.PATH
+		from 
+			INTERNET_RECORDMATERIAL a left join internet_material b on a.INTERNETMATERIAL_ID = b.INTERNETMATERIAL_ID
+				left join internet_pictures c on a.PICTURE_ID = c.PICTURE_ID
+		where
+			a.SENDRECORD_ID = #{SENDRECORD_ID}
+		order by a.SEQUENCE ASC
+	</select>
+	<!-- 通过sequence获取数据 -->
+	<select id="findByIndex" parameterType="pd" resultType="pd" >
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			SENDRECORD_ID = #{SENDRECORD_ID} and SEQUENCE = #{SEQUENCE}
+	</select>
+	
+	<!-- 查询列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd" >
+		select 
+			a.*
+		from 
+			<include refid="tableName"></include> a, internet_recordmaterial b, internet_material c
+		where 
+			a.sendrecord_id = b.sendrecord_id and b.internetmaterial_id = c.internetmaterial_id
+			<if test="pd.INTERNET_ID != null and pd.INTERNET_ID != ''">
+				and a.INTERNET_ID = #{pd.INTERNET_ID}
+			</if>
+			<if test="pd.WECHAT_ID != null and pd.WECHAT_ID != ''">
+				and a.WECHAT_ID = #{pd.WECHAT_ID}
+			</if>
+			
+			<if test="pd.STATE != null and pd.STATE != ''">
+				and a.STATE = #{pd.STATE}
+			</if>
+			
+		GROUP BY a.SENDRECORD_ID
+		ORDER BY a.CREATE_TIME DESC
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String" >
+		delete from 
+			<include refid="tableName"></include>
+		where 
+			USER_ID in
+  			 <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                  #{item}
+             </foreach>
+	</delete>
+
+	<delete id="delBySendRecordId" >
+		delete from
+		<include refid="tableName"></include>
+		where
+		sendrecord_id = #{sendrecord_id}
+	</delete>
+</mapper>

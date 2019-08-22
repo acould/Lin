@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>完整demo</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+
+<!-- 引入相关js文件 -->
+<script type="text/javascript" charset="utf-8" src="./ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="./third-party/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="./ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="./a92d301d77.js"> </script>
+<!-- 引入相关css文件 -->
+<link rel="stylesheet" type="text/css" href="./themes/96619a5672.css" />
+</head>
+<body>
+<div>
+<h1>demo</h1>
+<!-- 指定编辑器区域的宽度，像素或者100% -->
+<script id="editor" type="text/plain" style="width:1024px;"></script>
+</div>
+<script>
+var appkey = '566d34e0-4bac-443b-8a80-37f89fde689a';
+/**
+ *
+ * 1. 必需初始化至 window.current_editor,一个页面仅支持加载一个带样式的编辑器
+ * 2. 直接调用JS，不要使用vue等import的方式
+ * 3. 在ueditor.config.js文件中，serverUrl为上传文件接口地址，
+ *    根据服务器语言选择对应的接口程序。
+ * 4. 在ueditor.config.js文件中，toolbars为编辑器的工具栏按钮项，
+ *    可根据需要自行删减
+ */
+window.BASEURL = 'https://www.135editor.com';
+window.current_editor = UE.getEditor('editor',{
+    initialFrameHeight:420,
+    plat_host:'www.135editor.com',
+    appkey:appkey,
+    style_url : BASEURL+'/editor_styles/open?inajax=1&v=page&appkey=' + appkey,
+    page_url : BASEURL+'/editor_styles/open_styles?inajax=1&appkey='+appkey,    
+    style_width:340,    
+    zIndex : 1000,
+    pageLoad:true,
+    open_editor:true,
+    focus:true,
+    focusInEnd:true
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ManagerRequestMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		manager_request
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		request_id,
+		pubwin_store_id,
+		store_id,
+		msg_from,
+		msg_type,
+		msg_id,
+		ip,
+		json_data,
+		create_time,
+		remark
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{request_id},	
+		#{pubwin_store_id},	
+		#{store_id},	
+		#{msg_from},	
+		#{msg_type},
+		#{msg_id},
+		#{ip},
+		#{json_data},
+		#{create_time},
+		#{remark}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+			<include refid="tableName"></include>(<include refid="Field"></include>) 
+		values 
+			(<include refid="FieldValue"></include>)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			request_id = #{request_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+			<include refid="tableName"></include>
+		set 
+			
+			request_id = #{request_id}
+		where 
+			request_id = #{request_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			request_id = #{request_id}
+	</select>
+	<select id="findByMsgId" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			msg_id = #{msg_id}
+	</select>
+	
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 1=1
+			
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			request_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	
+</mapper>

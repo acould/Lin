@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="InternetMatchStoreMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		internet_match_store
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		foreign_id,
+		store_id,
+		type
+
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{foreign_id},
+		#{store_id},
+		#{type}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+			<include refid="tableName"></include>(<include refid="Field"></include>) 
+		values 
+			(<include refid="FieldValue"></include>)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="String">
+		delete from
+			<include refid="tableName"></include>
+		where
+		id = #{id}
+	</delete>
+	<!-- 删除-->
+	<delete id="deleteMatchStoreByStoreId" parameterType="pd">
+		delete from
+			<include refid="tableName"></include>
+		where
+        type = #{type} and store_id = #{store_id}
+	</delete>
+
+	<delete id="deleteMatchStoreByForeignId" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where foreign_id = #{foreign_id}
+	</delete>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="String" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where
+        id = #{id}
+	</select>
+
+	<select id="getOpenList" parameterType="String" resultType="pd">
+		select
+			a.store_id,
+			b.store_name,
+			c.*
+		from internet_match_store a left join internet_store b on a.store_id = b.store_id
+			left join internet_store_jialian c on a.foreign_id = c.id
+		where c.shop_secret != '' and c.shop_secret is not null
+		and c.status = 1
+		and b.internet_id = #{internet_id}
+	</select>
+
+
+
+    <select id="listByMatchesId" parameterType="String" resultType="pd">
+		select
+            b.*,
+            c.state as STATE_V,
+            d.path,
+            d.url
+        from internet_match_store a left join internet_store b on a.store_id = b.store_id
+        left join internet_store_v c on a.store_id = c.store_id
+        left join internet_new_pictures d on a.id = d.foreign_id
+        where a.foreign_id = #{matches_id} and a.type = 2 and b.store_name is not null and b.store_name != ''
+	</select>
+
+
+</mapper>

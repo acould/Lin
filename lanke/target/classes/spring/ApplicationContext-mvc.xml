@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd	
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <mvc:annotation-driven/>
+    <mvc:default-servlet-handler/>
+
+    <context:component-scan base-package="com.lk.controller"/>
+    <context:property-placeholder location="classpath:publicpayParams.properties"/>
+    <!-- 对静态资源文件的访问  restful-->
+    <mvc:resources mapping="/admin/**" location="/,/admin/"/>
+    <mvc:resources mapping="/static/**" location="/,/static/"/>
+    <mvc:resources mapping="/assets/**" location="/,/assets/"/>
+    <mvc:resources mapping="/plugins/**" location="/,/plugins/"/>
+    <mvc:resources mapping="/uploadFiles/**" location="/,/uploadFiles/"/>
+    <mvc:resources mapping="/ueditor/**" location="/,/ueditor/"/>
+    <mvc:resources mapping="/ueditorNew/**" location="/,/ueditorNew/"/>
+    <mvc:resources mapping="/135Editor/**" location="/,/135Editor/"/>
+    <mvc:resources mapping="/newStyle/**" location="/,/newStyle/"/>
+
+    <!-- 访问拦截  -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**/**"/>
+            <bean class="com.lk.interceptor.LoginHandlerInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!-- 配置SpringMVC的视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <bean id="exceptionResolver" class="com.lk.resolver.MyExceptionResolver"></bean>
+    <!-- 上传拦截，如最大上传值及最小上传值 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize">
+            <value>104857600</value>
+        </property>
+        <property name="maxInMemorySize">
+            <value>4096</value>
+        </property>
+        <property name="defaultEncoding">
+            <value>utf-8</value>
+        </property>
+    </bean>
+
+    <!--<bean id="ky.requestFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory">
+        <property name="readTimeout" value="10000"/>
+        <property name="connectTimeout" value="5000"/>
+    </bean>
+
+    <bean id="simpleRestTemplate" class="org.springframework.web.client.RestTemplate">
+        <constructor-arg ref="ky.requestFactory"/>
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.FormHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>text/plain;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>-->
+
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+        <constructor-arg index="0">
+            <list>
+                <bean id="byteArrayHttpMessageConverter"
+                      class="org.springframework.http.converter.ByteArrayHttpMessageConverter"></bean>
+                <bean id="stringHttpMessageConverter"
+                      class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <constructor-arg value="UTF-8"></constructor-arg>
+                </bean>
+                <bean id="resourceHttpMessageConverter"
+                      class="org.springframework.http.converter.ResourceHttpMessageConverter"></bean>
+                <bean id="sourceHttpMessageConverter"
+                      class="org.springframework.http.converter.xml.SourceHttpMessageConverter"></bean>
+                <bean id="allEncompassingFormHttpMessageConverter"
+                      class="org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter"></bean>
+                <bean id="jaxb2RootElementHttpMessageConverter"
+                      class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"></bean>
+            </list>
+        </constructor-arg>
+    </bean>
+    
+</beans>

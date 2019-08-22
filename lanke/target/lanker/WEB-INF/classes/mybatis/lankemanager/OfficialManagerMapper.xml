@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OfficialManagerMapper">
+
+    <select id="datalistPage" parameterType="page" resultType="pd">
+        select a.* , b.USERNAME ,b.NAME from sys_intenet a left join sys_user b on a.user_id=b.user_id
+        where 1=1
+        <if test="pd.state!= null and pd.state!= ''">
+            and a.STATE = #{pd.state}
+        </if>
+        <!-- 关键词搜索 -->
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            a.INTENET_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            or a.PHONE LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            )
+        </if>
+        ORDER BY a.CREATE_TIME desc
+
+    </select>
+
+    <!-- 修改 -->
+    <update id="edit" parameterType="pd">
+        UPDATE sys_intenet a
+        LEFT JOIN sys_user b ON a.user_id = b.user_id
+        SET
+        <if test="NICK_NAME != null and NICK_NAME != ''">
+            INTENET_NAME = #{NICK_NAME},
+        </if>
+        <if test="HEAD_IMG != null and HEAD_IMG != ''">
+            HEAD_IMG = #{HEAD_IMG},
+        </if>
+        <if test="QRCODE_URL != null and QRCODE_URL != ''">
+            QRCODE_URL = #{QRCODE_URL}
+        </if>
+        WHERE
+        a.WECHAT_ID = #{WECHAT_ID}
+    </update>
+
+    <!-- 修改 -->
+    <update id="edit2" parameterType="pd">
+        UPDATE tb_terrace a
+        SET
+        <if test="authorizer_refresh_token != null and authorizer_refresh_token != ''">
+            AUTHORIZER_REFRESH_TOKEN = #{authorizer_refresh_token}
+        </if>
+        WHERE
+        a.APP_ID = #{WECHAT_ID}
+    </update>
+
+
+    <!-- 修改 -->
+    <update id="updateToken" parameterType="java.util.Map">
+        update
+           tb_terrace
+        set
+            AUTHORIZER_ACCESS_TOKEN = #{authToken}
+        where
+            INTENET_ID = #{intenet_id}
+    </update>
+
+</mapper>

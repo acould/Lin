@@ -1,0 +1,3536 @@
+body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+html {
+    height: 100%;
+}
+
+p {
+    font-family: inherit;
+    font-size: inherit;
+}
+@font-face {
+  font-family: 'iconfont';  /* project id 622913 */
+  src: url('https://at.alicdn.com/t/font_622913_rk0r1lzoid.eot');
+  src: url('https://at.alicdn.com/t/font_622913_rk0r1lzoid.eot?#iefix') format('embedded-opentype'),
+  url('https://at.alicdn.com/t/font_622913_rk0r1lzoid.woff') format('woff'),
+  url('https://at.alicdn.com/t/font_622913_rk0r1lzoid.ttf') format('truetype'),
+  url('https://at.alicdn.com/t/font_622913_rk0r1lzoid.svg#iconfont') format('svg');
+}
+.iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+.icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+}
+
+.weic-body-bgf3f3f3 {
+    background-color: #f3f3f3
+}
+
+.weic-bgfff {
+    background-color: #fff
+}
+
+.weic-search-bg2eab69 {
+    background-color: #2eab69
+}
+
+.weic-parent-mar {
+    border-top: 1px solid transparent;
+    box-sizing: border-box;
+}
+
+.weic-textcolor-fff {
+    color: #fff !important;
+}
+
+.weic-textcolor-green {
+    color: #18a739 !important;
+}
+
+.weic-bgcolor-green {
+    background-color: #18a739;
+}
+
+.weic-bgcolor-blue {
+    background-color: #2380bc;
+}
+
+.weic-btn-green {
+    background-color: #18a739;
+    box-shadow: 0px 3px 20px rgba(24, 167, 57, 0.6);
+    color: #fff;
+}
+
+.weic-btn-blue {
+    background-color: #2380bc;
+    box-shadow: 0px 3px 20px rgba(34, 105, 180, 0.36);
+    color: #fff;
+}
+
+.weic-btn-gray {
+    background-color: #d8d8d8;
+    box-shadow: 0px 3px 20px rgba(216, 216, 216, 0.9);
+    color: #fff;
+}
+
+.weic-btn-share {
+    background-color: #fff;
+    color: #666;
+    border: 1px solid #ccc;
+    border-radius: 100%;
+}
+
+.weic-cursor {
+    cursor: pointer
+}
+
+.weic-bnt-p {
+    position: absolute;
+    bottom: 2.8rem;
+    width: 100%;
+    color: #dedede;
+    font-size: 0.4rem
+}
+
+.weic-martop-60 {
+    margin-top: 0.8rem
+}
+
+.weic-martop-40 {
+    margin-top: 0.5rem
+}
+.weic-martop-20 {
+    margin-top: 0.266rem
+}
+.weic-martop-188 {
+    margin-top: 2.5rem
+}
+
+.weic-den-head {
+    width: 2rem;
+    height: 2rem;
+    background: #fff;
+    margin: 0 auto;
+    border: 0.05rem solid #fff;
+    border-radius: 2rem;
+    overflow: hidden;
+    margin-top: 1.3rem;
+}
+
+.weic-text-center {
+    text-align: center
+}
+
+.weic-text-left {
+    text-align: left
+}
+
+.weic-text-right {
+    text-align: right
+}
+
+.weic-name {
+    font-size: 0.48rem;
+    margin: 0.53rem 0 1.41rem 0;
+    color: #333;
+}
+
+.weic-dent-btnbox {
+    width: 70%;
+    margin: 0 auto
+}
+
+.weic-dent-btn {
+    display: block;
+    width: 100%;
+    font-size: 0.45rem;
+    padding: 0.3rem 0;
+    border-radius: 2rem;
+    text-align: center
+}
+
+.weic-elem-field {
+    width: 100%;
+    border-width: 1px 0 0;
+    border-style: solid;
+    padding: 0;
+    border-color: #d0d0d0;
+    position: absolute;
+    bottom: 1.51rem;
+}
+
+.weic-elem-field legend {
+    margin: 0 auto;
+    padding: 0 0.2rem;
+    font-size: 0.34rem;
+    color: #efefef;
+}
+
+.weic-cell-form {
+    font-size: 0.4rem;
+}
+
+.weic-cell-ft button {
+    display: inline-block;
+    margin-left: 0.06rem;
+    padding: 0 0.6em 0 1.7em;
+    border-left: 1px solid #E5E5E5;
+    vertical-align: middle;
+    font-size: 0.37rem;
+    color: #18a739;
+    background-color: transparent;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 0;
+    outline: 0;
+}
+
+.weic-cells-title {
+    font-size: 0.37rem;
+    color: #333;
+    padding: 0.3rem 0.4rem;
+}
+
+.weic-cell-bor {
+    padding: 0 0.4rem
+}
+
+.weic-popup-search {
+    width: 100%;
+    position: fixed !important;
+    top: 0;
+    z-index: 1000;
+}
+
+.weic-popup-bnt {
+    width: 100%;
+    font-size: 0.4rem;
+    position: fixed;
+    bottom: 0;
+    background-color: #fafafa;
+    z-index: 1000;
+}
+
+.weic-popup-bnt span {
+    color: #18a739;
+    display: inline-block;
+}
+
+.weic-popup-bnt1 {
+    margin-right: 1.2rem;
+    color: #666 !important;
+}
+
+.weic-popup-item {
+    padding: 0.35rem 0.4rem;
+}
+
+.weic-popup-content {
+    margin: 1.3rem 0;
+    height: calc(100% - 2.6rem);
+    overflow-y: auto;
+}
+
+.weic-check-bg:active {
+    background-color: #eee
+}
+
+.weic-check-bg .weui-cells {
+    background: none;
+}
+
+.weic-popup-i {
+    position: absolute;
+    right: 0.4rem;
+    display: none;
+}
+
+.weic-popup-i i {
+    color: #18a739;
+    font-size: inherit;
+}
+
+.weic-active .weic-popup-i {
+    display: block;
+}
+
+
+input::-webkit-input-placeholder {
+    /* placeholder锟斤拷色  */
+    color: #999;
+    /* placeholder锟斤拷锟斤拷锟叫�  */
+    /*font-size: 12px;*/
+    /* placeholder位锟斤拷  */
+    /*text-align: right;*/
+}
+
+textarea::-webkit-input-placeholder {
+    /* placeholder锟斤拷色  */
+    color: #999;
+    /* placeholder锟斤拷锟斤拷锟叫�  */
+    font-size: 0.37rem;
+    /* placeholder位锟斤拷  */
+    /*text-align: right;*/
+}
+.weic-inplace-fff input::-webkit-input-placeholder {
+    /* placeholder锟斤拷色  */
+    color: #fff;
+    /* placeholder锟斤拷锟斤拷锟叫�  */
+    /*font-size: 12px;*/
+    /* placeholder位锟斤拷  */
+    /*text-align: right;*/
+}
+
+.weic-color333 {
+    color: #333 !important;
+}
+
+.weic-color666 {
+    color: #666 !important;
+}
+
+.weic-color999 {
+    color: #999 !important;
+}
+
+.weic-inplace-fff {
+    position: relative;
+}
+
+.weic-inplace-fff input {
+    padding-left: 0.6rem
+}
+
+.weic-inplace-fff i {
+    position: absolute;
+    left: 0;
+    top: -1px;
+}
+
+.weic-cell {
+    padding: 0.24rem 0.4rem;
+    background-color: #fff;
+    line-height: 0;
+    position: relative;
+}
+
+.weic-notice-title {
+    margin-left: 0.3rem !important;
+    font-size: 0.4rem;
+    position: absolute !important;
+    width: calc(100% - 1.92rem);
+    font-family: fontMedium;
+    display: inline-block;
+    color: #333;
+    height: 0.83rem;
+}
+
+.weic-notice-title p {
+    padding-left: 0.44rem;
+    border-left: 1px solid #eee;
+    line-height: 0.83rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.weic-notice-title p a {
+    color: #333;
+}
+
+.weic-grids {
+    padding: 0.26rem 0 0.4rem 0rem;
+    background-color: #fff;
+    font-size: 0.32rem;
+}
+
+.weic-my .weic-grids {
+    padding: 0.86rem 0 2rem 0;
+}
+
+.weic-index-icon-p p {
+    color: #333;
+    margin-top: 0.133rem;
+}
+
+.weic-index-icon {
+    display: inline-block;
+    width: 1.2rem;
+    height: 1.2rem;
+}
+.weic-game-icon {
+    background: url("../images/weic-game-icon.png")no-repeat center center;
+    background-size: 112%;
+}
+.weic-member-apply-icon {
+    background: url("../images/member_apply.png")no-repeat center center;
+    background-size: 112%;
+}
+.weic-reservation-icon {
+    background: url("../images/weic-reservation-icon.png")no-repeat center center;
+    background-size: 112%;
+}
+.weic-shopping-icon {
+    background: url("../images/weic-shopping-icon.png")no-repeat center center;
+    background-size: 112%;
+}
+.weic-complaint-icon {
+    background: url("../images/weic-complaint-icon.png")no-repeat center center;
+    background-size: 112%;
+}
+.weic-my .weic-index-icon {
+    width: 0.7rem;
+    height: 0.7rem;
+    display: inline-block;
+}
+
+.weic-index-icon svg {
+    font-size: 0.85rem;
+}
+
+.weic-index-icon2 {
+    position: relative;
+    left: -0.1rem;
+}
+
+.weic-my .weic-index-icon1 {
+    background: url("../images/draw-icon.png") no-repeat center center;
+    background-size: 96%
+}
+
+.weic-my .weic-index-icon2 {
+    position: relative;
+    left: 0;
+    background: url("../images/coupon-icon.png") no-repeat center center;
+    background-size: 100%
+}
+
+.weic-my .weic-index-icon3 {
+    background: url("../images/order-icon.png") no-repeat center center;
+    background-size: 80%
+}
+
+.weic-my .weic-index-icon4 {
+    background: url("../images/signup-icon.png") no-repeat center center;
+    background-size: 86%
+}
+
+.weic-my .weic-index-icon5 {
+    background: url("../images/reservation-icon.png") no-repeat center center;
+    background-size: 97%
+}
+
+.weic-my .weic-index-icon6 {
+    background: url("../images/complaint-icon.png") no-repeat center center;
+    background-size: 100%
+}
+
+.weic-my .weic-index-icon7 {
+    background: url("../images/detail-icon.png") no-repeat center center;
+    background-size: 97%
+}
+
+.weic-my .weic-index-icon8 {
+    background: url("../images/replace-icon.png") no-repeat center center;
+    background-size: 97%
+}
+
+.weic-my .weic-index-ico9 {
+    background: url("../images/Internet.png") no-repeat center center;
+    background-size: 97%;
+    width: 0.8rem;
+    height:0.8rem;
+}
+
+.weic-art-label-top {
+    position: absolute;
+    color: #fff;
+    font-size: 0.26rem;
+    padding: 0 0.8rem;
+    background-color: #18a739;
+    top: 0.08rem;
+    right: -0.8rem;
+    transform: rotate(45deg);
+}
+
+.weic-cell-title {
+    margin-top: 10px;
+    position: relative;
+    background-color: #fff;
+    line-height: 1.47058824;
+}
+
+.weic-cell-title:after, .weic-artrow:after, .weic-artrow:before {
+    content: " ";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    color: #e5e5e5;
+    z-index: 2;
+    bottom: 0;
+    border-bottom: 1px solid #e5e5e5;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+}
+
+.weic-box-title {
+    font-size: 0.37rem;
+    font-family: fontMedium;
+    color: #333;
+    margin-left: 0.7rem;
+}
+
+.weic-icon-hot {
+    font-size: 0.55rem;
+    color: #e63b2d;
+    position: absolute;
+    left: 0.4rem;
+    top: 0.18rem
+}
+
+.weic-article-box {
+    padding: 0.4rem 0.5rem;
+    position: relative;
+    overflow: hidden;
+    background-color: #fff
+}
+
+.weic-article-box h2 {
+    font-size: 0.45rem;
+    color: #333;
+    font-weight: 500;
+    font-family: fontMedium;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    line-height: 1.47058824;
+}
+
+.weic-art-height {
+    height: 1.92rem;
+    position: relative;
+}
+
+.weic-lab-box {
+    position: absolute;
+    bottom: 0;
+    line-height: 1;
+    overflow: hidden;
+    width: 100%;
+    bottom: 2px;
+}
+
+.weic-lab-boxs {
+    line-height: 1;
+    overflow: hidden;
+    width: 100%;
+}
+
+.weic-art-label {
+    font-size: 0.32rem;
+    color: #999;
+    padding-right: 5px
+}
+
+.weic-lab-box .eyes, .weic-lab-boxs .eyes {
+    font-size: 0.32rem;
+    color: #999;
+}
+
+.weic-artrow:after, .weic-artrow:before {
+    left: 0.5rem;
+    right: 0.5rem;
+}
+
+.weic-article-box:active {
+    background-color: #ececec
+}
+.index .weic-my-head {
+    width: 0.9rem;
+    height: 0.9rem;
+    background-color: #eee;
+    border-radius: 4rem;
+}
+ .user .weic-my-head {
+    width: 1.2rem;
+    height: 1.2rem;
+    background-color: #eee;
+    border-radius: 4rem;
+}
+
+.weic-hd {
+    line-height: 0
+}
+
+.weic-relative {
+    position: relative;
+}
+
+.weic .weic-cell-ft .weui-badge {
+    padding: 0.02rem 0.12rem;
+    font-size: 0.28rem;
+    border-radius: 4rem;
+    min-width: 0.21rem;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.45rem;
+}
+
+.weic-my-title, .weic-my-name {
+    font-size: 0.42rem;
+    color: #333;
+    margin-left: 0.4rem;
+}
+.index .weic-my-name {
+    font-size: 0.34rem;
+    color: #fff;
+}
+.index .weic-head-msg:before {
+    display: none;
+}
+
+.user .weic-my-name {
+    font-size: 0.40rem;
+    color: #333;
+    font-weight: 600;
+}
+.user .weic-user-rank {
+    font-size: 0.373rem;
+    color: #666;
+    margin-left: 0.4rem;
+}
+.weic-userMsg-box {
+    padding: 0 0.45rem;
+}
+.weic-user-top {
+    color: #fff;
+    padding: 0.333rem 0.266rem;
+    background: -moz-linear-gradient(to right, #37a8ff 0%,#2283e5 100%);
+    background: -webkit-linear-gradient(to right, #37a8ff 0%,#2283e5 100%);
+    background: -o-linear-gradient(to right, #37a8ff 0%,#2283e5 100%);
+    background: -ms-linear-gradient(to right, #37a8ff 0%,#2283e5 100%);
+    background: linear-gradient(to right, #37a8ff 0%,#2283e5 100%);
+    border-top-left-radius: 0.133rem;
+    border-top-right-radius: 0.133rem;
+    position: relative;
+}
+.weic-user-top p {
+    font-size: 0.346rem;
+    margin-bottom: 0.033rem;
+}
+.weic-user-top .change-store-btn {
+    color: #fff;
+    display: inline-block;
+    padding:0.346rem 0.4rem;
+    background: -moz-linear-gradient(to right, #f7a626 0%,#ffc000 100%);
+    background: -webkit-linear-gradient(to right, #f7a626 0%,#ffc000 100%);
+    background: -o-linear-gradient(to right, #f7a626 0%,#ffc000 100%);
+    background: -ms-linear-gradient(to right, #f7a626 0%,#ffc000 100%);
+    background: linear-gradient(to right, #f7a626 0%,#ffc000 100%);
+    position: absolute;
+    top: 1.5rem;
+    right:0.266rem;
+    font-size: 0.373rem;
+    border-radius: 4rem;
+    box-shadow: 0 4px 20px rgba(13,94,168,0.4);
+    line-height: 1;
+}
+.weic-user-top h1 {
+    font-size: 0.48rem;
+    padding-bottom: 1.1rem;
+}
+.weic-user-store i {
+    display: inline-block;
+    width: 0.4rem;
+    height: 0.5rem;
+    background: url("../images/weic-icon-adrss.png")no-repeat center center;
+    background-size: 94%;
+    float: left;
+}
+.weic-user-store p {
+    color: #fff;
+    padding-left: 0.666rem;
+    font-size: 0.346rem;
+    margin: 0;
+}
+.weic-user-bottom {
+    color: #fff;
+    padding: 0.3rem 0.266rem;
+    background: -moz-linear-gradient(to right, #67b9fc 0%,#5ba4ed 100%);
+    background: -webkit-linear-gradient(to right, #67b9fc 0%,#5ba4ed 100%);
+    background: -o-linear-gradient(to right, #67b9fc 0%,#5ba4ed 100%);
+    background: -ms-linear-gradient(to right, #67b9fc 0%,#5ba4ed 100%);
+    background: linear-gradient(to right, #67b9fc 0%,#5ba4ed 100%);
+    border-bottom-left-radius: 0.133rem;
+    border-bottom-right-radius: 0.133rem;
+}
+.weic-my-lable {
+    font-size: 0.35rem;
+    color: #999;
+    margin-left: 0.4rem;
+}
+.weic-my-icon {
+    width: 0.64rem;
+    height: 0.64rem;
+    margin: 0 auto;
+    margin-bottom: 0.133rem;
+}
+.my-lottery-icon {
+    background: url("../images/my-lottery-icon.png")no-repeat center center;
+    background-size: 100%;
+    width: 0.62rem;
+}
+.my-card-icon {
+    width: 0.75rem;
+    background: url("../images/my-card-icon.png")no-repeat center center;
+    background-size: 100%;
+}
+.my-order-icon {
+    background: url("../images/my-order-icon.png")no-repeat center center;
+    background-size: 100%;
+}
+.my-sign-icon {
+    background: url("../images/my-sign-icon.png")no-repeat center center;
+    background-size: 100%;
+}
+.weic-my-enter {
+    font-size: 0.4rem;
+    color: #666;
+    margin-left: 0.4rem;
+}
+ .weic-cell-icon {
+    width: 0.48rem;
+    height: 0.48rem;
+    display: inline-block;
+    position: absolute;
+    top: 0.4rem;
+}
+ .weic-userCard-bg {
+     box-shadow: 0px 5px 20px rgba(35,133,231,0.5);border-radius: 0.133rem;overflow: hidden;
+ }
+.weic .my-icon-list .weui-cell__bd p {
+    font-size: 0.346rem;
+    padding-left: 0.9rem;
+}
+.weic-hide {
+    display: none!important;
+}
+.weic-card-lable {
+    color: #fff;
+    font-size: 0.266rem;
+    padding: 0px 0.2rem;
+    background: -moz-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: -webkit-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: -o-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: -ms-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    border-radius: 1rem;
+    border-bottom-left-radius: 0px;
+    position: absolute;
+    right: 0;
+    top: -0.266rem;
+}
+.weic-badge {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    background: red;
+    color: #fff;
+    border-radius: 10px;
+
+}
+.my-icon-list .weic-badge {
+    position: absolute;top: -0.3em;right: 1em;
+}
+.weic .my-icon-list .weui-cell {
+    padding: 0.4rem 0.45rem;
+}
+.my-booker-icon {
+    background: url("../images/my-booker-icon.png")no-repeat center center;
+    background-size: 100%;
+}
+.my-complaint-icon {
+    background: url("../images/my-complaint-icon.png")no-repeat center center;
+    background-size: 100%;
+}
+.my-account-icon {
+    background: url("../images/my-account-icon.png")no-repeat center center;
+    background-size: 100%;
+}
+.my-internet-icon {
+    width: 0.52rem;
+    height: 0.52rem;
+    background: url("../images/my-internet-icon.png")no-repeat center center;
+    background-size: 100%;
+}
+.unbind-user {
+    background: url("../images/unbind-user.png")no-repeat center center;
+    background-size: 96%;
+}
+.index .weic-cardNumber {
+    font-size: 0.34rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-left: 0.4rem;
+}
+.weic-cardNumber {
+    font-size: 0.35rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-left: 0.4rem;
+}
+
+.weic-my-icon1 {
+    font-size: 0.46rem;
+    color: #1d86e0;
+    position: relative;
+    bottom: -1px;
+}
+
+.weic-my-icon2 {
+    font-size: 0.42rem;
+    color: #6f5ddf
+}
+
+.weic-my-icon3 {
+    font-size: 0.42rem;
+    color: #f8392b
+}
+
+.weic-my-icon4 {
+    font-size: 0.42rem;
+    color: #3399f6
+}
+
+.weic-my-icon5 {
+    font-size: 0.42rem;
+    color: #0cd8bf
+}
+
+.weic-my-icon6 {
+    font-size: 0.45rem;
+    color: #ff9126
+}
+
+.weic-my-icon7 {
+    font-size: 0.45rem;
+    color: #56ce1e
+}
+
+.weic-my-icon8 {
+    font-size: 0.45rem;
+    color: #30c08f
+}
+
+.weic-cell-ft .weui-ft-text {
+    font-size: 0.32rem;
+    color: #999;
+    position: absolute;
+    top: 0.46rem;
+    right: 0.45rem;
+}
+
+.content-slide {
+    height: 100vh;
+    overflow: auto;
+}
+
+.weic .weui-cell {
+    padding: 0.35rem 0.45rem;
+}
+
+.weic .weui-label {
+    width: 2.5rem;
+}
+
+.weic .weui-cell:before {
+    left: 0.4rem;
+}
+
+.weic .swiper-container img {
+    display: block;
+    width: 100%;
+}
+
+.weic .weui-tabbar:before {
+    border-top: none;
+}
+
+.weic .weui-tabbar {
+    background-color: #fbfbfb;
+    position: fixed;
+    /*box-shadow: 0 -4px 20px rgba(0,0,0,0.08);*/
+    /*border-top: 1px solid #eee;*/
+}
+
+.weic .weui-tabbar__icon {
+    width: 0.72rem;
+    height: 0.72rem;
+}
+
+.weic-my .weui-tabbar__item {
+    padding: 0;
+}
+
+.weic-my .weui-tabbar__item.weui-bar__item--on .weui-tabbar__label {
+    color: #57a2ff
+}
+
+.weic-my .weui-tabbar__label {
+    font-size: 0.45rem;
+    color: #333;
+    padding: 0.26rem 0;
+}
+
+/*.weic .weui-badge {
+    padding: 0.02rem 0.12rem;
+    font-size: 0.28rem;
+    border-radius: 4rem;
+    min-width: 0.21rem;
+    position: absolute;
+    top: -0.4em;
+    right: 1.5rem;
+}*/
+
+.weic .swiper-pagination-clickable .swiper-pagination-bullet {
+    width: 0.16rem;
+    height: 0.16rem;
+    border-radius: 4rem;
+    background: #fff;
+    opacity: 0.5;
+}
+
+.weic .swiper-container-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet {
+    margin: 0 0.12rem;
+}
+
+.weic .swiper-pagination-clickable .swiper-pagination-bullet-active {
+    width: 0.34rem;
+    height: 0.16rem;
+    background-color: #fff;
+    opacity: 0.9;
+}
+
+.weic .weui-dialog {
+    border-radius: 0
+}
+
+.weic .weui-dialog__ft {
+    font-size: 0.42rem
+}
+
+.weic .weui-dialog__bd {
+    font-size: 0.4rem
+}
+
+.weic .weui-dialog__title {
+    font-size: 0.45rem
+}
+
+.weic .weui-navbar__item.weui-bar__item--on {
+    background-color: #fff;
+    color: #478efb;
+}
+
+.weic .weui-navbar__item:after {
+    display: none
+}
+
+.weic .weui-navbar {
+    background-color: #fff;
+}
+
+.weic .weui-navbar__item {
+    font-size: 0.42rem;
+    color: #333;
+    padding: 0.3rem 0;
+}
+
+.weic-bor {
+    padding: 0 0.4rem;
+}
+
+.weic-bottom-line {
+    height: 0.05rem;
+    width: 0.66rem;
+    background-color: #478efb;
+    border-radius: 5rem;
+    display: none;
+    position: absolute;
+    bottom: 0.24rem;
+    left: 0.92rem;
+}
+
+.weic-five-line .weic-bottom-line {
+    left: 0.68rem;
+}
+
+.weic .weui-bar__item--on .weic-bottom-line {
+    display: block;
+}
+
+.weic .weui-navbar + .weui-tab__bd {
+    padding-top: 1.5rem
+}
+
+.weic-noboby {
+    width: 100%;
+    height: 4.2rem;
+    position: absolute;
+    top: 0;
+    bottom: 100px;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+.minWeb .weic-noboby {
+    height: 8.8rem;
+}
+
+.weic-nobody-img,.weic-bindingError-img {
+    width: 4.4rem;
+    height: 3.2rem;
+    margin: 0 auto;
+    background: url("../images/no-body.png") no-repeat center center;
+    background-size: 100%;
+}
+.minWeb .weic-nobody-img {
+    height: 4.2rem;
+    background: url("../images/no-minWeb.png") no-repeat center center;
+    background-size: 100%;
+}
+.choose_team .weic-nobody-img{
+    height: 4.2rem;
+    background: url("../images/no_team.png") no-repeat center center;
+    background-size: 100%;
+}
+.gamesList .weic-nobody-img{
+    height: 4.2rem;
+    background: url("../images/no_matche.png") no-repeat center center;
+    background-size: 100%;
+}
+#btnback .weic-nobody-img {
+    height: 4.2rem;
+    background: url("../images/tips/no-card.png") no-repeat center center;
+    background-size: 100%;
+}
+.noStore .weic-nobody-img {
+    height: 4.2rem;
+    background: url("../images/no-store.png") no-repeat center center;
+    background-size: 100%;
+}
+.weic-nobody-text {
+    text-align: center;
+    color: #666;
+    font-size: 0.37rem;
+    margin-top: 0.4rem
+}
+.minWeb .weic-nobody-text {
+    margin-top: 0;
+}
+.weic-nobody-btn {
+    width: 50%;
+    margin: 2rem auto;
+}
+.weic-foot-tip {
+    font-size: 0.37rem;
+    color: #666;
+    text-align: center;
+    margin: 1rem 0 2rem;
+}
+
+.weic-article-title {
+    padding-bottom: 0.2rem;
+    border-bottom: 1px dashed #e5e5e5;
+}
+
+.weic-article-title h1 {
+    font-size: 0.52rem;
+    color: #333;
+    font-weight: 400;
+    font-family: fontBold;
+    line-height: 1.47058824;
+    padding: 0.5rem 0 0 0;
+    text-align: justify;
+}
+
+.collect {
+    font-size: 0.5rem;
+    color: #d8d8d8;
+    float: right;
+    padding: 0 0 0 0.3rem;
+    position: relative;
+    bottom: 6px
+}
+
+.weic-article-title .collect-active {
+    color: #f8392b
+}
+
+.weic-art-lab .weic-art-label {
+    color: #666;
+    font-size: 0.35rem;
+    padding-right: 14px
+}
+
+.weic-art-lab .weic-art-label .eyes {
+    position: relative;
+    top: 1px;
+    font-size: 0.37rem;
+}
+
+.weic-article-content img {
+    width: 100% !important;
+    padding-bottom: 0.4rem;
+}
+
+.weic-article-content p {
+    font-family: fontMedium;
+    letter-spacing: 0.1px;
+    text-align: justify;
+    font-size: 0.42rem
+}
+
+.weic-article-content {
+    padding: 0.52rem 0
+}
+
+.weic-article-source {
+    color: #666;
+    font-size: 0.37rem;
+    margin-bottom: 1rem;
+}
+
+.weic-article-source a {
+    color: #21a4e4
+}
+
+.weic-twoline .weic-bottom-line {
+    left: 2.2rem
+}
+
+.weic-threeline .weic-bottom-line {
+    left: 1.34rem
+}
+
+.weic-article-list .weui-cell_swiped {
+    position: relative;
+}
+
+.weic-article-list .weui-cell_swiped > .weui-cell__ft {
+    justify-content: center;
+    align-items: center;
+    background-color: #ff3b30;
+    margin: 0 auto;
+}
+
+.weic-article-list .weui-cell_swiped > .weui-cell__ft .weui-swiped-btn {
+    padding: 0.4rem;
+    font-size: 0.4rem;
+}
+
+.weic-seach-content {
+    background-color: #f3f3f3;
+    padding: 0.2rem 0.4rem;
+    width: 100%
+}
+
+.weic-seach-box {
+    display: flex;
+    position: fixed;
+    z-index: 500;
+    top: 0;
+    width: 100%
+}
+
+.weic .weic-seach-box .weui-cell {
+    background-color: #fff;
+    padding: 0.2rem 0.45rem;
+    font-size: 0.37rem;
+}
+
+.weic .weic-seach-box .weui-cell .weui-input {
+    text-align: center;
+}
+
+.weic-cyber-box {
+    padding: 1.38rem 0.4rem 0 0.4rem;
+    border-top: 1px solid #fff;
+}
+
+.weic-cyber-banner {
+    margin: 0.2rem 0 0.4rem 0
+}
+
+.weic-cyber-banner img {
+    display: block;
+}
+.weic-block {
+    display: block;
+}
+.weic-inline-block {
+    display: inline-block;
+}
+.weic-cyber-img {
+    width: 100%;
+    height: 2.9rem;
+}
+
+.weic-cyber-name {
+    font-size: 0.4rem;
+    font-family: fontMedium;
+    margin: 0.3rem 0 0.12rem 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.weic-cyberIcon {
+    color: #b7b7b7
+}
+
+.weic-cyberIcon-avtive {
+    font-size: 0.45rem;
+    color: #ffc936;
+}
+
+.weic-cyber-odd {
+    margin-bottom: 0.5rem;
+}
+
+.weic-address {
+    font-size: 0.4rem;
+    color: #666;
+    margin-top: 0.2rem;
+}
+
+.weic-cyber-detail {
+    padding: 0.52rem 0;
+}
+
+.weic-overhide {
+    overflow: hidden;
+}
+
+.weic-overauto {
+    overflow: auto;
+}
+
+.weic-cyber-list .weic-cyber-name {
+    font-size: 0.45rem;
+    margin: 0;
+    line-height: 2.32341;
+}
+
+.weic-cyber-list .weic-cyber-address {
+    font-size: 0.37rem;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.weic-cyber-list .weic-cyber-address span {
+    padding-right: 10px
+}
+
+.weic-cyber-list .weic-cyber-address span:last-child {
+    padding-right: 0
+}
+
+.weic-cyber-bnt {
+    font-size: 0.45rem;
+    padding: 0.3rem 0;
+    padding: 0.04rem 0.4rem;
+    border: 1px solid #18a739;
+    border-radius: 10rem;
+    color: #18a739 !important;
+}
+
+.weic-cyber-listbox .weui-tab {
+    padding-top: 1.38rem;
+    height: calc(100% - 1.38rem);
+}
+
+.weic-cyber-listbox .weui-navbar:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 1px;
+    border-bottom: 1px solid #ccc;
+    color: #ccc;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+    display: none
+}
+
+.weic-cyber-listbox .weui-navbar {
+    border-bottom: 1px solid #eee;
+}
+
+.weic-staff-list {
+    padding-top: 1.38rem
+}
+
+.weici-staff-box {
+    background-color: #fff;
+    margin-bottom: 0.266rem
+}
+
+.weici-staff-box .weui-cells__title {
+    margin: 0;
+}
+
+.weic-staff-name {
+    font-size: 0.42rem;
+    font-family: fontMedium;
+    color: #333
+}
+
+.weic-staff-cyber {
+    font-size: 0.45rem;
+    font-family: fontMedium;
+    color: #000
+}
+
+.weic-staff-num {
+    font-size: 0.37rem
+}
+
+.weic-staff-header {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 4rem;
+    overflow: hidden;
+    margin-right: 0.32rem
+}
+
+.weic-staff-name .weic-staff-job {
+    font-size: 0.37rem;
+    color: #666;
+    padding-left: 0.32rem;
+    font-family: fontRegular;
+}
+
+.weic-notice-time {
+    margin: 0.3rem 0;
+}
+
+.weic-notice-time span {
+    color: #fff;
+    padding: 0.01rem 0.2rem;
+    background-color: #ccc;
+    font-size: 0.32rem;
+    border-radius: 4rem;
+}
+
+.weic .weui-select {
+    height: auto;
+    line-height: inherit;
+    color: #333;
+    font-family: inherit;
+}
+
+.weic-comp .weui-cells {
+    line-height: inherit;
+}
+
+.weic-comp .weui-textarea {
+    font-size: 0.45rem;
+    color: #333;
+}
+
+.weic-comp-img, .weic-comp-flie {
+    width: 100%;
+    height: 2.7rem;
+    position: relative;
+}
+
+.weic-comp-icon {
+    width: 0.6rem;
+    height: 0.6rem;
+    overflow: hidden;
+    border-radius: 4rem;
+    position: absolute;
+    right: 2px;
+    background-color: #fff;
+    top: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.weic-comp-img .weic-comp-del {
+    color: #f8392b;
+    position: relative;
+    font-size: 0.65rem;
+}
+
+.weic-comp-file {
+    border: 1px dashed #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: calc(2.7rem - 2px);
+}
+
+.weic-comp-file i {
+    color: #ccc;
+    font-size: 1rem
+}
+
+.weic-comp-file input {
+    position: absolute;
+    width: 100%;
+    hieght: 100%;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    opacity: 0;
+}
+
+.weic-complist-content {
+    font-size: 0.4rem;
+    color: #333;
+    font-family: fontRegular;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.weic-complist-btn {
+    font-size: 0.37rem;
+    font-family: fontMedium;
+    color: #000;
+    position: relative;
+}
+
+.weic-complist-btn i {
+    font-size: 0.37rem;
+    color: #999;
+    padding-left: 10px;
+    position: absolute;
+    right: 0;
+}
+
+.weic-comp .weui-cell__bd {
+    width: 100%
+}
+
+.weic .weui-photo-browser-modal {
+    z-index: 10000
+}
+
+.weic-headbg {
+    width: 100%;
+    height: 6rem;
+    background: #5b82fb url("../images/my-bg.jpg") no-repeat center center;
+    background-size: 100%
+}
+
+.weic-my .weic-headbg {
+    width: 100%;
+    background: #5b82fb url("../images/my-bg.jpg") no-repeat center center;
+    background-size: 110%
+}
+
+.weic-index-body {
+    position: absolute;
+    top: 0.2rem;
+    z-index: 100;
+    width: 100%;
+    height: auto;
+}
+
+.weic-setIcon {
+    width: 0.466rem;
+    height: 0.466rem;
+    background: url("../images/icon-right.png")no-repeat center center;
+    background-size: 56%;
+}
+
+.weic-crownIcon i {
+    color: #ffd307;
+    font-size: 0.6rem;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg)
+}
+
+.weic-cardBalance-box h1 {
+    color: #444444;
+    text-align: center;
+    font-weight: 500;
+    line-height: 1.1;
+    font-size: 1.2rem;
+    padding-top: 0.833rem;
+}
+
+.weic-cardBalance-box p {
+    color: #666666;
+    text-align: center;
+    font-size: 0.32rem;
+    margin-bottom: 0.667rem;
+}
+.weic-recharge-btn {
+    width: 4.667rem;
+    margin: 0 auto;
+    font-size: 0.4rem;
+    height: 1.066rem;
+    line-height: 1.066rem;
+    text-align: center;
+    color: #fff;
+    border-radius: 4rem;
+}
+.weic-sum {
+    margin-top: 0.35rem;
+}
+
+.weic-borderNone:before {
+    display: none
+}
+
+.weic-jf-p {
+    color: #fff;
+    font-size: 0.34rem;
+    opacity: 0.9;
+}
+
+.weic-num-p {
+    font-size: 0.42rem;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.4;
+}
+
+.weic-jf-box {
+    padding: 0.35rem 0 !important;
+    border-radius: 2px;
+    margin-top: 0.853rem;
+    box-shadow: 0px 3px 20px rgba(208, 208, 208, 0.45);
+}
+
+.weic-border-left {
+    position: relative
+}
+
+.weic-border-left:before {
+    content: " ";
+    position: absolute;
+    right: 0;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 2rem;
+    border-right: 1px solid #91caf9;
+    color: #eee;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+    z-index: 2;
+}
+
+.weic-border-left:last-child:before {
+    display: none
+}
+
+.weic-banner-slide {
+    width: 100% !important;
+    height: 2.667rem !important;
+    background: #eee;
+}
+
+.weic-banner-box {
+    margin: 0.266rem 0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.weic-my .weic-sum {
+    margin-top: 0.68rem;
+}
+
+.weic-my .weic-mendian {
+    margin-top: 4px;
+}
+
+.weic-my .weic-jf-box {
+    margin-top: 1rem;
+}
+
+.weic-gradient-blue {
+    background: -moz-linear-gradient(to right, #3c66e0 0%, #4faaff 100%);
+    background: -webkit-linear-gradient(to right, #3c66e0 0%, #4faaff 100%);
+    background: -o-linear-gradient(to right, #3c66e0 0%, #4faaff 100%);
+    background: -ms-linear-gradient(to right, #3c66e0 0%, #4faaff 100%);
+    background: linear-gradient(to right, #3c66e0 0%, #4faaff 100%);
+}
+
+.weic-gradient-orange {
+    background: -moz-linear-gradient(to right, #f8701e 0%, #f7a524 100%);
+    background: -webkit-linear-gradient(to right, #f8701e 0%, #f7a524 100%);
+    background: -o-linear-gradient(to right, #f8701e 0%, #f7a524 100%);
+    background: -ms-linear-gradient(to right, #f8701e 0%, #f7a524 100%);
+    background: linear-gradient(to right, #f8701e 0%, #f7a524 100%);
+}
+
+.weic-money-month {
+    color: #fff;
+    font-size: 0.45rem
+}
+
+.weic-money-total {
+    color: #fff;
+    font-size: 0.4rem
+}
+
+.weic-icon-calendar {
+    font-size: 0.5rem;
+    color: #fff
+}
+
+.weic-money-leble {
+    color: #fff;
+    width: 1.2rem;
+    height: 1.2rem;
+    font-size: 0.4rem;
+    text-align: center;
+    line-height: 1.2rem;
+    border-radius: 4rem;
+    margin-right: 0.38rem
+}
+
+.weic-bg-blue {
+    background: #478efb;
+}
+
+.weic-bg-orange {
+    background: #ff8010;
+}
+.weic-orange {
+	color:#ff8010;
+}
+.weic-bg-green {
+    background: #00cf97;
+}
+
+.weic-bg-yellow {
+    background: #fba611;
+}
+
+.weic-money-title {
+    color: #000;
+    font-size: 0.42rem;
+}
+.weic-waiting {
+	font-size: 0.29rem;
+    color: #478efb;
+    padding: 2px 6px;
+    border: 1px solid #478efb;
+}
+.weic-money-time {
+    color: #999;
+    font-size: 0.38rem
+}
+.weic-money-amount {
+    color: #666;
+    font-size: 0.4rem
+}
+
+.weic-money-sum {
+    font-size: 0.52rem;
+    font-weight: 600;
+    text-align:center;
+}
+.weic-money-type {
+	font-size:0.32rem;
+	text-align:right;
+	color:#666;
+}
+.weic-money-amount span {
+	padding-left:0.266rem
+}
+.weic-red {
+    color: #ff3333
+}
+
+.weic-bm-bor {
+    border-bottom: 1px solid #e5e5e5
+}
+
+.weic-footbar {
+    background: #fafafa;
+    border-top: 1px solid #e5e5e5;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+.weic-footbar {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    position: fixed;
+    z-index: 500;
+    bottom: 0;
+    width: 100%;
+    background-color: #fafafa;
+}
+
+.weic .weic-footbar .weui-navbar__item {
+    color: #666
+}
+
+.weic .weic-footbar .weui-bar__item--on {
+    color: #478efb
+}
+
+.weic-date {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.weic-date input {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    opacity: 0;
+}
+
+.weic-date i {
+    position: absolute;
+    right: 0;
+}
+
+.weic .weui-picker-modal {
+    background: #fff
+}
+
+.weic .toolbar .toolbar-inner {
+    height: 1.2rem
+}
+
+.weic .toolbar .title, .weic .toolbar .picker-button {
+    line-height: 1.2rem;
+    font-size: 0.45rem;
+    height: 1.2rem;
+    padding: 0 0.45rem;
+}
+
+.weic .toolbar .picker-button {
+    color: #478efb
+}
+
+.weic .weui-picker-modal {
+    height: 5rem;
+}
+
+.weic .weui-picker-modal .picker-items {
+    font-size: 0.65rem
+}
+
+.weic .weui-picker-modal .picker-modal-inner {
+    height: 5.9rem
+}
+
+.weic-rec-md, .weic-rec-timebox {
+    font-size: 0.4rem;
+    color: #666;
+    line-height: 1.7;
+}
+
+.weic-rec-timebox .weic-rec-xj {
+    padding-left: 12px
+}
+
+.weic-rec-day {
+    position: absolute;
+    top: 0.35rem;
+    right: 0.45rem;
+    color: #333;
+    font-size: 0.37rem
+}
+
+.weic-rec-sum {
+    color: #000;
+}
+
+.weic-rec .weui-cells {
+    margin-top: 0.266rem
+}
+
+.weic-full {
+    width: 100%
+}
+
+.weic-mauto {
+    margin: 0 auto
+}
+
+.weic-query {
+    text-align: center;
+    position: absolute;
+    bottom: 0.66rem;
+    width: 100%;
+    color: #999;
+    font-size: 0.4rem
+}
+
+.weic-navbar {
+    position: fixed;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    z-index: 500;
+    top: 0;
+    width: 100%;
+}
+
+.weic .toolbar .title {
+    font-size: 0.37rem
+}
+
+.weic .weui-picker-modal .picker-modal-inner {height:4.2rem}
+.weic .weui-picker-modal .picker-item {height: 0.853rem;line-height: 0.853rem;padding:0 0.267rem;}
+
+.weic-noboby {width:100%;height:4.2rem;position: absolute; top: 0;bottom: 100px;left: 0;right: 0;margin: auto; }
+.weic-nobody-img {width:4.4rem;height:3.2rem;margin:0 auto;background: url("../images/no-body.png") no-repeat center center;background-size:68%;}
+.weic-nobody-text {text-align: center;color:#666;font-size:0.37rem;margin-top: 0.4rem}
+
+
+/*.weui-cells:first-child {margin-top: 0!important;}*/
+.weic-martop-transmit {border-top:1px solid #fff;}
+.weic-backGauge {padding: 0 0.45rem;}
+.weic-bindingError-body {width: 100%;margin-top: 2.2rem;}
+.weic-bindingError-img {background: url("../images/system-sj.png") no-repeat center center;background-size:68%;}
+.weic-bindingError-text {text-align: center;color:#333;font-size:0.45rem;margin-top: 0.4rem}
+.weic-btn-gradientBlue {
+    background: -moz-linear-gradient(to right, #2283e5 0%,#37a8ff 100%);
+    background: -webkit-linear-gradient(to right, #2283e5 0%,#37a8ff 100%);
+    background: -o-linear-gradient(to right, #2283e5 0%,#37a8ff 100%);
+    background: -ms-linear-gradient(to right, #2283e5 0%,#37a8ff 100%);
+    background: linear-gradient(to right, #2283e5 0%,#37a8ff 100%);
+    color:#fff;
+    box-shadow: 0px 4px 20px rgba(35,133,231,0.5);
+}
+.weic-btn-gradientOrange {
+    background: -moz-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: -webkit-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: -o-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: -ms-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    color:#fff;
+    box-shadow: 0px 4px 20px rgba(239,77,48,0.4);
+}
+.weic-btn-gradientGray {
+    background: -moz-linear-gradient(to right, #d7d7d7 0%,#e4e4e4 100%);
+    background: -webkit-linear-gradient(to right, #d7d7d7 0%,#e4e4e4 100%);
+    background: -o-linear-gradient(to right, #d7d7d7 0%,#e4e4e4 100%);
+    background: -ms-linear-gradient(to right, #d7d7d7 0%,#e4e4e4 100%);
+    background: linear-gradient(to right, #d7d7d7 0%,#e4e4e4 100%);
+    color:#666;
+    box-shadow: 0px 4px 20px rgba(216,216,216,0.5);
+}
+.weic-position-b {
+    position: absolute;
+    bottom: 2.5rem;
+    width: 100%;
+}
+
+
+/*优惠充值*/
+.weic-pay-header {
+	width:110%;
+	height:5.16rem;
+	background: -moz-linear-gradient(to right, #1684cb 0%,#2159be 100%);
+    background: -webkit-linear-gradient(to right, #1684cb 0%,#2159be 100%);
+    background: -o-linear-gradient(to right, #1684cb 0%,#2159be 100%);
+    background: -ms-linear-gradient(to right, #1684cb 0%,#2159be 100%);
+    background: linear-gradient(to right, #1684cb 0%,#2159be 100%);
+    border-radius: 75% / 50%;
+    transform:translate(-5%,-1rem);
+    overflow:hidden;
+	box-shadow: 0px 6px 20px rgba(30,93,187,0.4);
+}
+.weic-pay-bg {
+	margin-left: 4px;
+	height:4rem;
+	background: -moz-linear-gradient(to bottom, #148fdb 0%,#10b6d1 100%);
+    background: -webkit-linear-gradient(to bottom, #148fdb 0%,#10b6d1 100%);
+    background: -o-linear-gradient(to bottom, #148fdb 0%,#10b6d1 100%);
+    background: -ms-linear-gradient(to bottom, #148fdb 0%,#10b6d1 100%);
+    background: linear-gradient(to bottom, #148fdb 0%,#10b6d1 100%);  
+    transform:translateY(1rem);
+    border-radius:8px;
+     box-shadow: 0px 6px 20px rgba(0,0,0,0.2);
+}
+#pay-userbox {
+	padding:0.34rem 0 0 0;
+	margin:0 auto;
+}
+.weic-pay-bg h1 {
+	color:#fff;
+	text-align:center;
+	font-size: 0.6rem;
+	padding-top: 0.5rem;
+}
+.weic-pay-bg h1 i {
+	position: relative;
+    top: -4px;
+    padding-right: 8px;
+    font-size: 0.44rem;
+}
+.weic-pay-bg p {
+	color:#fff;
+	font-size:0.34rem;
+	text-align:center;
+}     
+
+ .bindIocn {
+	width:1.2rem;
+	height:1.2rem;
+	border-radius:4rem;
+	background-color:#fff;
+	margin:0 auto;
+	text-align:center;
+	position: absolute;
+    top: 3.2rem;
+    left: 0;
+    right: 0;
+    box-shadow: 0px 6px 20px rgba(31,95,192,0.3);
+}
+ .bindIocn i {
+	color:#10b4d1;
+	line-height:1.2rem;
+	font-size:0.54rem;
+}
+.weic-payHeader-box {
+	overflow: hidden;
+    height: 4.9rem;
+    position:relative;
+}
+.weic-pay-setMeal h1 {
+	font-size:0.533rem;
+	color:#333;
+	margin-bottom: 0.45rem;
+}
+.setMeal-det {
+	text-align:center;
+	padding: 0.3rem 0;
+	border:1px solid #cccccc;
+	border-radius:4px;
+	position:relative;
+}
+.setMeal-det h3 {
+ 	color:#333;
+ 	font-weight:500;
+ 	line-height:1.2;
+ 	font-size: 0.48rem;
+}	
+.setMeal-det p {
+	font-size:0.32rem;
+	color:#666;
+}
+.weic-pay-setMeal .setMeal-det {
+	margin-bottom:0.32rem;
+}
+.setMeal-active h3,.setMeal-active p {
+	color:#3e88e1!important;
+}
+.setMeal-active .setMeal-det {
+	border:1px solid #3e88e1!important;
+	background-color:#f7fafe;
+}
+.setMeal-active .active-icon {
+    width:0.533rem;
+    height: 0.533rem;
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    background:url("../images/pay-active-icon.png") no-repeat center center;background-size:100%;
+}                                                                                                    
+.weic-pay-agreement {
+	color:#666;
+	font-size:0.32rem;
+	text-align:center;
+	margin-bottom:0.32rem;
+}
+.weic-pay-agreement a {
+	color:#004eff;
+	text-decoration:none;
+}
+.weic-pay-agreement span {
+	width: 0.293rem;
+    height: 0.293rem;
+    display: inline-block;
+    border: 1px solid #d3d3d3;
+    position: relative;
+    top: 2px;
+    right: 4px;
+}
+.weic-pay-agreement span i {
+	color: #004eff;
+    font-size: 0.48rem;
+    position: absolute;
+    top: -4px;
+    line-height: 1;
+    left: -2px;
+}
+.pay-btnBox {
+	width:100%;
+	position:absolute;
+	bottom: 0.7rem;
+}
+.weic-pay-lable {
+	color: #fff;
+    padding: 0 0.3rem;
+    font-size: 0.266rem;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    position: absolute;
+    top: -6px;
+    right: -6px;
+}
+.weic-pay-lable-org {
+	background: #ff6e26;
+}
+.weic-pay-lable:before {
+	content: " ";
+    position: absolute;
+    bottom: -4px;
+    right: 0;
+    width: 0;
+    height: 0;
+}
+.weic-pay-lable-org:before {
+	 border-top: 4px solid #d35516;
+    border-right: 6px solid transparent;
+}
+.color01 {background-color: #63b359}
+.color02 {background-color: #2c9f67}
+.color03 {background-color: #509fc9}
+.color04 {background-color: #5885cf}
+.color05 {background-color: #9062c0}
+.color06 {background-color: #d09a45}
+.color07 {background-color: #e4b138}
+.color08 {background-color: #ee903c}
+.color09 {background-color: #ff6e26}
+.color10 {background-color: #a9d92d}
+.color11 {background-color: #dd6549}
+.color12 {background-color: #cc463d}
+.color01:before {
+    border-top: 4px solid #3a9c2d;
+    border-right: 6px solid transparent;
+}
+.color02:before {
+    border-top: 4px solid #2d8821;
+    border-right: 6px solid transparent;
+}
+.color03:before {
+    border-top: 4px solid #3980a7;
+    border-right: 6px solid transparent;
+}
+.color04:before {
+    border-top: 4px solid #3c63a2;
+    border-right: 6px solid transparent;
+}
+.color05:before {
+    border-top: 4px solid #723fa7;
+    border-right: 6px solid transparent;
+}
+.color06:before {
+    border-top: 4px solid #bd8d41;
+    border-right: 6px solid transparent;
+}
+.color07:before {
+    border-top: 4px solid #c3972e;
+    border-right: 6px solid transparent;
+}
+.color08:before {
+    border-top: 4px solid #d27e34;
+    border-right: 6px solid transparent;
+}
+.color09:before {
+    border-top: 4px solid #d68034;
+    border-right: 6px solid transparent;
+}
+.color10:before {
+    border-top: 4px solid #97c12a;
+    border-right: 6px solid transparent;
+}
+.color11:before {
+    border-top: 4px solid #c34e33;
+    border-right: 6px solid transparent;
+}
+.color12:before {
+    border-top: 4px solid #b1382f;
+    border-right: 6px solid transparent;
+}
+
+.agreement-icon-hide i {
+   display:none;
+}
+
+.weic-paydet-box {
+	background-color: #fff;
+    margin-bottom: 0.266rem;
+}
+.weic-paydet-box .weui-cells__title {
+	margin:0;
+	font-size:0.48rem;
+	color:#000;
+	font-weight:600;
+}
+.weic-paydet-box .weui-cells__title  h3 {
+	font-size:0.48rem;
+	font-weight:600;
+}
+.weic-cell-l {
+	color:#666;
+	font-size:0.42rem;
+}
+.weic-cell-r {
+	color:#000!important;
+	font-size:0.42rem;
+}
+.weic-cell-r-red {
+	color:#ff0000!important;
+	font-size:0.42rem;
+}
+.weixinPay-icon {
+	color:#41b035;
+	font-size:0.42rem;
+	padding-right:0.266rem;
+}
+.payActive-icon {
+	color: #ff0000;
+    font-size: 0.62rem!important;
+    position: absolute;
+    right: 0.45rem;
+    top: 0.24rem;
+}
+.payResult-defeated,.payResult-successful,.payResult-overtime {
+	width:5.4rem;
+	height:5.4rem;
+	margin:0.3rem auto;
+}
+.payResult-defeated {
+	background:url("../images/Top-up-failure.png") no-repeat center center;background-size:90%;
+}
+.payResult-successful {
+	background:url("../images/Top-up-successfully.png") no-repeat center center;background-size:90%;
+}
+.payResult-overtime {
+	background:url("../images/Top-up-overtime.png") no-repeat center center;background-size:90%;
+}
+
+.weic-row:after {
+	content: '';
+    display: block;
+    clear: both;
+}
+.weic-row .weic-col-33 {
+	float:left;
+	width:calc((100% - 5px*6) / 3);
+}
+.weic-col-space10 {
+	margin:0 -5px;
+}
+.weic-col-space10>* {
+	padding:0 5px;
+}
+.weic-headbg-box {
+    position: absolute;
+    top: 0;
+    z-index: -1;
+    width: 100%;
+}
+.weic-cardBalance-box {
+    background: #ffffff;
+    padding-bottom: 0.48rem;
+    border-bottom: 1px solid #f3f3f3;
+}
+.weic-body-padding20 {
+    padding: 0 0.266rem 0.266rem 0.266rem;
+}
+.weic-index-navIcon {
+    background: #ffffff;
+    font-size: 0.32rem;
+    color: #333;
+    padding: 0.36rem 0 0.4rem 0;
+    border-color: #f3f3f3;
+}
+.index-boxShadow {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.member-activity [class*="weui-col-"] {
+    border: 1px solid #eeeeee;
+}
+.member-activity .frist {
+    border-top-left-radius: 4px;
+    border-right: 0;
+    border-bottom: 0;
+}
+.member-activity .second {
+    border-top-right-radius: 4px;
+    border-bottom: 0;
+    position: relative;
+    overflow: hidden;
+}
+.second img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0.8rem;
+}
+.member-activity .seconded {
+    border-right: 0;
+    border-bottom-left-radius: 4px;
+}
+.member-activity .fristed {
+    border-bottom-right-radius: 4px;
+}
+.member-activity .weui-media-box {
+    padding: 0.34rem 0.266rem;
+    padding-right: 0;
+}
+.member-activity .weui-media-box_appmsg .weui-media-box__hd {
+    width: 0.933rem;
+    height: 0.933rem;
+    margin-right: 0.26rem;
+}
+.member-activity .weui-media-box__title {
+    font-size: 0.4rem;
+}
+.member-activity .weui-media-box__desc {
+    font-size: 0.32rem;
+}
+.weic-user-sign {
+    background: url("../images/weic-user-sign.png")no-repeat center center;
+    background-size: 100%;
+}
+.weic-user-card {
+    background: url("../images/weic-user-card.png")no-repeat center center;
+    background-size: 90%;
+}
+.weic-user-lottery {
+    background: url("../images/weic-user-lottery.png")no-repeat center center;
+    background-size: 100%;
+}
+.weic-user-share {
+    background: url("../images/weic-user-share.png")no-repeat center center;
+    background-size: 110%;
+}
+.index .weui-tabbar__item.weui-bar__item--on .weui-tabbar__label {
+    color: #478efb;
+}
+.index .weui-tabbar__label {
+    font-size: 0.293rem;
+}
+.index .weui-tabbar__item {
+    padding: 0.133rem 0 0;
+}
+.weic-icon-up {
+    width: 1.2rem!important;
+    height: 1.2rem!important;
+    background: url("../images/tabar-icon_up.png")no-repeat center center;
+    background-size: 104%;
+    position: absolute;
+    right: 0;
+    left: 0;
+    margin: auto;
+    top: -0.3rem;
+}
+.up-color span{
+    color:#f65c38;
+}
+.weui-bar__item--on .up-color span{
+    color:#478efb;
+}
+.weui-bar__item--on .weic-icon-up {
+    background: url("../images/tabar-icon_down.png")no-repeat center center;
+    background-size: 104%;
+}
+.weic-icon-home {
+    background: url("../images/tab-homeIcon-normal.png")no-repeat center center;
+    background-size: 80%;
+}
+.weui-bar__item--on .weic-icon-home {
+    background: url("../images/tab-homeIcon-check.png")no-repeat center center;
+    background-size: 80%;
+}
+.weic-icon-store {
+    background: url("../images/tab-storeIcon-normal.png")no-repeat center center;
+    background-size: 80%;
+}
+.weui-bar__item--on .weic-icon-store {
+    background: url("../images/tab-storeIcon-check.png")no-repeat center center;
+    background-size: 80%;
+}
+.weic-icon-internet {
+    background: url("../images/tab-internetIcon-normal.png")no-repeat center center;
+    background-size: 80%;
+}
+.weui-bar__item--on .weic-icon-internet {
+    background: url("../images/tab-internetIcon-check.png")no-repeat center center;
+    background-size: 80%;
+}
+.weic-icon-memberLife {
+    background: url("../images/tab-memberLife-normal.png")no-repeat center center;
+    background-size: 80%;
+}
+.weui-bar__item--on .weic-icon-memberLife {
+    background: url("../images/tab-memberLife-check.png")no-repeat center center;
+    background-size: 80%;
+}
+.weic-icon-my {
+     background: url("../images/tab-myIcon-normal.png")no-repeat center center;
+     background-size: 80%;
+}
+.weui-bar__item--on .weic-icon-my {
+    background: url("../images/tab-myIcon-check.png")no-repeat center center;
+    background-size: 80%;
+}
+.weic-storelist-img {
+    width: 2.666rem;
+    height: 2.133rem;
+    border-radius: 5px;
+}
+.weic-store-list {
+    height: 2.133rem;
+    padding-left: 0.4rem;
+    position: relative;
+}
+.weic-store-list .title {
+    width: 6.02rem;
+    font-size: 0.4rem;
+    color: #333;
+    margin-bottom: 0.133rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.weic-store-list .adress {
+    width: 6.02rem;
+    font-size: 0.346rem;
+    color: #666;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.weic-store-list .icon{
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    height: auto;
+    font-size: 0.426rem;
+}
+.weic-store-list .icon .orange{
+    color: #fd992e;
+}
+.weic-store-list .icon .blue{
+    color: #409ff3;
+}
+.weic .weui-search-bar:before,.weic .weui-search-bar:after {
+    display: none;
+}
+.weic .weui-search-bar__box{
+    padding: 0 0.8rem;
+}
+.weic .weui-search-bar__cancel-btn {
+    margin-left: 0.266rem;
+    color: #2283e5;
+    font-size: 0.426rem;
+    line-height: 0.853rem;
+}
+.weic .weui-search-bar__label span {
+    line-height: 1;
+    position: relative;
+    top: 0.053rem;
+}
+.weic .weui-search-bar__label span ,.weic .weui-icon-search {
+    font-size: 0.373rem;
+}
+.weic .weui-search-bar__box .weui-search-bar__input {
+    height: 0.64rem;
+    line-height: 0.64rem;
+    padding: 0.106rem 0;
+    font-size: 0.373rem;
+}
+.weic .weui-search-bar__label .weui-icon-search {
+    position: relative;
+    top: 0.053rem;
+}
+.weic .weui-search-bar__box .weui-icon-search {
+    position: absolute;
+    left: 0.206rem;
+    top: 0.246rem;
+    line-height: normal;
+}
+.animateTop {
+    position: fixed!important;
+    top: 0;
+    width: 100%;
+    height: auto;
+    z-index: 1000;
+    animation: animateTop 2s;
+    -webkit-animation: animateTop 2s;	/* Safari 和 Chrome */
+}
+@keyframes animateTop
+{
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+@-webkit-keyframes myfirst /* Safari 和 Chrome */
+{
+    from {opacity: 0;}
+    to {opacity: 0;}
+}
+.weic-wkCenter-head {
+    width: 100%;
+    height: 3rem;
+    background-color: #fffcf5;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 110%;
+}
+.weic-head-back {
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    position: relative;
+    padding: 0 0.4rem;
+}
+.weic-wk-logo {
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 3px;
+    position: absolute;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100%;
+    bottom: 0.3rem;
+    border: 1px solid rgba(255,255,255,0.4);
+    z-index: 1000;
+}
+.weic-wkCenter-msg {
+    color: rgba(255,255,255,0.9);
+    position: absolute;
+    bottom: 0.5rem;
+    font-size: 0.32rem;
+    padding-left: 1.8rem;
+    padding-right: 0.266rem;
+}
+.weic-wkCenter-msg .name {
+    font-size: 0.42rem;
+    color: #fff;
+}
+.weic-wkPhone,.weic-wkLocation {
+    width: 1.4rem;
+    height: 1.4rem;
+    margin: 0.266rem auto;
+    color: #ffffff;
+    border-radius: 4px;
+    text-align: center;
+    box-shadow: 0px 4px 20px rgba(35,133,231,0.5)
+}
+.weic-wkLocation {
+    box-shadow: 0px 4px 20px rgba(248, 122, 31, 0.68);
+}
+.weic-wkPhone i,.weic-wkLocation i {
+    line-height: 1.4rem;
+    font-size: 0.7rem;
+}
+.weic-cut-off {
+    height: 0.266rem;
+    width: 100%;
+    background: #f3f3f3;
+}
+.weic-section-title {
+    position: relative;
+    padding: 0.39rem 0;
+}
+.weic-section-title .leftText {
+    padding-left: 0.266rem;
+    border-left: 3px solid #ec4a25;
+    font-size: 0.42rem;
+    color: #333;
+    margin: 0 0.266rem;
+    line-height: 1;
+}
+.weic-section-title:before {
+    content: "";
+    display: inline-block;
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px solid #eee;
+    position: absolute;
+    bottom: 0;
+}
+.weic-wkcenter-img {
+    height: 3.2rem;
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100%;
+    margin: 0.133rem 0.2rem 0.2rem 0.133rem;
+    border-radius: 4px;
+}
+.weic-bindCard-header {
+    height: 3.146rem;
+    padding: 0 1.333rem;
+    background: #eee url("../images/bindCard-header-bg.png")no-repeat center center;
+    background-size: 100%;
+}
+.weic-bindCard-header .weic-my-head {
+    width: 1.76rem;
+    height: 1.76rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 4rem;
+}
+.weic-bindCard-header .weic-my-name {
+    font-size: 0.453rem;
+    color: #fff;
+    margin-bottom: 0.133rem;
+}
+.weic-bindCard-header .weic-cardbind-tip {
+    font-size: 0.5rem;
+    color: #fff;
+    margin-left: 0.4rem;
+    margin-bottom: 0;
+}
+.weic-bindCard-body {
+    padding: 0 1.333rem;
+}
+.weic-bindMsg-item {
+    font-size: 0.426rem;
+    padding: 0.2rem 0;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    margin-bottom: 0.788rem;
+}
+.weic-bindMsg-item:first-child{
+    margin-top: 1.33rem;
+}
+.weic-bindMsg-item:last-child {
+    padding-top: 1rem;
+    border: none;
+}
+.weic-bindMsg-item input {
+    border: 0;
+    outline: none;
+    padding-left: 0.9rem;
+    position: relative;
+    width: 100%;
+    background: none;
+    font-size: 0.4rem;
+}
+.weic-bindMsg-item i{
+    display: inline-block;
+    width: 0.466rem;
+    height: 0.466rem;
+    position: absolute;
+    left: 0;
+}
+.weic-bindMsg-item .store{
+    background: url("../images/bind-store.png")no-repeat center center;
+    background-size: 100%;
+}
+.weic-bindMsg-item .name {
+    background: url("../images/bind-name.png")no-repeat center center;
+    background-size: 100%;
+}
+.weic-bindMsg-item .phone {
+    width: 0.4rem;
+    height: 0.533rem;
+    background: url("../images/bind-phone.png")no-repeat center center;
+    background-size: 82%;
+}
+.weic-bindMsg-item .msg {
+    background: url("../images/bind-msg.png")no-repeat center center;
+    background-size: 100%;
+}
+.weic-bindMsg-item .card {
+    background: url("../images/bind-card.png")no-repeat center center;
+    background-size: 100%;
+}
+.weic-bindMsg-item .btn-send {
+    color: #478efb;
+    font-size: 0.32rem;
+    padding: 5px;
+    border: 1px solid #3b5bd1;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 2px;
+    text-decoration: none;
+}
+
+.weic-wkCity-list {
+    width: 100%;
+    background: #fff;
+    position: fixed;
+    bottom: 0;
+    z-index: 999;
+    transition:0.3s ease;
+}
+.hide .weic-wkCity-list {
+    transform:translateY(10.666rem);
+}
+.show .weic-wkCity-list {
+    transform:translateY(0px);
+}
+.weic-wkCity-left,.changeCity-list {
+    width: 3rem;
+    float: left;
+    height: 10rem;
+    overflow-y: auto;
+}
+.changeCity-list {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background: #fff;
+    transition:0.3s;
+}
+.changeCity-hide {
+    transform:translateX(-3rem);
+}
+.changeCity-show {
+    transform:translateX(0rem);
+}
+.weic-wkCity-left p,.weic-wkCity-right .wk-item p,.changeCity-list p  {
+    font-size: 0.34rem;
+    line-height: 1.3rem;
+    text-align: center;
+    margin: 0;
+}
+.weic-wkCity-right {
+    margin-left: 3rem;
+    background: #f3f3f3;
+    height: 10rem;
+    overflow-y: auto;
+}
+.weic-wkCity-right .wk-item p {
+    margin: 0 0.9rem;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    text-align: left;
+}
+.wk-item  {
+    position: relative;
+}
+.weic-wkCity-right .wk-item  i {
+    width: 0.38rem;
+    height: 1.3rem;
+    display: inline-block;
+    background: url('../images/false-icon@2x.png')no-repeat center center;
+    position: absolute;
+    right: 0.4rem;
+    top: 0;
+    background-size: 100%;
+}
+.weic-wkCity-right .wk-item-active  i{
+    background: url('../images/ture-icon@2x.png')no-repeat center center;
+    background-size: 100%;
+}
+.wkCity-active {
+    background:#f3f3f3;
+    color:#f33a70
+}
+.weic-black-bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    transition:0.2s;
+}
+.hide .weic-black-bg {
+    z-index: -1;
+    display: none;
+}
+.show .weic-black-bg {
+    z-index: 100;
+    display: inline-block;
+}
+
+.weic-userCode-item {
+    padding:0  0.667rem;
+}
+.weic-codeIdex-num {
+    font-size: 0.453rem;
+    color: #000;
+    padding:0.4rem 0;
+}
+#uesr_banner {
+    overflow: hidden;
+    border-radius: 0.266rem;
+}
+
+#uesr_banner .internet,#uesr_banner .membership{
+    height: 4.586rem;
+    position: relative;
+}
+#uesr_banner .internet img {
+    height: 100%;
+}
+.weic-userCode-slide {
+    background: #eee;
+}
+.internet_lable:before {
+    content: "";
+    display: inline-block;
+    width: 2.2rem;
+    height: 1.093rem;
+    background: url("../images/userCode-lable-icon.png")no-repeat center center;
+    background-size: 100%;
+    position: absolute;
+    right: 0;
+    top: 0.183rem;
+}
+#uesr_banner  .membership h1,.small .membership h1{
+    font-size: 0.64rem;
+    padding: 0.666rem 1.3rem;
+    color: #f4d5a7;
+    word-break: break-all;
+}
+.small .membership h1 {
+    padding: 0 3.6rem 0 1.36rem;
+    font-size: 0.48rem;
+    position: absolute;
+    top: 0.55rem;
+}
+#uesr_banner  .internet h1,.small .internet h1{
+    font-size: 0.64rem;
+    padding: 0 1.3rem;
+    color: #fffdbf;
+    position: absolute;
+    top: 0.666rem;
+    word-break: break-all;
+}
+.small .internet h1{
+    font-size: 0.48rem;
+    padding: 0 2.666rem;
+    top: 0.8rem;
+}
+.user_index .weic-my-head{
+    width: 1.36rem;
+    height: 1.36rem;
+    border-radius: 4rem;
+    border: 1px solid #fff;
+    margin-right: 0.453rem;
+}
+.weic .user_index .weui-cell{
+    padding: 0;
+}
+.weic .user_index .weui-cell:before {
+    display: none;
+}
+.weic .user_index  .weic-my-name {
+    margin: 0;
+    font-size: 0.4rem;
+    color: #000;
+    font-weight: bold;
+}
+.weic .user_index  .weic-user-rank {
+    margin: 0;
+    font-size: 0.36rem;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.user_index .user_msg {
+    margin: 0.733rem 0;
+}
+.user_index  .sign {
+    display: inline-block;
+    text-align: center;
+    color: #478efb;
+    border: 1px solid #478efb;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 26px;
+    height: 26px;
+    width: 62px;
+    border-radius: 20px;
+    position: relative;
+}
+.function_icon {
+    /*padding: 0.32rem;*/
+}
+.user_index .function_icon {
+    background: #fff;
+    text-align: center;
+    border-radius: 0.2rem;
+}
+.function_icon .weui-col-50 {
+    padding: 0.613rem;
+    width: 50%!important;
+}
+.function_icon .weui-col-33 {
+    padding: 0.7rem;
+}
+.border-top {
+    border-top: 1px solid #f3f3f3;
+}
+.border-left {
+    border-left: 1px solid #f3f3f3;
+}
+.border-bottom {
+    border-bottom: 1px solid #f3f3f3;
+}
+.border-right {
+    border-right: 1px solid #f3f3f3;
+}
+.function_icon .icon {
+    width: 0.933rem;
+    height: 0.9333rem;
+    margin: 0 auto;
+}
+.function_icon .icon_on{
+    background: url("../images/icon_on.png")no-repeat center center;
+    background-size: 91%;
+}
+.function_icon .icon_off{
+    background: url("../images/icon_off.png")no-repeat center center;
+    background-size: 93%;
+}
+.function_icon .icon_exchange{
+    background: url("../images/icon_exchange.png")no-repeat center center;
+    background-size: 93%;
+}
+.function_icon .icon_recharge {
+    background: url("../images/icon_recharge.png")no-repeat center center;
+    background-size: 97%;
+}
+.function_icon .icon_card {
+    background: url("../images/icon_card.png")no-repeat center center;
+    background-size: 100%;
+}
+.function_icon .icon_mall {
+    background: url("../images/icon_mall.png")no-repeat center center;
+    background-size: 90%;
+}
+.function_icon .icon_call {
+    background: url("../images/icon_call.png")no-repeat center center;
+    background-size: 74%;
+}
+.function_icon .icon_complaint {
+    background: url("../images/icon_complaint.png")no-repeat center center;
+    background-size: 82%;
+}
+.function_icon .text {
+    color: #333;
+    font-size: 0.346rem;
+    margin-top: 0.2rem;
+}
+.weic-user-rate {
+    font-size:0.38rem;
+    color: #666;
+    padding-top: 0.2rem;
+}
+.weic-item-padding30 {
+    padding: 0 0.4rem;
+}
+.user_up_btn {
+    width: 4.526rem;
+    height: 4.526rem;
+    margin: 1rem auto 0 auto;
+    background: url(../images/btn_up.png)no-repeat center center;
+    background-size: 100%;
+}
+.user_change_btn {
+    width: 4.526rem;
+    height: 4.526rem;
+    margin: 1rem auto 0 auto;
+    background: url(../images/btn_exchange.png)no-repeat center center;
+    background-size: 100%;
+}
+.user_up_text {
+    font-size: 0.4rem;
+    color: #333;
+    text-align: center;
+    padding-bottom: 1.3rem;
+}
+.weic-online-time {
+    padding: 0.9rem 0.84rem 0.4rem 0.84rem;
+    background: #fff;
+}
+
+.time-bgpadding {
+    padding: 0.5rem 0.586rem;
+}
+.time-bg {
+    height:3.333rem;
+    background: url("../images/online_timeBg.png")no-repeat center center;
+    background-size: 100%;
+}
+.weic-online-time .hour,.weic-online-time,.minute {
+    color: #2486e7;
+    font-size: 0.873rem;
+    font-weight: bold;
+    line-height: 2.38rem;
+    text-align: center;
+}
+
+.up_tips  {
+    display: inline-block;
+    width: 180px;
+    height: 160px;
+    margin: 0 auto;
+}
+.card_notime {
+    display: block;
+    background: url("../images/tips/img_prompt7.png")no-repeat center center;
+    background-size: 100%;
+}
+.internet_notime {
+    display: block;
+    background: url("../images/tips/img_prompt1.png")no-repeat center center;
+    background-size: 100%;
+}
+.noWeixin {
+    display: block;
+    background: url("../images/tips/img_prompt8.png")no-repeat center center;
+    background-size: 100%;
+}
+.bindMember {
+    display: block;
+    background: url("../images/tips/img_prompt4.png")no-repeat center center;
+    background-size: 86%;
+}
+.occupy {
+    background: url("../images/tips/img_prompt5.png")no-repeat center center;
+    background-size: 100%;
+}
+.forbidden {
+    background: url("../images/tips/img_prompt.png")no-repeat center center;
+    background-size: 100%;
+}
+.activate {
+    background: url("../images/tips/img_prompt6.png")no-repeat center center;
+    background-size: 100%;
+}
+.no_money {
+    background: url("../images/tips/img_prompt2.png")no-repeat center center;
+    background-size: 100%;
+}
+.passwrodTile{
+    text-align: left;
+    font-size: 0.4rem;
+    font-weight: 600;
+    margin-bottom: 38px;
+}
+.passwrodInput {
+    position: relative;
+    text-align: left;
+    overflow: hidden;
+}
+.passwrodInput input{
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #d7d7d7;
+    height: 20px;
+    line-height: 20px;
+    margin-bottom: 30px;
+    font-size: 16px;
+    position: relative;
+    padding-left: 38px;
+    border-radius: 0!important;
+}
+.passwrodInput:before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url(../images/tips/passwrod_icon.png)no-repeat center center;
+    background-size: 100%;
+    position: absolute;
+    left: 0;
+    z-index: 1000;
+    top: 10px;
+}
+.passwrodInput p{
+    color: red;
+    text-align: left;
+}
+.weic-timeCard-tip {
+    position: absolute;
+    top: 0.38rem;
+    color: #ff4810;
+    font-size: 0.346rem;
+    z-index: 100;
+    overflow: hidden;
+    width: 100%;
+}
+.weic-timeCard-tip .timeCard-box{
+    background: #ffe8e1;
+    border-radius: 4px;
+    margin: 0 0.266rem;
+}
+.inform_icon ,.close_icon{
+    display: inline-block;
+    width: 0.4rem;
+    height: 0.4rem;
+    background: url(../images/tips/inform_icon.png)no-repeat center center;
+    background-size: 100%;
+    position: relative;
+    top: 2px;
+    margin-right: 0.266rem;
+}
+.close_icon {
+    background: url(../images/tips/close_icon.png)no-repeat center center;
+    background-size: 78%;
+    margin: 0;
+}
+.textScrolling {
+    width: 7.6rem;
+    overflow: hidden;
+    position: relative;
+    height: 0.49rem;
+}
+.weic-timeCard-tip ul {
+    position: absolute;
+    left: 0;
+    top: 0;
+    list-style: none;
+}
+.weic-timeCard-tip ul li{
+    color: #ff4810;
+    width: 12.6rem;
+    float: left;
+    list-style: none;
+}
+.weic .weic-timeCard-tip .weui-cell{
+    padding: 0.15rem 0.3rem;
+}
+.succeed_icon {
+    width: 2.213rem;
+    height: 2.213rem;
+    background: url(../images/tips/succeed_icon.png)no-repeat center center;
+    background-size: 100%;
+    margin: 1.06rem auto 0.8rem auto;
+}
+.weic-card-img {
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 4px;
+    background: #eee;
+    margin-right: 0.266rem;
+    overflow: hidden;
+}
+.weic-card-msg {
+    /*height: 1.626rem;*/
+    width: 5rem;
+}
+.weic-card-msg .weic-card-title {
+    font-size: 0.426rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.266rem;
+    line-height: 1;
+    margin-top: 2px;
+}
+.weic-card-msg .weic-card-time {
+    font-size: 0.32rem;
+    color: #666;
+}
+.weic-card-tips {
+    color: red;
+    font-size: 0.32rem;
+    margin-top: 0.133rem;
+}
+.card .weui-cell {
+    -webkit-box-align: initial;
+    -webkit-align-items: initial;
+    align-items: initial;
+}
+.weic-card-repertory {
+    font-size: 0.32rem;
+    color: #333;
+}
+.weic-card-msg p {
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.weic-card-btn {
+    width: 1.73rem;
+    height: 0.72rem;
+    border-radius: 0.133rem;
+    box-shadow: none!important;
+    font-size: 0.373rem;
+    position: relative;
+    margin-top: 0.4rem;
+}
+.weic-card-btn span {
+    display: inline-block;
+    width: 100%;
+    line-height: 1;
+    height: 0.346rem;
+    position: absolute;
+    top: 0;right: 0;left: 0;
+    bottom: 0;
+    margin: auto;
+    text-align: center;
+}
+.card .weui-cell {
+    padding: 0.506rem 0.45rem;
+}
+.open-card-box {
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+}
+.open-card-box .card-img {
+    width: 100%;
+    /*height: 3.866rem;*/
+    /*background: #eee;*/
+}
+.open-card-box p {
+    padding:0 0.45rem;
+    text-align: left;
+    color: #555;
+    font-size:0.34rem;
+    margin-bottom: 3px;
+    font-size: 0.32rem;
+}
+.open-card-box .weic-card-title {
+    font-weight: bold;
+    color: #333;
+    font-size: 0.506rem;
+    margin: 0.4rem 0;
+}
+.weic-navbar-text {
+    background: #3899f2;
+    border-bottom: 3px solid #296aed;
+    height: 1.173rem;
+    line-height: 1.173rem;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    font-size: 0.4rem;
+}
+.weic-navbar-text:after {
+    content: "";
+    width: 1.6rem;
+    height: 3px;
+    background-color: #ffdd51;
+    position: absolute;right: 0;
+    left: 0;
+    bottom: -3px;
+    margin: auto;
+    display: none;
+}
+.active .weic-navbar-text{
+    color: #ffdd51;
+    font-weight: bold;
+    background: #63abfc;
+}
+.active .weic-navbar-text:after {
+    display: inline-block;
+}
+.weic-cardlistbox {
+    margin: 0.3rem 0.266rem 0 0.266rem;
+    border-radius: 4px;
+}
+.weic-cardlistbox .weui-cell {
+    padding-right:0.266rem;
+    padding-left: 0.266rem;
+}
+.no-card {
+    width: 100%;
+    color: #fff;
+    font-size: 0.4rem;
+    margin-top: 2rem;
+    text-align: center;
+}
+.no-card  .img{
+    width: 2.5rem;
+    height: 2.5rem;
+    background: url("../images/tips/no-card.png")no-repeat center center;
+    background-size: 100%;
+    margin: 0 auto;
+}
+.no-card  .text{
+    margin-top: 0.4rem;
+}
+.signIn_box .layui-m-layercont{
+    padding: 0;
+}
+
+
+.weic .weui-row .weui-col-50 {
+    width: calc((100% - 0.266rem * 1) / 2)
+}
+.weic-mallBox {
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 0.266rem;
+}
+.weic-mallTitle {
+    color: #333;
+    font-size: 0.4rem;
+    margin-bottom: 0.133rem;
+}
+.weic-mallCash {
+    color: red;
+    font-size: 0.45rem;
+}
+.weic-mallCash svg {
+    width: 0.4rem;
+    height: 0.4rem;
+    position: relative;
+    top: 2px;
+    margin-right: 5px;
+}
+.weic-mallCash span:nth-child(2) {
+    float: right;
+}
+.weic-buyUi-title {
+    font-size: 0.42rem;
+    color: #000;
+    margin: 0.4rem 0 0 0;
+}
+.weic-buyCash {
+    font-size: 0.45rem;
+    color: red;
+    margin-top: 0.266rem;
+}
+.weic-buyCash span:first-child {
+    margin-right: 1rem;
+}
+.weic-buyCash  .t {
+    font-size: 0.34rem;
+    color: #666;
+}
+.weic-buyCash  .s {
+    font-size: 0.266rem;
+}
+.weic .weui-count .weui-count__btn {
+    width: 0.56rem;
+    height: 0.56rem;
+}
+.weic .weui-cells__title {
+    padding: 0.266rem 0.45rem;
+    margin: 0.266rem 0 0 0;
+    font-size: 0.373rem;
+}
+.weic .weui-cells {
+    font-size: 0.42rem;
+}
+.weic input::-webkit-input-placeholder {
+    color: #ccc;
+    font-size: 0.37rem;
+}
+.user_msg_title {
+    font-size: 0.45rem;
+    color: red!important;
+}
+
+/*赛事*/
+.weic-gameList-content {
+    padding: 0.533rem 0.4rem;
+}
+.weic-nav-module {
+    font-size: 0.346rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 0.533rem;
+}
+.weic-nav-module div {
+    padding: 0.2rem  0;
+    border:1px solid #329ef8;
+    border-right: none;
+}
+.weic-nav-module div:first-child{
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+}
+.weic-nav-module div:last-child{
+    border-right: 1px solid #329ef8;
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+}
+.weic-nav-module .active {
+    color: #fff!important;
+    background: #329ef8!important;
+}
+.weic-gameList-box {
+    border-radius: 0.186rem;
+    overflow: hidden;
+    margin-bottom: 0.4rem;
+    box-shadow: 0px 4px 20px rgba(66,66,66,0.1);
+}
+.weic-gameList-box img {
+    display: block;
+}
+.gameMsg-box {
+    padding:0.4rem 0.266rem;
+}
+.gameMsg-box .title{
+    font-size: 0.466rem;
+    color: #000;
+    font-weight: 600;
+}
+.gameMsg-box .store {
+    font-size: 0.32rem;
+    color: #999;
+    padding: 2px 0;
+    width: 6.6rem;
+}
+.weic-line-overflow {
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.gameMsg-box .weic-card-btn{
+    border-radius: 1rem;
+    font-size: 0.32rem;
+    margin-top: 0;
+}
+.gameMsg-box  .weic-card-btn span {
+    height: 0.3rem;
+}
+.applyIng .people,.gameIng .people,.finish .people {
+    font-size: 0.32rem;
+}
+.applyIng .people {
+    color: #ff6e26;
+}
+.gameIng .people {
+    color: #6218ca;
+}
+.finish .people {
+    color: #999;
+}
+.applyIng .weic-card-btn {
+    background: -moz-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: -webkit-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: -o-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: -ms-linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    background: linear-gradient(to right, #ef4b30 0%,#f28230 100%);
+    color: #fff;
+    box-shadow: 0px 2px 10px rgba(239,77,48,0.4)!important;
+}
+.gameIng .weic-card-btn {
+    background: -moz-linear-gradient(to right, #5b18ca 0%,#8918ca 100%);
+    background: -webkit-linear-gradient(to right, #5b18ca 0%,#8918ca 100%);
+    background: -o-linear-gradient(to right, #5b18ca 0%,#8918ca 100%);
+    background: -ms-linear-gradient(to right, #5b18ca 0%,#8918ca 100%);
+    background: linear-gradient(to right, #5b18ca 0%,#8918ca 100%);
+    color: #fff;
+    box-shadow: 0px 2px 10px rgba(99,24,202,0.32)!important;
+}
+.finish  .weic-card-btn {
+    background: -moz-linear-gradient(to right, #c3c3c3 0%,#d6d6d6 100%);
+    background: -webkit-linear-gradient(to right, #c3c3c3 0%,#d6d6d6 100%);
+    background: -o-linear-gradient(to right, #c3c3c3 0%,#d6d6d6 100%);
+    background: -ms-linear-gradient(to right, #c3c3c3 0%,#d6d6d6 100%);
+    background: linear-gradient(to right, #c3c3c3 0%,#d6d6d6 100%);
+    color: #fff;
+    box-shadow: 0px 2px 10px rgba(224,224,224,0.5)!important;
+}
+.gameCenter .gameMsg-box{
+    padding-left: 0;
+    padding-right: 0;
+}
+.gameCenter .gameMsg-box .title{
+    font-size: 0.506rem;
+    margin-bottom: 0.133rem;
+    font-weight: bold;
+}
+.gameCenter .gameMsg-box .store{
+    font-size: 0.346rem
+}
+.game-tips {
+    color: #ff6e26;
+    font-size: 0.32rem;
+    padding: 5px 10px;
+    border-radius: 2px;
+    background: #fff0e9;
+    float: right;
+    font-weight: normal!important;
+}
+.weic-through_btn {
+    height:1.333rem;
+    line-height:1.333rem;
+    color: #fff;
+    font-size: 0.45rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+.applyIng .weic-through_btn {
+    background: #ef4b30;
+}
+.gameIng .weic-through_btn {
+    background: #5b18ca;
+}
+.finish .weic-through_btn {
+    background: #c3c3c3;
+}
+.weic-item-title {
+    font-size: 0.42rem;
+    color: #000;
+    font-weight: bold;
+    margin-bottom: 0.133rem;
+}
+.weic-item {
+    padding-top: 0.6rem;
+}
+.gameMsg-box .time {
+    font-size: 0.34rem;
+    color: #666;
+}
+.gameMsg-box .time span {
+    color:#2588e8;
+}
+.team_bottom_line {
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid #eee;
+}
+.weic-team-seat {
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 1rem;
+    overflow: hidden;
+    background: url("../images/team_seat_normal.png")no-repeat center center;
+    background-size: 100%;
+    margin: 0.133rem 0.32rem;
+}
+.weic-team-seat-active {
+    background: url("../images/team_seat_active.png")no-repeat center center;
+    background-size: 100%;
+}
+.weic-fixed-bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+.team_header {
+    width: 0.32rem;
+    height: 0.32rem;
+    background: url(../images/header_sign.png)no-repeat center center;
+    background-size: 100%;
+    position: absolute;
+    left: 0.133rem;
+}
+.weui-cell__bd .btn-send {
+    color: #478efb;
+    font-size: 0.32rem;
+    padding: 5px;
+    border: 1px solid #3b5bd1;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    border-radius: 2px;
+    text-decoration: none;
+}
+.memberLife {position: relative}
+.memberLife h1{
+    color: #fffad4;
+    position: absolute;
+    top: 0.58rem;
+    padding: 0 1.233rem;
+    font-size: 0.553rem;
+    font-weight: bold;
+}
+.memberLife img {display: block;}
+.weic-banner-slide .memberLife img {height: 2.667rem;}
+
+.weic-member-box {padding:0.533rem 0.4rem;margin-top: 0.4rem;background: #fff;border-radius: 4px;box-shadow: 0px 0px 10px rgba(0,0,0,0.03)}
+.weic-member-box:last-child {
+    margin-bottom: 2.4rem;
+}
+.weic-member-box .title {
+     font-size: 0.426rem;
+     font-weight: bold;
+     color: #000;
+ }
+.weic-member-box .time {
+    font-size: 0.266rem;
+    color: #999;
+}
+.weic-member-box .content {
+    font-size: 0.346rem;
+    color: #333;
+}
+.weic-member-box .content .red {
+    color: #f23939;
+}
+.weic-member-box .img {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 4px;
+    margin-right: 0.266rem;
+}
+.weic-member-box .msg {
+    font-weight: bold;
+    font-size: 0.32rem;
+    color: #f23939;
+    padding-top: 0.4rem;
+    border-top: 1px solid #eee;
+}
+
+.active  .weic-cell-l{
+    color:#f23939!important;
+    margin-bottom: 0.133rem!important;
+}
+.weic-cardRush-msg {
+    color: #999;
+    font-size: 0.32rem;
+}
+.weic-cardRush-msg p:first-child {
+    margin-bottom: 0.133rem;
+}
+.active .weui-icon-checked:before{
+    content: "\EA06" !important;
+    color: #f23939!important;
+}
+.active {
+    align-items: inherit!important;
+}
+.weui-cells_checkbox .weui-icon-checked:before{
+    font-size: 0.48rem!important;
+}

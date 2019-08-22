@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="IntIntegralMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		INTINTEGRAL
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		INTEGRAL_NAME,	
+		INTEGRAL_TYPE,	
+		INTEGRAL_SEND,	
+		INTENET_ID,	
+		STATE,	
+		CATEGRORY,
+		INTINTEGRAL_ID,
+		WEEKEND_SEND,
+		sign_time_set,
+		integralnums
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{INTEGRAL_NAME},	
+		#{INTEGRAL_TYPE},	
+		#{INTEGRAL_SEND},	
+		#{INTENET_ID},	
+		#{STATE},
+		#{CATEGRORY},
+		#{INTINTEGRAL_ID},
+		#{WEEKEND_SEND}
+	</sql>
+	
+	<!-- 新增(新增积分规则)-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除(通过INTINTEGRAL_ID删除积分规则)-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			INTINTEGRAL_ID = #{INTINTEGRAL_ID}
+	</delete>
+	
+	<!-- 修改(通过INTINTEGRAL_ID保存修改后的信息) -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			INTEGRAL_NAME = #{INTEGRAL_NAME},
+			INTEGRAL_TYPE = #{INTEGRAL_TYPE},
+			INTEGRAL_SEND = #{INTEGRAL_SEND},
+			 CATEGRORY = #{CATEGRORY},               
+			STATE = #{STATE},
+			WEEKEND_SEND = #{WEEKEND_SEND},
+		INTINTEGRAL_ID = INTINTEGRAL_ID
+		where 
+		INTINTEGRAL_ID = #{INTINTEGRAL_ID}
+	</update>
+	
+	<!-- 通过ID获取数据(通过积分表id查询数据) -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			INTINTEGRAL_ID = #{INTINTEGRAL_ID}
+	</select>
+	
+	<!-- 通过类型和网吧id获取数据 -->
+	<select id="findByCATEGRORY" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			CATEGRORY = #{CATEGRORY}
+			and INTENET_ID = #{INTENET_ID}
+	</select>
+	
+	<!-- 列出IntIntegral列表(通过网吧id/关键词查询相关数据) -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and INTEGRAL_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		</if>
+		<if test="pd.INTENET_ID != null and pd.INTENET_ID != ''">
+			and INTENET_ID = #{pd.INTENET_ID}
+		</if>
+		and CATEGRORY = #{pd.CATEGRORY}
+	</select>
+	
+	<!-- 列出IntIntegral列表(通过网吧id获取信息) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 列表网吧(全部) -->
+	<select id="listIntegral" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.intenetId!= null and pd.intenetId != ''">
+			and
+					INTENET_ID =#{pd.intenetId}
+				
+		</if>
+	</select>
+	
+	<!-- 批量删除(通过INTINTEGRAL_ID批量删除积分规则) -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			INTINTEGRAL_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+
+	<insert id="saveSign">
+        INSERT INTO
+        intintegral
+        ( INTINTEGRAL_ID,CATEGRORY,INTENET_ID,sign_time_set,WEEKEND_SEND,integralnums)
+        VALUES(
+            #{id},
+            #{CATEGRORY},
+            #{INTENET_ID},
+            #{sign_time_set},
+            #{WEEKEND_SEND},
+            #{integralnums}
+            )
+    </insert>
+
+	<select id="getTypes"  resultType="pd">
+       SELECT
+			intintegral_name,foreign_id
+		FROM
+			intintegral_type
+		WHERE
+			foreign_id NOT IN ( SELECT categrory FROM intintegral WHERE INTENET_ID = #{INTENET_ID} )
+	</select>
+
+	<select id="findnums"  resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		CATEGRORY = #{CATEGRORY}
+		and INTENET_ID = #{INTENET_ID}
+	</select>
+
+	<select id="">
+		select * from intintegral where INTENET_ID=#{intenet_id} and
+	</select>
+
+
+	<update id="updateSign" parameterType="pd">
+		update
+		intintegral
+		set
+		sign_time_set = #{sign_time_set},
+		integralnums = #{integralnums}
+		where
+		INTENET_ID = #{INTENET_ID}
+		and
+		CATEGRORY = #{CATEGRORY}
+	</update>
+
+	<select id="getStores" resultType="pd">
+		select store_id,store_name from internet_store where INTERNET_ID=#{intenet_id}
+	</select>
+
+	<select id="getVStores" resultType="pd">
+		select a.store_id,a.store_name from internet_store a left join internet_store_v b on a.STORE_ID= b.STORE_ID where b.STATE!='1' and INTERNET_ID=#{intenet_id}
+	</select>
+
+	<select id="getscanStores" resultType="pd">
+		select a.store_id,b.store_name from intintegral a left join internet_store b on a.store_id= b.STORE_ID where  a.CATEGRORY='5'
+		and
+		a.store_id in
+		<foreach collection="list" item="map" separator=","  open="(" close=")">
+			#{map.store_id}
+		</foreach>
+	</select>
+
+	<select id="getSign" resultType="pd">
+		select * from intintegral where CATEGRORY='2' and store_id=#{store_id}
+	</select>
+
+	<select id="getScanUp" resultType="pd">
+		select * from intintegral where CATEGRORY='5' and store_id=#{store_id}
+	</select>
+
+	<insert id="addSign">
+		insert into intintegral
+		 ( INTINTEGRAL_ID,store_id,INTEGRAL_SEND,WEEKEND_SEND,CATEGRORY)
+        VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.store_id},
+			#{item.INTEGRAL_SEND},
+			#{item.WEEKEND_SEND},
+			#{item.CATEGRORY}
+			)
+		</foreach>
+	</insert>
+
+	<insert id="addSign2">
+		insert into intintegral
+		( INTINTEGRAL_ID,store_id,sign_time_set,CATEGRORY)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.store_id},
+			#{item.sign_time_set},
+			#{item.CATEGRORY}
+			)
+		</foreach>
+	</insert>
+
+	<select id="checkSign" resultType="pd">
+		select * from intintegral where store_id=#{store_id} and CATEGRORY='2'
+	</select>
+
+	<select id="checkSign2" resultType="pd">
+		select * from intintegral where store_id=#{store_id} and CATEGRORY='5'
+	</select>
+
+	<delete id="deleteSign">
+		delete from intintegral where store_id=#{store_id}  and (CATEGRORY =#{type1} or CATEGRORY=#{type2})
+	</delete>
+
+	<delete id="deleteSign2">
+		delete from intintegral where store_id=#{store_id}  and CATEGRORY =#{type}
+	</delete>
+
+	<select id="getAllSign" resultType="pd">
+			SELECT
+				CATEGRORY,
+				INTEGRAL_SEND,
+				WEEKEND_SEND,
+				sign_time_set,
+				b.store_id ,
+				b.store_name
+			FROM
+			intintegral a left join  internet_store b on a.store_id=b.STORE_ID  where a.store_id=#{store_id} order by CATEGRORY asc
+    </select>
+
+	<update id="saveSigns" parameterType="java.util.List">
+			UPDATE intintegral
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			<set>
+				INTEGRAL_SEND=#{item.INTEGRAL_SEND},
+				WEEKEND_SEND=#{item.WEEKEND_SEND}
+			</set>
+		</foreach>
+		where store_id = #{item.store_id}
+	</update>
+
+	<update id="saveSigns2" parameterType="java.util.List">
+
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			update intintegral
+			<set>
+				sign_time_set=#{item.sign_time_set}
+			</set>
+			where store_id = #{item.store_id}
+		</foreach>
+	</update>
+	
+</mapper>

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LeaveMessageMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		leaveMessage
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		LM_ID,
+		LM_DATE,
+		LM_CONTENT,
+		LM_USERID,
+		LM_TYPEID,
+		INTERNET_ID,
+		STROE_ID,
+		LM_USERNAME,
+		LM_INTERNET_NAME,
+		LM_STROE_NAME,
+		LM_STATE,
+		LM_BACKTIME,
+		USER_ID,
+		IS_VIEW,
+		BACKCONTENT
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{LM_ID},
+		#{LM_DATE},
+		#{LM_CONTENT},
+		#{LM_USERID},
+		#{LM_TYPEID},
+		#{INTERNET_ID},
+		#{STROE_ID},
+		#{LM_USERNAME},
+		#{LM_INTERNET_NAME},
+		#{LM_STROE_NAME},
+		#{LM_STATE},
+		#{LM_BACKTIME},
+		#{USER_ID},
+		#{IS_VIEW},
+		#{BACKCONTENT}
+	</sql>
+
+	<!--查询 -->
+	<select id="getAllLm"
+		resultType="com.lk.entity.system.LeaveMessage">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		order by LM_DATE DESC
+	</select>
+
+	<!--根据网吧id查询 -->
+	<select id="getLmByIntId" parameterType="java.lang.String"
+		resultType="com.lk.entity.system.LeaveMessage">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		and INTERNET_ID = #{INTERNET_ID}
+			<![CDATA[ and datediff(curdate(),LM_DATE) < 90 ]]>
+		ORDER BY LM_DATE DESC
+	</select>
+
+	<!--excel导出查询 -->
+	<select id="getLm" parameterType="pd"
+		resultType="com.lk.entity.system.LeaveMessage">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		and INTERNET_ID = #{INTERNET_ID}
+		<!-- 关键词检索 -->
+		<if test="keywords!= null and keywords != ''">
+			and
+			(
+			LM_STROE_NAME LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or LM_USERNAME LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			or LM_STATE LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+
+			or LM_USERNAME LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%')<!-- 加码后的 -->
+			)
+		</if>
+		<!-- 状态筛选 -->
+		<if test="LM_STATE != null and LM_STATE != '' ">
+			and LM_STATE = #{LM_STATE}
+		</if>
+		<!-- 门店筛选 -->
+		<if test="STORE_ID != null and STORE_ID != '' ">
+			and STROE_ID = #{STORE_ID}
+		</if>
+		<!-- 开始时间和结束时间筛选 -->
+		<if test="lastLoginStart != null and lastLoginStart != '' ">
+			and LM_DATE <![CDATA[>]]>
+			#{lastLoginStart}
+		</if>
+		<if test="lastLoginEnd != null and lastLoginEnd != '' ">
+			and LM_DATE <![CDATA[<]]>
+			#{lastLoginEnd}
+		</if>
+		<!-- 3个月内，倒序排列 -->
+		<![CDATA[ and datediff(curdate(),LM_DATE) < 90 ]]>
+		ORDER BY LM_DATE DESC
+	</select>
+
+	<!-- 分页列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		A
+		where 1=1
+		<!-- 关键词检索 -->
+		<if test="pd.keywords!= null and pd.keywords != ''">
+			and
+			(
+			<!-- A.LM_STROE_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') or A.LM_STATE 
+				LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') -->
+			A.LM_USERNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+
+			or A.LM_USERNAME LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%')<!-- 加码后的 -->
+			)
+		</if>
+		<!-- 网吧筛选 -->
+		<if test="pd.internetId != null and pd.internetId != '' ">
+			and A.INTERNET_ID = #{pd.internetId}
+		</if>
+		<!-- 状态筛选 -->
+		<if test="pd.LM_STATE != null and pd.LM_STATE != '' ">
+			and A.LM_STATE = #{pd.LM_STATE}
+		</if>
+		<!-- 门店筛选 -->
+		<if test="pd.STORE_ID != null and pd.STORE_ID != '' ">
+			and A.STROE_ID = #{pd.STORE_ID}
+		</if>
+		<!-- 门店角色筛选 -->
+		<if test="pd.STORE_ID == null or pd.STORE_ID == '' ">
+			<if test="pd.list!= null and pd.list!=''">
+			and A.STROE_ID in ('${pd.list}')
+		    </if>
+		</if>
+		<!-- 日期筛选 -->
+		<if test="pd.lastLoginStart != null and pd.lastLoginStart != '' ">
+			and A.LM_DATE <![CDATA[>]]>
+			#{pd.lastLoginStart}
+		</if>
+		<if test="pd.lastLoginEnd != null and pd.lastLoginEnd != '' ">
+			and A.LM_DATE <![CDATA[<]]>
+			#{pd.lastLoginEnd}
+		</if>
+		<!-- 显示最新3个月 -->
+		<![CDATA[ and datediff(curdate(),A.LM_DATE) < 90 ]]>
+		ORDER BY A.LM_DATE DESC
+	</select>
+
+
+	<!--根据主键id查询 -->
+	<select id="getOneByLMID" parameterType="java.lang.String"
+		resultType="com.lk.entity.system.LeaveMessage">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1 and LM_ID=#{LM_ID}
+	</select>
+
+	<!--根据投诉人LM_USERID查询 -->
+	<select id="getlmByUid" parameterType="pd"
+		resultType="com.lk.entity.system.LeaveMessage">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1 and LM_USERID = #{LM_USERID} and LM_USERID = #{LM_USERID}
+		ORDER BY LM_DATE DESC
+	</select>
+	<select id="findLmByCondition" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from
+			<include refid="tableName"></include>
+		where 1=1
+		<if test="LM_USERID != null and LM_USERID != ''">
+			and LM_USERID = #{LM_USERID}
+		</if>
+		<if test="IS_VIEW != null and IS_VIEW != ''">
+			and IS_VIEW = #{IS_VIEW}
+		</if>
+		<if test="LM_STATE != null and LM_STATE != ''">
+			and LM_STATE = #{LM_STATE}
+		</if>
+		ORDER BY LM_DATE DESC
+	</select>
+
+	<!-- 新增 -->
+	<insert id="addLm"
+		parameterType="com.lk.entity.system.LeaveMessage">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除 -->
+	<delete id="deleteLm" parameterType="java.lang.String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		LM_ID = #{LM_ID}
+	</delete>
+
+
+	<!-- 修改 -->
+	<update id="updateLm" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="LM_STATE != null and LM_STATE != ''">
+			LM_STATE = #{LM_STATE},
+		</if>
+		<if test="LM_BACKTIME != null and LM_BACKTIME != ''">
+			LM_BACKTIME = #{LM_BACKTIME},
+		</if>
+		<if test="BACKCONTENT != null and BACKCONTENT != ''">
+			BACKCONTENT = #{BACKCONTENT},
+		</if>
+		<if test="IS_VIEW != null and IS_VIEW != ''">
+			IS_VIEW = #{IS_VIEW},
+		</if>
+		<if test="USER_ID != null and USER_ID != ''">
+			USER_ID = #{USER_ID},
+		</if>
+		LM_ID = #{LM_ID}
+		where
+		LM_ID = #{LM_ID}
+	</update>
+
+</mapper>

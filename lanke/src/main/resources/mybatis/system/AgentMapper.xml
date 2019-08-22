@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AgentMapper">
+	<!--表名 -->
+	<sql id="tableName">
+		tb_agent
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		company_name,
+		province,
+		city,
+		county,
+		company_address,
+		corporate_name,
+		corporate_id,
+		credit_number,
+		contacts_name,
+		phone,
+		agent_number,
+		createtime,
+		updatetime
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{company_name},
+		#{province},
+		#{city},
+		#{county},
+		#{company_address},
+		#{corporate_name},
+		#{corporate_id},
+		#{credit_number},
+		#{contacts_name},
+		#{phone},
+		#{agent_number},
+		#{createtime},
+		#{updatetime}
+	</sql>
+
+	<!-- 代理商列表 -->
+	<select id="datalistPages" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and
+			(
+			company_name LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or company_address LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or contacts_name LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or phone LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or agent_number LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			)
+		</if>
+		<if test="pd.province != null and pd.province != ''">
+			and province= #{pd.province}
+		</if>
+		<if test="pd.city != null and pd.city != ''">
+			and city= #{pd.city}
+		</if>
+		<if test="pd.county != null and pd.county != ''">
+			and county= #{pd.county}
+		</if>
+		<if test="pd.id != null and pd.id != ''">
+			and id= #{pd.id}
+		</if>
+		order by createtime DESC
+	</select>
+
+	<!-- 判断代理商编号是否存在 -->
+	<select id="exist" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where agent_number = #{agent_number}
+	</select>
+
+	<!-- 新增代理商信息 -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 通过id获取代理商信息 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where id = #{id}
+	</select>
+
+	<!-- 编辑代理商信息 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="company_name != null and company_name != ''">
+			company_name = #{company_name},
+		</if>
+		<if test="province != null and province != ''">
+			province = #{province},
+		</if>
+		<if test="city != null and city != ''">
+			city = #{city},
+		</if>
+		<if test="county != null and county != ''">
+			county =#{county},
+		</if>
+		<if test="company_address != null and company_address != ''">
+			company_address = #{company_address},
+		</if>
+		<if test="corporate_name != null and corporate_name != ''">
+			corporate_name = #{corporate_name},
+		</if>
+		<if test="corporate_id != null and corporate_id != ''">
+			corporate_id = #{corporate_id},
+		</if>
+		<if test="credit_number != null and credit_number != ''">
+			credit_number = #{credit_number},
+		</if>
+		<if test="contacts_name != null and contacts_name != ''">
+			contacts_name = #{contacts_name},
+		</if>
+		<if test="phone != null and phone != ''">
+			phone = #{phone},
+		</if>
+		<if test="agent_number != null and agent_number != ''">
+			agent_number = #{agent_number},
+		</if>
+		<if test="updatetime != null and updatetime != ''">
+			updatetime = #{updatetime}
+		</if>
+		where id = #{id}
+	</update>
+
+	<!-- 通过代理商id去查询其代理门店信息 -->
+	<select id="showlistPage" parameterType="page" resultType="pd">
+		SELECT
+		b.STORE_NAME AS STORE_NAME,
+		b.STORE_ID AS STORE_ID,
+		b.PROVINCE AS
+		PROVINCE,
+		b.CITY AS CITY,
+		b.COUNTY AS COUNTY,
+		b.ADDRESS AS ADDRESS,
+		b.TELEPHONE AS TELEPHONE,
+		c.`STATE` AS STATE,
+		d.`status` AS STATUS
+		FROM
+		tb_agentstore a
+		LEFT JOIN internet_store b
+		ON a.`store_id` =
+		b.`store_id`
+		LEFT JOIN internet_store_v c
+		ON b.`store_id` = c.`store_id`
+		LEFT JOIN tb_internetdatum d
+		ON c.`store_id` = d.`store_id`
+		where
+		a.`agent_id` = #{pd.id}
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and
+			(
+			b.STORE_NAME LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or b.STORE_ID LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or b.ADDRESS LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or b.TELEPHONE LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			)
+		</if>
+		<if test="pd.province != null and pd.province != ''">
+			and b.PROVINCE= #{pd.province}
+		</if>
+		<if test="pd.city != null and pd.city != ''">
+			and b.CITY= #{pd.city}
+		</if>
+		<if test="pd.county != null and pd.county != ''">
+			and b.COUNTY= #{pd.county}
+		</if>
+		<if test="pd.STATE != null and pd.STATE != ''">
+			and c.`STATE`= #{pd.STATE}
+		</if>
+		<if test="pd.STATUS != null and pd.STATUS != ''">
+			<if test="pd.STATUS == 0 ">
+				and (d.`status` is null or d.`status`= #{pd.STATUS})
+			</if>
+			<if test="pd.STATUS != 0 ">
+				and d.`status`= #{pd.STATUS}
+			</if>
+		</if>
+	</select>
+
+	<!-- 通过用户id去查询代理商代理的门店信息 -->
+	<select id="selStore" parameterType="page" resultType="pd">
+		SELECT
+		c.STORE_NAME
+		FROM
+		sys_user a,
+		tb_agentstore b,
+		internet_store c
+		WHERE
+		a.`ANGET_ID` = b.`agent_id`
+		AND b.`store_id` = c.`store_id`
+		AND
+		a.`USER_ID`=#{pd.USER_ID}
+	</select>
+
+	<!-- 删除代理商和门店关系表信息 -->
+	<delete id="deleteAgentStore" parameterType="pd">
+		delete from
+		tb_agentstore
+		where
+		store_id = #{STORE_ID}
+	</delete>
+
+	<!-- 通过门店id去查看关系表信息 -->
+	<select id="selAgentStore" parameterType="pd" resultType="pd">
+		select
+		*
+		from
+		tb_agentstore
+		where store_id = #{STORE_ID}
+	</select>
+
+	<!-- 新增门店和代理商关系 -->
+	<insert id="addAgentStore" parameterType="pd">
+		INSERT INTO
+		tb_agentstore (agent_id, store_id)
+		VALUES
+		(#{agent_id}, #{STORE_ID})
+	</insert>
+
+	<!-- 更新门店和代理商关系 -->
+	<update id="editAgentStore" parameterType="pd">
+		update
+		tb_agentstore
+		set
+		<if test="agent_id != null and agent_id != ''">
+			agent_id = #{agent_id}
+		</if>
+		where store_id = #{STORE_ID}
+	</update>
+</mapper>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RechargeRuleMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		tb_internetrule
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		internet_id,
+		recharge_money,
+		reward_money,
+		label_name,
+		label_id,
+		label_color,
+		createtime,
+		store_id,
+		sequence,
+		status
+
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{internet_id},
+		#{recharge_money},
+		#{reward_money},
+		#{label_name},
+		#{label_id},
+		#{label_color},
+		#{createtime},
+		#{store_id},
+		#{sequence},
+		#{status}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+			<include refid="tableName"></include>(<include refid="Field"></include>) 
+		values 
+			(<include refid="FieldValue"></include>)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="deleteExtra" parameterType="pd">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			sequence in(#{item}) and store_id = #{store_id} and status = '0'
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+			<include refid="tableName"></include>
+		set 
+			<if test="label_name != null and label_name != ''">
+				label_name = #{label_name},
+			</if>
+			<if test="label_color != null and label_color != ''">
+				label_color = #{label_color},
+			</if>
+			<if test="label_id != null and label_id != ''">
+				label_id = #{label_id},
+			</if>
+			<if test="recharge_money != null and recharge_money != ''">
+				recharge_money = #{recharge_money},
+			</if>
+			<if test="reward_money != null and reward_money != ''">
+				reward_money = #{reward_money},
+			</if>
+			<if test="status != null and status != ''">
+				status = #{status},
+			</if>
+			<if test="sequence != null and sequence != ''">
+				sequence = #{sequence},
+			</if>
+			<if test="label_name == 'kong'">
+				label_name = "",
+			</if>
+			<if test="label_color == 'kong'">
+				label_color = "",
+			</if>
+			<if test="label_id == 'kong'">
+				label_id = "",
+			</if>
+			id = #{id}
+		where 
+			id = #{id}
+	</update>
+	<update id="editByStoreIdAndSequence" parameterType="pd">
+		update
+			<include refid="tableName"></include>
+		set 
+			<if test="label_name != null and label_name != ''">
+				label_name = #{label_name},
+			</if>
+			<if test="label_color != null and label_color != ''">
+				label_color = #{label_color},
+			</if>
+			<if test="label_id != null and label_id != ''">
+				label_id = #{label_id},
+			</if>
+			<if test="recharge_money != null and recharge_money != ''">
+				recharge_money = #{recharge_money},
+			</if>
+			<if test="reward_money != null and reward_money != ''">
+				reward_money = #{reward_money},
+			</if>
+			<if test="status != null and status != ''">
+				status = #{status},
+			</if>
+			<if test="label_name == 'kong'">
+				label_name = "",
+			</if>
+			<if test="label_color == 'kong'">
+				label_color = "",
+			</if>
+			<if test="label_id == 'kong'">
+				label_id = "",
+			</if>
+			store_id = #{store_id}
+		where 
+			store_id = #{store_id} and sequence = #{sequence} and status = '0'
+	</update>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			a.id,
+			count(*) as number,
+			a.store_id,
+			b.store_name
+		from 
+			<include refid="tableName"></include> a left join internet_store b on a.store_id = b.store_id
+		where 1=1 and a.internet_id = #{pd.internet_id}
+		<!-- 关键词检索 -->
+			<if test="pd.keywords != null and pd.keywords != ''">
+				and b.store_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			</if>
+		<!-- 筛选条件 -->
+			<if test="pd.store_id != null and pd.store_id != ''">
+				and a.store_id in ('${pd.store_id}')
+			</if>
+		<!-- 未删除的 -->
+			and a.status = '0'
+		group by a.store_id
+	</select>
+	
+	<select id="findByStoreId" parameterType="pd" resultType="pd">
+		select 
+			a.*,
+			b.store_name 
+		from 
+			<include refid="tableName"></include> a left join internet_store b on a.store_id = b.store_id
+		where 
+			a.store_id = #{store_id} and a.status = '0'
+		order by a.sequence asc
+	</select>
+	
+	<select id="checkIsUsed" parameterType="pd" resultType="pd">
+		select 
+			(select count(*) from tb_rechargehistory where internetrule_id in 
+				(select id from tb_internetrule where store_id = #{store_id} and sequence = #{sequence} and status = '0')) as number1 ,
+			(select count(*) from tb_recharge where internetrule_id in 
+				(select id from tb_internetrule where store_id = #{store_id} and sequence = #{sequence} and status = '0'))as number2 
+	</select>
+	
+	<select id="findByStoreIdAndSequence" parameterType="pd" resultType="pd">
+		select * from <include refid="tableName"></include> where store_id = #{store_id} and sequence = #{sequence} and status = '0'
+	</select>
+
+	<select id="findStoreId" parameterType="pd" resultType="pd">
+		select a.store_id,(select store_name from internet_store where store_id = a.store_id) as store_name from  <include refid="tableName"></include> a 
+		where  a.status = '0' and a.internet_id = #{internet_id}
+		<if test="store_id != null and store_id != ''">
+		       and a.store_id in ('${store_id}')
+		</if>
+		group by a.store_id
+		
+	</select>
+</mapper>

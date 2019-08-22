@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ueditor图片背景对话框</title>
+    <script type="text/javascript" src="../internal.js"></script>
+    <!-- jquery -->
+    <script type="text/javascript" src="../../third-party/jquery-3.3.1.min.js"></script>
+</head>
+<style>
+
+.col-sm-6{width:50%;display: inline-block;float:left;}
+.col-form-label{display: inline-block;width:60px;text-align: right;}
+.col-sm-7{width:58%;display: inline-block;}
+input {width:80px;}
+.form-group {padding:5px;}
+</style>
+<body>
+	
+	<div id="bg-dialog-content" style="padding:20px;">
+		<div class="modal-body" style="overflow: hidden;padding: 0;clear:both;">
+     	<form class="form-horizontal">
+     	<div>提示：段落如果未生效，请先将内容转换成段落格式。</div>
+     	<div>
+     		<div class="col-sm-6">
+     			<div class="form-group">
+					<label class="col-sm-5 col-form-label">行高：</label>
+					<div class="col-sm-7 controls">
+						<input class="form-control" value="1.5em" id="paragraph-lineHeight" type="text">
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-sm-5 col-form-label">字体：</label>
+					<div class="col-sm-7 controls">
+						<select  class="form-control" id="paragraph-fontFamily">
+						<option value="微软雅黑">微软雅黑</option>
+							<option value="宋体">宋体</option>
+							<option value="楷体">楷体</option>
+							<option value="黑体">黑体</option>
+							<option value="隶书,SimLi">隶书</option>
+							<option value="arial">arial</option>
+							<option value="sans-serif">sans-serif</option>
+						</select>
+					</div>
+				</div>
+				 
+				 <div class="form-group">
+					<label class="col-sm-5 col-form-label">颜色：</label>
+					<div class="col-sm-7 controls">
+						<input class="form-control" style="width: 100px;" placeholder="字号" value="rgb(61,61,61)" id="paragraph-color" type="text">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-5 col-form-label">段前距：</label>
+					<div class="col-sm-7 controls">
+						<input class="form-control" id="paragraph-paddingTop" value="5px" type="text">
+					</div>
+				</div>
+     		</div>
+     		<div class="col-sm-6">
+     			<div class="form-group">
+					<label class="col-sm-5 col-form-label">字号：</label>
+					<div class="col-sm-7 controls">
+						<input class="form-control" placeholder="字号" value="14px" id="paragraph-fontSize" type="text">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-5 col-form-label">字间距：</label>
+					<div class="col-sm-7 controls">
+						<input class="form-control" placeholder="字间距" value="0px" id="paragraph-letterSpacing" type="text">
+					</div>
+				</div>
+     			<div class="form-group">
+					<label class="col-sm-5 col-form-label">首行缩进：</label>
+					<div class="col-sm-7 controls">
+						<input class="form-control" id="paragraph-textIndent" value="0em" type="text">
+					</div>
+				</div>
+     			
+				<div class="form-group">
+					<label class="col-sm-5 col-form-label">段后距：</label>
+					<div class="col-sm-7 controls">
+						<input class="form-control" id="paragraph-paddingBottom" value="5px" type="text">
+					</div>
+				</div>
+     		</div>
+     	</div>
+     		
+			
+     	</form>
+     </div>
+     <div style="text-align:center;">
+     	<button type="button" onclick="applyParagraph('active');" class="btn btn-primary" data-dismiss="modal">应用到本样式</button>
+     	<button type="button" onclick="applyParagraph('all');" class="btn btn-warning" data-dismiss="modal">应用到全文</button>
+     	<button type="button" onclick="dialog.close(false);" class="btn btn-warning" data-dismiss="modal">取消</button>
+     </div>
+	</div>
+
+<script>
+	
+(function () {	
+	dialog.onok = function () {
+		
+	}	
+})();
+	
+
+function applyParagraph(type) {
+	var object ;
+	if(type == 'all') {
+		var editor_document = editor.selection.document;
+		object = $(editor_document);
+	}
+	else{
+		object = dialog.anchorEl;
+	}
+
+	$(object).find('p').each(function(){
+		$(this).css('lineHeight',$('#paragraph-lineHeight').val());
+		$(this).css('fontFamily',$('#paragraph-fontFamily').val());
+		$(this).css('fontSize',$('#paragraph-fontSize').val());
+		$(this).css('letterSpacing',$('#paragraph-letterSpacing').val());
+		$(this).css('color',$('#paragraph-color').val());
+		$(this).css('textIndent',$('#paragraph-textIndent').val());
+		$(this).css('paddingTop',$('#paragraph-paddingTop').val());
+		$(this).css('paddingBottom',$('#paragraph-paddingBottom').val());
+	});
+	dialog.close(false);
+}
+</script>    
+
+</body>
+</html>

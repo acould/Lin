@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EnrollMapper">
+
+    <!--表名-->
+    <sql id="tableName">
+		user_enroll
+	</sql>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Field">
+        id,
+        user_id,
+        matches_id,
+        name,
+        phone,
+        game_json,
+        create_time,
+        position,
+        team_id,
+        internet_id
+
+    </sql>
+
+    <sql id="FieldValue">
+        #{id},
+        #{user_id},
+        #{matches_id},
+        #{name},
+        #{phone},
+        #{game_json},
+        #{create_time},
+        #{position},
+        #{team_id},
+        #{internet_id}
+
+    </sql>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="pd">
+        insert into
+        <include refid="tableName"></include>(<include refid="Field"></include>)
+        values
+        (<include refid="FieldValue"></include>)
+    </insert>
+
+    <!-- 删除-->
+    <delete id="delete" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        id = #{id}
+    </delete>
+    <delete id="delByTeamId" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        team_id = #{team_id}
+    </delete>
+
+    <update id="edit" parameterType="pd">
+        update
+        user_enroll
+        set
+        <if test="name != null and name != ''">
+            name = #{name},
+        </if>
+        <if test="phone != null and phone != ''">
+            phone = #{phone},
+        </if>
+        <if test="game_json != null and game_json != ''">
+            game_json = #{game_json},
+        </if>
+        <if test="position != null and position != ''">
+            position = #{position},
+        </if>
+        id = #{id}
+        where
+        id = #{id}
+    </update>
+    <update id="editByTeamIdAndPhone" parameterType="pd">
+        update
+        user_enroll
+        set
+        <if test="name != null and name != ''">
+            name = #{name},
+        </if>
+        <if test="phone != null and phone != ''">
+            phone = #{phone},
+        </if>
+        <if test="game_json != null and game_json != ''">
+            game_json = #{game_json},
+        </if>
+        team_id = #{team_id}
+        where
+        phone = #{phone} and team_id = #{team_id}
+    </update>
+
+
+
+    <!-- 通过ID获取数据 -->
+    <select id="findById" parameterType="String" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        id = #{id}
+    </select>
+
+
+    <select id="getEnrollNumByMatchesId" parameterType="String" resultType="Integer">
+        select count(*) from user_enroll where matches_id = #{matches_id}
+    </select>
+
+
+    <select id="datalistPage" parameterType="page" resultType="pd">
+        select
+            a.*,
+            b.team_name,
+            b.team_type
+        from user_enroll a left join user_enroll_team b on a.team_id = b.id
+        where 1=1 and a.matches_id = #{pd.matches_id}
+        <!-- 关键词搜索 -->
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            a.name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            a.phone LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            b.team_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            )
+        </if>
+        order by b.create_time desc, field(a.position,'1','2') asc
+    </select>
+
+    <select id="listExcel" parameterType="pd" resultType="pd">
+        select
+        a.*,
+        b.team_name,
+        b.team_type
+        from user_enroll a left join user_enroll_team b on a.team_id = b.id
+        where 1=1 and a.matches_id = #{matches_id}
+        <!-- 关键词搜索 -->
+        <if test="keywords != null and keywords != ''">
+            and (
+            a.name LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+            a.phone LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+            b.team_name LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+            )
+        </if>
+        <if test="arr != null and arr != ''">
+            and a.id in
+            <foreach item="item" index="index" collection="arr" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        order by a.create_time desc, a.position asc
+    </select>
+
+
+    <select id="findByTeamId" parameterType="String" resultType="pd">
+        select
+          a.*,
+          b.neck_name,
+          b.imgurl
+        from user_enroll a left join wechat_user b on a.user_id = b.user_id
+        where a.team_id = #{team_id}
+          order by a.position asc, a.create_time desc
+    </select>
+
+    <select id="findByUserIdAndMatchesId" parameterType="pd" resultType="pd">
+        select
+            a.*,
+            b.team_name,
+            b.team_description,
+            b.team_type
+        from user_enroll a left join user_enroll_team b on a.team_id = b.id
+        where a.user_id = #{user_id} and a.matches_id = #{matches_id}
+        limit 1
+    </select>
+    <select id="findByPhoneAndMatchesId" parameterType="pd" resultType="pd">
+        select
+            a.*,
+            b.team_name,
+            b.team_description,
+            b.team_type
+        from user_enroll a left join user_enroll_team b on a.team_id = b.id
+        where a.phone = #{phone} and a.matches_id = #{matches_id}
+        limit 1
+    </select>
+
+
+
+</mapper>

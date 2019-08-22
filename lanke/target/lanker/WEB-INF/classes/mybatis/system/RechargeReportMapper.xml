@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RechargeReportMapper">
+	<!--表名 -->
+	<sql id="tableName">
+		tb_recharge
+	</sql>
+
+	<!--表名 -->
+	<sql id="tableName_history">
+		tb_rechargehistory
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		merOrderId,
+		user_name,
+		openid,
+		carded,
+		cardid,
+		store_id,
+		store_name,
+		internet_id,
+		rincipal_balance,
+		reward_balance,
+		internetrule_id,
+		createtime,
+		return_code,
+		return_msg,
+		pay_state,
+		pay_actualbalance,
+		pay_type,
+		pay_starttime,
+		third_payment,
+		memo,
+		request_time,
+		pat_endtime
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{merOrderId},
+		#{carded},
+		#{cardid},
+		#{user_id},
+		#{user_name},
+		#{openid},
+		#{store_id},
+		#{store_name},
+		#{internet_id},
+		#{rincipal_balance},
+		#{reward_balance},
+		#{internetrule_id},
+		#{createtime},
+		#{return_code},
+		#{return_msg},
+		#{pay_state},
+		#{pay_actualbalance},
+		#{pay_type},
+		#{pay_starttime},
+		#{third_payment},
+		#{memo},
+		#{request_time},
+		#{pat_endtime}
+	</sql>
+
+	<!-- 充值报表 -->
+	<select id="datalistPage" parameterType="page"
+		resultType="pd">
+		select c.* from (
+		select
+		<include refid="Field"></include>,
+		(select business_number from tb_internetdatum where store_id = a.store_id) business_number,
+		(select store_name from internet_store where store_id = a.store_id) storename
+		from
+		<include refid="tableName"></include> a
+		UNION ALL
+		select
+		<include refid="Field"></include>,
+		(select business_number from tb_internetdatum where store_id = b.store_id) business_number,
+		(select store_name from internet_store where store_id = b.store_id) storename
+		from
+		<include refid="tableName_history"></include> b) c
+		where pay_state not in ('0','1','3')
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and ( store_id LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or user_name LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or carded LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or merOrderId LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or pay_type LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or rincipal_balance LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or reward_balance LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or carded LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%'))
+		</if>
+		<if test="pd.id != null and pd.id != ''">
+			and id= #{pd.id}
+		</if>
+		<if test="pd.internet_id != null and pd.internet_id != ''">
+			and internet_id= #{pd.internet_id}
+		</if>
+		<if test="pd.store_id != null and pd.store_id != ''">
+			and store_id in ('${pd.store_id}') 
+		</if>
+		<if test="pd.pay_state != null and pd.pay_state != ''">
+				and pay_state = #{pd.pay_state}
+		</if>
+		<if test="pd.STORE_ID != null and pd.STORE_ID != ''">
+			and store_id in ('${pd.pd.STORE_ID') 
+		</if>
+		<if test="pd.startTime != null and pd.startTime != '' ">
+			and createtime <![CDATA[>]]>#{pd.startTime}
+		</if>
+		<if test="pd.endTime != null and pd.endTime != '' ">
+			and createtime <![CDATA[<]]>#{pd.endTime}
+		</if>
+		order by createtime
+		desc
+	</select>
+
+	<select id="totalNum" parameterType="page"
+		resultType="Integer">
+		select count(*) from (select
+		<include refid="Field"></include>,
+		(select business_number from tb_internetdatum where store_id = a.store_id) business_number
+		from
+		<include refid="tableName"></include> a
+		UNION ALL
+		select
+		<include refid="Field"></include>,
+		(select business_number from tb_internetdatum where store_id = b.store_id) business_number
+		from
+		<include refid="tableName_history"></include> b) c
+		where pay_state not in ('0','1','3')
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and ( store_id LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or user_name LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or carded LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or merOrderId LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or pay_type LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or rincipal_balance LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or reward_balance LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%')
+			or carded LIKE
+			CONCAT(CONCAT('%',#{pd.keywords}),'%'))
+		</if>
+		<if test="pd.id != null and pd.id != ''">
+			and id= #{pd.id}
+		</if>
+		<if test="pd.internet_id != null and pd.internet_id != ''">
+			and internet_id= #{pd.internet_id}
+		</if>
+		<if test="pd.store_id != null and pd.store_id != ''">
+			and store_id= #{pd.store_id}
+		</if>
+		<if test="pd.pay_state != null and pd.pay_state != ''">
+			 and pay_state = #{pd.pay_state}
+		</if>
+
+		<if test="pd.STORE_ID != null and pd.STORE_ID != ''">
+			and store_id= #{pd.pd.STORE_ID}
+		</if>
+		<if test="pd.startTime != null and pd.startTime != '' ">
+			and createtime <![CDATA[>]]>#{pd.startTime}
+		</if>
+		<if test="pd.endTime != null and pd.endTime != '' ">
+			and createtime <![CDATA[<]]>#{pd.endTime}
+		</if>
+		order by createtime
+		desc
+	</select>
+	
+	<!-- 导出 -->
+	<select id="datalist" parameterType="pd"
+		resultType="com.lk.entity.unionPay.TBRecharge">
+		select c.* from (select
+		<include refid="Field"></include>,
+		(select business_number from tb_internetdatum where store_id = a.store_id) business_number,
+		(select store_name from internet_store where store_id = a.store_id) storename
+		from
+		<include refid="tableName"></include> a
+		UNION ALL
+		select
+		<include refid="Field"></include>,
+		(select business_number from tb_internetdatum where store_id = b.store_id) business_number,
+		(select store_name from internet_store where store_id = b.store_id) storename
+		from
+		<include refid="tableName_history"></include> b) c
+		where pay_state not in ('0','1','3')
+		<if test="keywords != null and keywords != ''">
+			and ( store_id LIKE
+			CONCAT(CONCAT('%',#{keywords}),'%')
+			or user_name LIKE
+			CONCAT(CONCAT('%',#{keywords}),'%')
+			or carded LIKE
+			CONCAT(CONCAT('%',#{keywords}),'%')
+			or merOrderId LIKE
+			CONCAT(CONCAT('%',#{keywords}),'%')
+			or pay_type LIKE
+			CONCAT(CONCAT('%',#{keywords}),'%')
+			or rincipal_balance LIKE
+			CONCAT(CONCAT('%',#{keywords}),'%')
+			or reward_balance LIKE
+			CONCAT(CONCAT('%',#{keywords}),'%')
+			or carded LIKE
+			CONCAT(CONCAT('%',#{keywords}),'%'))
+		</if>
+		<if test="id != null and id != ''">
+			and id= #{id}
+		</if>
+		<if test="internet_id != null and internet_id != ''">
+			and internet_id= #{internet_id}
+		</if>
+		<if test="store_id != null and store_id != ''">
+			and store_id in ('${store_id}') 
+		</if>
+		<if test="pay_state != null and pay_state != ''">
+			 and pay_state = #{pay_state}
+		</if>
+		<if test="STORE_ID != null and STORE_ID != ''">
+			and store_id= #{STORE_ID}
+		</if>
+		<if test="startTime != null and startTime != '' ">
+			and createtime <![CDATA[>]]>#{startTime}
+		</if>
+		<if test="endTime != null and endTime != '' ">
+			and createtime <![CDATA[<]]>#{endTime}
+		</if>
+		order by createtime
+		desc
+	</select>
+
+
+	<!-- 获取网吧所有门店信息 -->
+	<select id="storeList" parameterType="page" resultType="pd">
+		SELECT
+		store_id  STORE_ID,
+		store_name  STORE_NAME
+		FROM
+		internet_store
+		WHERE 1=1
+		<if test="pd.internet_id != null and pd.internet_id != ''">
+			and INTERNET_ID= #{pd.internet_id}
+		</if>
+	</select>
+
+	<select id="tosum" parameterType="pd"
+		resultType="pd">
+		select
+			SUM(reward_balance) reward_sum,
+			SUM(RINCIPAL_BALANCE) rincipal_sum
+		from
+			<include refid="tableName_history"></include>
+		where pay_state ='a'
+		<if test="keywords != null and keywords != ''">
+			and (
+			carded LIKE CONCAT(CONCAT('%',#{keywords}),'%')
+			or store_name LIKE CONCAT(CONCAT('%',#{keywords}),'%')
+			)
+		</if>
+		<if test="internet_id != null and internet_id != ''">
+			and internet_id= #{internet_id}
+		</if>
+		<if test="store_id != null and store_id != ''">
+			and store_id in ('${store_id}')
+		</if>
+		<if test="startTime != null and startTime != '' ">
+			and createtime <![CDATA[>]]>#{startTime}
+		</if>
+		<if test="endTime != null and endTime != '' ">
+			and createtime <![CDATA[<]]>#{endTime}
+		</if>
+	</select>
+
+</mapper>

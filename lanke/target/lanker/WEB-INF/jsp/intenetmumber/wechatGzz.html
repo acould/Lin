@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+		<title>网吧联盟</title>
+	</head>
+	<body style="background: url(http://oo9t47b94.bkt.clouddn.com/bg.jpg);">
+		<div style="margin-top: 3rem">
+			<img src="http://oo9t47b94.bkt.clouddn.com/qcode.jpg" style="width: 2.24rem;height: 2.24rem;display: block;margin:0 auto 0.23rem">
+			<span style="font-size: 0.28rem;display: block; margin: 0 auto;text-align: center;line-height: 0.47rem">
+				1.长按二维码关注微信公众号
+			</span>
+			<span style="font-size: 0.28rem;margin: 0 auto;display: block;text-align: center;line-height: 0.47rem;margin-bottom: 0.59rem">
+				2.即刻用车
+			</span>
+		</div>
+
+<script type="text/javascript">
+function fontAuto(width){//width表示效果图的宽度
+	var screenWidth=document.documentElement.clientWidth;//屏幕的宽度
+	//document.documentElement表示html标签
+	if(screenWidth>=width)//当设备的宽度大于等于效果图的宽度
+	{
+		document.documentElement.style.fontSize="530%";
+	}
+	else{//当设备的宽度小于效果图的宽度
+		document.documentElement.style.fontSize=(530*screenWidth/width)+"%";
+	}
+	
+}
+
+fontAuto(640);//网页加载的时候触发
+
+window.onresize=function(){//当网页宽度发生变化时触发函数
+	fontAuto(640);
+}
+
+</script>
+
+	</body>
+</html>
+
+
+
+
+
+
+
+

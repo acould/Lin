@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="InternetTemplateMessageMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		internet_template_message
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		first_data,
+		keyword_data,
+		remark_data,
+		url,
+		mini_app,
+
+		create_time,
+		update_time,
+		template_id,
+		internet_id
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{first_data},
+		#{keyword_data},
+		#{remark_data},
+		#{url},
+		#{mini_app},
+
+		#{create_time},
+		#{update_time},
+		#{template_id},
+		#{internet_id}
+	</sql>
+
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>(<include refid="Field"></include>)
+		values
+		(<include refid="FieldValue"></include>)
+	</insert>
+
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		id = #{id}
+	</delete>
+
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+			<include refid="tableName"></include>
+		set 
+			<if test="first_data != null and first_data != ''">
+				first_data = #{first_data},
+			</if>
+			<if test="keyword_data != null and keyword_data != ''">
+				keyword_data = #{keyword_data},
+			</if>
+
+			<if test="remark_data != null and remark_data != ''">
+				remark_data = #{remark_data},
+			</if>
+			<if test="mini_app != null and mini_app != ''">
+				mini_app = #{mini_app},
+			</if>
+
+			<if test="update_time != null and update_time != ''">
+				update_time = #{update_time},
+			</if>
+			<if test="template_id != null and template_id != ''">
+				template_id = #{template_id},
+			</if>
+			url = #{url},
+			id = id
+		where
+			id = #{id}
+	</update>
+
+	
+	<!-- 通过主键ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where
+			id = #{id}
+	</select>
+	<select id="findByCondition" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from
+			<include refid="tableName"></include>
+		where 1=1
+			<if test="first_data != null and first_data != ''">
+				and first_data = #{first_data}
+			</if>
+			<if test="internet_id != null and internet_id != ''">
+				and internet_id = #{internet_id}
+			</if>
+			<if test="template_id != null and template_id != ''">
+				and template_id = #{template_id}
+			</if>
+		order by update_time desc
+	</select>
+
+
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from
+			<include refid="tableName"></include>
+		where 1=1
+		<!-- 条件筛选 -->
+			<if test="pd.internet_id != null and pd.internet_id != ''">
+				and internet_id = #{pd.internet_id}
+			</if>
+		<!-- 搜索 -->
+			<if test="pd.keywords != null and pd.keywords != ''">
+				and (
+					first_data LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+			</if>
+		order by update_time desc
+	</select>
+
+	<select id="listIndex" parameterType="page" resultType="pd" >
+		select
+			a.id,
+			a.first_data,
+			a.keyword_data,
+			a.remark_data,
+			a.update_time
+		from
+		<include refid="tableName"></include> a
+		where 1=1 and a.id not in(select foreign_id from internet_group_send where send_type = '2')
+		<!-- 条件筛选 -->
+			<if test="pd.internet_id != null and pd.internet_id != ''">
+				and a.internet_id = #{pd.internet_id}
+			</if>
+		<!-- 搜索 -->
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and (
+				a.first_data LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			)
+		</if>
+		order by update_time desc
+	</select>
+
+
+	
+</mapper>

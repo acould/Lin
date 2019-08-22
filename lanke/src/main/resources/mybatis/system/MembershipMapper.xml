@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MembershipMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		tb_membership
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		memberId,
+		advertisement,
+		typeo,
+		typet,
+		rincipal_balance,
+		reward_balance,
+		couponid,
+		internet_id,
+		userid,
+		createtime,
+		member_level
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{memberId},
+		#{advertisement},
+		#{typeo},
+		#{typet},
+		#{rincipal_balance},
+		#{reward_balance},
+		#{couponid},
+		#{internet_id},
+		#{userid},
+		#{createtime},
+		#{member_level}
+
+	</sql>
+
+	<!--查询申请会员设置 -->
+	<select id="view" parameterType="pd" resultType="pd">
+		select * from
+		<include refid="tableName"></include>
+		a
+		where internet_id=#{internet_id}
+		order by createtime desc
+		limit 1
+	</select>
+
+
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<insert id="savenexus" parameterType="pd">
+		insert into
+		tb_member_store
+		(
+		memberId,storeid
+		) values
+		<foreach item="item" index="index" collection="array"
+			separator=",">
+			(#{memberId},#{item})
+		</foreach>
+	</insert>
+
+	<delete id="delete" parameterType="pd">
+		DELETE
+		FROM
+		tb_membership,
+		tb_member_store
+		USING
+		tb_membership,
+		tb_member_store
+		WHERE
+		tb_membership.memberId = tb_member_store.memberId
+		AND
+		tb_membership.memberId = #{memberId}
+	</delete>
+
+	<!-- 修改TYPE -->
+	<update id="editType" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		typeo=#{typeo},
+		typet=#{typet}
+		where
+		memberId = #{memberId}
+	</update>
+	<!-- 查询以选门店信息 -->
+	<select id="findStoreId" parameterType="pd" resultType="pd">
+		SELECT
+		b.storeid,
+		(
+		SELECT
+		store_name
+		FROM
+		internet_store
+		WHERE
+		store_id = b.storeid
+		) AS store_name
+		FROM
+		tb_membership a,
+		tb_member_store b
+		WHERE
+		a.memberId =
+		b.memberId
+		AND internet_id = #{internet_id}
+	</select>
+
+	<select id="selectCard" parameterType="String" resultType="pd">
+		SELECT
+		a.*
+		FROM
+		card a,
+		in_scene b,
+		card_store c,
+		internet_store d,
+		internet_store_v e
+		WHERE a.scene_id = b.scene_id
+		AND a.`CARD_ID` =
+		c.`card_id`
+		AND c.`store_id`=d.`STORE_ID`
+		AND c.`store_id`= e.`STORE_ID`
+		AND d.`STATE`='1'
+		AND b.`FAV_TYPE`='APPLY'
+		AND a.CARD_ID = #{card_id}
+		GROUP BY a.`CARD_ID`
+	</select>
+
+	<select id="cardStoreList" parameterType="pd" resultType="pd">
+		select
+		store_id,store_name from internet_store where INTERNET_ID =
+		#{internet_id} and (member_level is null or member_level = '')
+	</select>
+
+	<select id="typeStore" parameterType="String" resultType="pd">
+		select
+		typeo,typet from tb_membership where memberId = (select memberId from
+		tb_member_store where storeid=#{store_id})
+	</select>
+
+	<select id="findinterbystoreid" parameterType="String"
+		resultType="String">
+		select
+		storeid from
+		tb_member_store where memberId=(select
+		memberId from
+		tb_membership where internet_id = #{internet_id} and
+		typeo='1')
+	</select>
+
+	<select id="findCityByInternetId" parameterType="pd" resultType="pd">
+		select
+		CITY
+		from
+		INTERNET_STORE
+		where
+		STORE_ID in ('${STORE_IDS}')
+		GROUP BY
+		CITY
+	</select>
+	<!-- 通过网吧ID和城市获取数据 -->
+	<select id="findAreaByCity" parameterType="pd" resultType="pd">
+		select
+		COUNTY
+		from
+		INTERNET_STORE
+		where
+		STORE_ID in ('${STORE_IDS}') and
+		CITY = #{CITY}
+		GROUP BY COUNTY
+	</select>
+	<!-- 通过网吧ID和城市和区域获取数据 -->
+	<select id="findStoreByArea" parameterType="pd" resultType="pd">
+		select
+		STORE_ID,
+		STORE_NAME
+		from
+		INTERNET_STORE
+		where
+		STORE_ID in
+		('${STORE_IDS}') and CITY = #{CITY}
+		<if test="COUNTY != null and COUNTY != ''">
+			and COUNTY = #{COUNTY}
+		</if>
+	</select>
+
+	<select id="CardIdandUserIdbycard" parameterType="pd"
+		resultType="pd">
+		select
+		STORE_ID,
+		STORE_NAME
+		from
+		INTERNET_STORE
+		where
+		STORE_ID in
+		('${STORE_IDS}') and CITY = #{CITY}
+		<if test="COUNTY != null and COUNTY != ''">
+			and COUNTY = #{COUNTY}
+		</if>
+	</select>
+
+	<!-- 获取符合条件的卡券 -->
+	<select id="selectCards" parameterType="pd" resultType="pd">
+		SELECT
+		a.*
+		FROM
+		card a,
+		in_scene b,
+		card_store c
+		WHERE a.scene_id = b.scene_id
+		AND
+		a.`CARD_ID` = c.`card_id`
+		AND b.FAV_TYPE = 'APPLY'
+		AND a.INTENET_ID =
+		#{internet_id}
+		AND c.store_id in ('${list}')
+		GROUP BY
+		a.`CARD_ID`
+	</select>
+
+	<!-- 获取符合条件的卡券 -->
+	<select id="selectCardstoreid" parameterType="String"
+		resultType="String">
+		SELECT
+		store_id
+		FROM
+		card_store
+		WHERE card_id=#{CARD_ID}
+	</select>
+
+	<!-- 新增 -->
+	<insert id="savememberfind" parameterType="pd">
+		insert into
+		tb_memberbyuserId
+		(
+		meid,
+		store_id,
+		user_id,
+		carded
+		) values (
+		#{meid},
+		#{store_id},
+		#{user_id},
+		#{carded}
+		)
+	</insert>
+
+	<select id="selectfind" parameterType="String"
+		resultType="pd">
+		SELECT
+		*
+		FROM
+		tb_memberbyuserId
+		WHERE store_id=#{store_id} and user_id=#{user_id}
+	</select>
+	
+		<!-- 修改微信用户信息 -->
+	<update id="edit" parameterType="com.lk.wechat.response.WechatUser">
+		update
+		wechat_user
+		set 
+		<if test="NECK_NAME != null and NECK_NAME != ''">
+		NECK_NAME=#{NECK_NAME},	
+		</if>
+		<if test="SEX != null and SEX != ''">
+		SEX=#{SEX},	
+		</if>
+		<if test="PROVICNE != null and PROVICNE != ''">
+		PROVICNE=#{PROVICNE},	
+		</if>
+		<if test="CITY != null and CITY != ''">
+		CITY=#{CITY},
+		</if>
+		<if test="IMGURL != null and IMGURL != ''">
+		IMGURL=#{IMGURL},
+		</if>
+			OPEN_ID = #{OPEN_ID}
+		where 
+			OPEN_ID = #{OPEN_ID} and INTENET_ID=#{INTENET_ID}
+	</update>
+</mapper>

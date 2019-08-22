@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PayMapper">
+
+	<!--表名 订单表-->
+	<sql id="tableName">
+		tb_recharge
+	</sql>
+
+	<!--表名 历史订单表-->
+	<sql id="tableNameh">
+		tb_rechargehistory
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		merOrderId,
+		user_id,
+		carded,
+		cardid,
+		user_name,
+		openid,
+		store_id,
+		store_name,
+		internet_id,
+		rincipal_balance,
+		reward_balance,
+		internetrule_id,
+		createtime,
+		return_code,
+		return_msg,
+		pay_state,
+		pay_actualbalance,
+		pay_type,
+		pay_starttime,
+		third_payment,
+		memo,
+		pat_endtime
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{merOrderId},
+		#{user_id},
+		#{carded},
+		#{cardid},
+		#{user_name},
+		#{openid},
+		#{store_id},
+		#{store_name},
+		#{internet_id},
+		#{rincipal_balance},
+		#{reward_balance},
+		#{internetrule_id},
+		#{createtime},
+		#{return_code},
+		#{return_msg},
+		#{pay_state},
+		#{pay_actualbalance},
+		#{pay_type},
+		#{pay_starttime},
+		#{third_payment},
+		#{memo},
+		#{pat_endtime}
+	</sql>
+
+	<!-- 新增 -->
+	<insert id="addOrder" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		)
+		values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 新增 -->
+	<insert id="addOrderHistory" parameterType="pd">
+		insert into
+		<include refid="tableNameh"></include>
+		(
+		<include refid="Field"></include>
+		)
+		values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除 -->
+	<delete id="deleteOrder" parameterType="java.lang.String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		merOrderId = #{merOrderId}
+	</delete>
+
+	<!-- 删除 -->
+	<delete id="deleteFailOrder" parameterType="java.lang.String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		user_id = #{user_id} and pay_state in ('0','1','3')
+	</delete>
+
+	<!-- 修改 -->
+	<update id="editOrderState" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="pd.return_code != null and pd.return_code != ''">
+			return_code = #{pd.return_code},
+		</if>
+		<if test="pd.pay_starttime != null and pd.pay_starttime != ''">
+			pay_starttime = #{pd.pay_starttime},
+		</if>
+		<if test="pd.pat_endtime != null and pd.pat_endtime != ''">
+			pat_endtime = #{pd.pat_endtime},
+		</if>
+		<if test="pd.request_time != null and pd.request_time != ''">
+			request_time = #{pd.request_time},
+		</if>
+		pay_state=#{pd.pay_state}
+		where
+		merOrderId = #{pd.merOrderId}
+	</update>
+
+	<!-- 通过ID获取数据 -->
+	<select id="findByIdormerOrderId" parameterType="pd"
+		resultType="pd">
+		select a.* 
+		from (
+		select <include refid="Field"></include> from <include refid="tableName"></include>
+		union 
+		select <include refid="Field"></include> from <include refid="tableNameh"></include>
+		) a
+		where
+		1=1
+		<if test="id != null and id != ''"><!-- 关键词检索 -->
+			and a.id = #{id} 
+		</if>
+		<if test="merOrderId != null and merOrderId != ''"><!-- 关键词检索 -->
+			and a.merOrderId = #{merOrderId}
+		</if>
+	</select>
+	
+	<!-- 查看全部订单 -->
+	<select id="listqb" parameterType="pd" resultType="pd">
+		select a.* 
+		from 
+		(select <include refid="Field"></include> from <include refid="tableName"></include> 
+		union 
+		select <include refid="Field"></include> from <include refid="tableNameh"></include>) a 
+		where a.pay_state not in ('0','1','3')
+		<if test="user_id != null and user_id != ''">
+			and a.user_id=#{pd.user_id}
+		</if>
+		<if test="carded != null and carded != ''"><!-- 关键词检索 -->
+			and a.pay_state = 'b' and a.carded=#{carded}
+		</if>
+		<if test="createtime != null and createtime != ''">
+				and DATE_FORMAT(a.createtime, '%Y%m') = DATE_FORMAT(createtime, '%Y%m')
+		</if>
+		ORDER BY a.createtime desc
+	</select>
+	
+		<!-- 查看门店规则 -->
+	<select id="listRule" parameterType="java.lang.String" resultType="pd">
+		select * from tb_internetrule 
+		where store_id = #{storeid} and status = '0'
+		order by sequence asc
+	</select>
+	
+		<!-- 查看门店规则 -->
+	<select id="yzRule" parameterType="java.lang.String" resultType="pd">
+		select * from tb_internetrule 
+		where id=#{id}
+	</select>
+		<!-- 查看余额 -->
+	<select id="findByStoreId" parameterType="pd" resultType="pd">
+		select
+		*
+		from 
+		BUND_USER 
+		where CARDED=#{CARDED} and USER_ID=#{USER_ID}
+	</select>
+	
+		<!-- 查看订单详情 -->
+	<select id="findByIdorder" parameterType="java.lang.String" resultType="pd">
+		select a.* 
+		from 
+		(select <include refid="Field"></include> from <include refid="tableName"></include> 
+		union 
+		select <include refid="Field"></include> from <include refid="tableNameh"></include>) a 
+		where a.id=#{id}
+	</select>
+	<!-- 保存更新状态 -->
+	<insert id="addwarning" parameterType="pd">
+		insert into tb_warning
+		(
+		id,createtime,falg,store_id
+		)
+		values (
+		#{id},#{createtime},#{falg},#{store_id}
+		)
+	</insert>
+	
+	<select id="count" parameterType="com.lk.entity.unionPay.Warning" resultType="com.lk.entity.unionPay.Warning">
+		select count(*) count, ROUND((select count(*) from tb_warning where store_id = a.store_id and falg = '0' AND createtime > DATE_SUB(#{createtime}, INTERVAL 120 MINUTE))/count(*) * 100) percentage, a.store_id from tb_warning a where a.createtime > DATE_SUB(#{createtime}, INTERVAL 120 MINUTE) GROUP BY a.store_id;
+	</select>
+
+
+    <select id="findByCardIdAndUserId" parameterType="pd" resultType="pd">
+        select * from
+        tb_rechargehistory
+        where 1=1
+        and user_id = #{user_id}
+        and internetrule_id = #{internetrule_id}
+        <if test="lastTime != null and lastTime != ''">
+            and pat_endtime <![CDATA[>=]]> #{lastTime}
+        </if>
+        <if test="nowTime != null and nowTime != ''">
+            and pat_endtime <![CDATA[<=]]> #{nowTime}
+        </if>
+        order by pat_endtime desc
+    </select>
+
+</mapper>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="InternetQrcodeMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		internet_qrcode
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		serial_number,
+		computer_name,
+		ip,
+		mac_address,
+		status,
+		state,
+
+		user_id,
+		internet_id,
+		store_id
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{serial_number},
+		#{computer_name},
+		#{ip},
+		#{mac_address},
+		#{status},
+		#{state},
+
+		#{user_id},
+		#{internet_id},
+		#{store_id}
+	</sql>
+
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>(<include refid="Field"></include>)
+		values
+		(<include refid="FieldValue"></include>)
+	</insert>
+
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		id = #{id}
+	</delete>
+	<delete id="deleteByIds" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		id in
+		<foreach collection="array" item="item" index="index" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+        and store_id = #{store_id}
+	</delete>
+
+	<delete id="deleteByStoreId" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		store_id = #{store_id}
+	</delete>
+
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+			<include refid="tableName"></include>
+		set 
+			<if test="serial_number != null and serial_number != ''">
+				serial_number = #{serial_number},
+			</if>
+			<if test="computer_name != null and computer_name != ''">
+				computer_name = #{computer_name},
+			</if>
+			<if test="ip != null and ip != ''">
+				ip = #{ip},
+			</if>
+			<if test="mac_address != null and mac_address != ''">
+				mac_address = #{mac_address},
+			</if>
+
+			<if test="status != null and status != ''">
+				status = #{status},
+			</if>
+			<if test="state != null and state != ''">
+				state = #{state},
+			</if>
+
+			<if test="user_id != null and user_id != ''">
+				user_id = #{user_id},
+			</if>
+			id = id
+		where
+			id = #{id}
+	</update>
+
+	<update id="editByStoreAndCom" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+			user_id = #{user_id},
+		<if test="state != null and state != ''">
+			state = #{state},
+		</if>
+
+		store_id = #{store_id}
+		where
+		store_id = #{store_id} and computer_name = #{computer_name}
+	</update>
+
+	<update id="editByStoreId" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+			<if test="status != null and status != ''">
+				status = #{status},
+			</if>
+			store_id = #{store_id}
+		where
+			store_id = #{store_id}
+	</update>
+	
+	<!-- 通过主键ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where
+			id = #{id}
+	</select>
+	<!-- 通过store_id查询 -->
+	<select id="findByStoreId" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where
+			store_id = #{store_id}
+		order by serial_number asc
+	</select>
+
+	<select id="findByCondition" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from
+			<include refid="tableName"></include>
+		where 1=1
+			<if test="store_id != null and store_id != ''">
+				and store_id = #{store_id}
+			</if>
+			<if test="serial_number != null and serial_number != ''">
+				and serial_number = #{serial_number}
+			</if>
+			<if test="computer_name != null and computer_name != ''">
+				and computer_name = #{computer_name}
+			</if>
+			<if test="user_id != null and user_id != ''">
+				and user_id = #{user_id}
+			</if>
+        limit 1
+	</select>
+
+
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from
+			<include refid="tableName"></include>
+		where 1=1
+		<!-- 条件筛选 -->
+			<if test="pd.store_id != null and pd.store_id != ''">
+				and store_id = #{pd.store_id}
+			</if>
+			<if test="pd.internet_id != null and pd.internet_id != ''">
+				and internet_id = #{pd.internet_id}
+			</if>
+			<if test="pd.status != null and pd.status != ''">
+				and status = #{status}
+			</if>
+			<if test="pd.state != null and pd.state != ''">
+				and state = #{pd.state}
+			</if>
+		<!-- 搜索 -->
+			<if test="pd.keywords != null and pd.keywords != ''">
+				and (
+					computer_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or serial_number LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+			</if>
+		 order by CONVERT(serial_number,SIGNED) asc
+	</select>
+
+
+	
+</mapper>

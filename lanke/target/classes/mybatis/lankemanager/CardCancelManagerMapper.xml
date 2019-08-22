@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CardCancelManagerMapper">
+
+    <select id="datalistPage" parameterType="page" resultType="pd">
+            SELECT
+                A.USER_ID,
+                A.CREAT_TIME,
+                A.CARD,
+                A.STATE,
+                A.MONEY_STATE,
+                A.OPEN_ID,
+                A.CARD_ID,
+                A.INTERNET_ID,
+                A.UPDATE_TIME,
+                A.CANCEL_ID,
+                A.CONSUME_SOURCE,
+                A.STAFF_OPEN_ID,
+                ( SELECT neck_name FROM wechat_user WHERE open_id = A.STAFF_OPEN_ID ) AS STAFF_NECK_NAME,
+                B.NAME,
+                C.NECK_NAME,
+                D.TITLE,
+                E.CARDED,
+                D.SUB_TITLE,
+                D.CARD_TICKET,
+                D.CASH_NUMBER ,
+                F.INTENET_NAME
+            FROM
+                CARD_CANCEL A,
+                SYS_USER B,
+                WECHAT_USER C,
+                CARD D,
+                BUND_USER E ,
+                sys_intenet F
+            WHERE
+                A.USER_ID = B.USER_ID
+                AND A.OPEN_ID = C.OPEN_ID
+                AND A.CARD_ID = D.CARD_ID
+                AND C.USER_ID = E.USER_ID
+                and a.INTERNET_ID = f.INTENET_ID
+                AND A.STATE != 1
+        <if test="pd.state!= null and pd.state!=''"  >
+            and A.MONEY_STATE= ${pd.state}
+        </if>
+        <if test="pd.cardtype!= null and pd.cardtype!=''"  >
+            and D.CARD_TICKET = ${pd.cardtype}
+        </if>
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            F.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or A.CARD LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or E.CARDED LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or D.SUB_TITLE LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or C.NECK_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+            ORDER BY
+                A.UPDATE_TIME DESC
+    </select>
+
+</mapper>

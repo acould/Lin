@@ -1,0 +1,1015 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CardMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		CARD
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		INTENET_ID,
+		CARD_TYPE,
+		DEFAULT_DETAIL,
+		LOGO_URL,
+		CODE_TYPE,
+		BRAND_NAME,
+		TITLE,
+		SUB_TITLE,
+		COLOR,
+		NOTICE,
+		DESCRIPTION,
+		QUANTITY,
+		TYPE,
+		BEGIN_TIMESTAMP,
+		END_TIMESTAMP,
+		STATE,
+		SCENE_ID,
+		CARD_ID,
+		DATE_INFO,
+		FIXED_TERM,
+		FIXED_BEGIN_TERM,
+		CREATE_TIME,
+		IS_ALL,
+		AUDIT_STATE,
+		CARD_TICKET,
+		CASH_NUMBER,
+		cardSum,
+		garbStart_time,
+		garbEnd_time,
+		cardSum_type,
+		cardSum_time,
+		card_ad,
+		recharge,
+		handsel,
+		handsel_sum,
+		handsel_type,
+		handsel_time,
+		handsel_times,
+		D_STATE
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{INTENET_ID},
+		#{CARD_TYPE},
+		#{DEFAULT_DETAIL},
+		#{LOGO_URL},
+		#{CODE_TYPE},
+		#{BRAND_NAME},
+		#{TITLE},
+		#{SUB_TITLE},
+		#{COLOR},
+		#{NOTICE},
+		#{DESCRIPTION},
+		#{QUANTITY},
+		#{TYPE},
+		#{BEGIN_TIMESTAMP},
+		#{END_TIMESTAMP},
+		#{STATE},
+		#{SCENE_ID},
+		#{CARD_ID},
+		#{DATE_INFO},
+		#{FIXED_TERM},
+		#{FIXED_BEGIN_TERM},
+		#{CREATE_TIME},
+		#{IS_ALL},
+		#{AUDIT_STATE},
+		#{CARD_TICKET},
+		#{CASH_NUMBER},
+		#{cardSum},
+		#{garbStart_time},
+		#{garbEnd_time},
+		#{cardSum_type},
+		#{cardSum_time},
+		#{card_ad},
+		#{recharge},
+		#{handsel},
+		#{handsel_sum},
+		#{handsel_type},
+		#{handsel_time},
+		#{handsel_times},
+		#{D_STATE}
+	</sql>
+
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 通过卡劵id删除卡劵信息(删除) -->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		CARD_ID = #{CARD_ID}
+	</delete>
+
+	<!-- 修改卡券信息(修改) -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="CARD_TYPE != null and CARD_TYPE != ''">
+			CARD_TYPE = #{CARD_TYPE},
+		</if>
+		<if test="DEFAULT_DETAIL != null and DEFAULT_DETAIL != ''">
+			DEFAULT_DETAIL = #{DEFAULT_DETAIL},
+		</if>
+		<if test="LOGO_URL != null and LOGO_URL != ''">
+			LOGO_URL = #{LOGO_URL},
+		</if>
+		<if test="CODE_TYPE != null and CODE_TYPE != ''">
+			CODE_TYPE = #{CODE_TYPE},
+		</if>
+		<if test="BRAND_NAME != null and BRAND_NAME != ''">
+			BRAND_NAME = #{BRAND_NAME},
+		</if>
+		<if test="TITLE != null and TITLE != ''">
+			TITLE = #{TITLE},
+		</if>
+		<if test="SUB_TITLE != null and SUB_TITLE != ''">
+			SUB_TITLE = #{SUB_TITLE},
+		</if>
+		<if test="COLOR != null and COLOR != ''">
+			COLOR = #{COLOR},
+		</if>
+		<if test="NOTICE != null and NOTICE != ''">
+			NOTICE = #{NOTICE},
+		</if>
+		<if test="DESCRIPTION != null and DESCRIPTION != ''">
+			DESCRIPTION = #{DESCRIPTION},
+		</if>
+		<if test="cardSum != null and cardSum != ''">
+			cardSum = #{cardSum},
+		</if>
+		<if test="QUANTITY != null">
+			QUANTITY = #{QUANTITY},
+		</if>
+		<if test="DATE_INFO != null and DATE_INFO != ''">
+			DATE_INFO = #{DATE_INFO},
+		</if>
+		<if test="TYPE != null and TYPE != ''">
+			TYPE = #{TYPE},
+		</if>
+		<if test="BEGIN_TIMESTAMP != null and BEGIN_TIMESTAMP != ''">
+			BEGIN_TIMESTAMP = #{BEGIN_TIMESTAMP},
+		</if>
+		<if test="END_TIMESTAMP != null and END_TIMESTAMP != ''">
+			END_TIMESTAMP = #{END_TIMESTAMP},
+		</if>
+		<if test="FIXED_TERM != null and FIXED_TERM != ''">
+			FIXED_TERM = #{FIXED_TERM},
+		</if>
+		<if test="FIXED_BEGIN_TERM != null and FIXED_BEGIN_TERM != ''">
+			FIXED_BEGIN_TERM = #{FIXED_BEGIN_TERM},
+		</if>
+		<if test="STATE != null and STATE != ''">
+			STATE = #{STATE},
+		</if>
+		<if test="SCENE_ID != null and SCENE_ID != ''">
+			SCENE_ID = #{SCENE_ID},
+		</if>
+		<if test="CREATE_TIME != null and CREATE_TIME != ''">
+			CREATE_TIME = #{CREATE_TIME},
+		</if>
+		<if test="IS_ALL != null and IS_ALL != ''">
+			IS_ALL = #{IS_ALL},
+		</if>
+		<if test="AUDIT_STATE != null and AUDIT_STATE != ''">
+			AUDIT_STATE = #{AUDIT_STATE},
+		</if>
+		<if test="CARD_TICKET != null and CARD_TICKET != ''">
+			CARD_TICKET = #{CARD_TICKET},
+		</if>
+		<if test="CASH_NUMBER != null and CASH_NUMBER != ''">
+			CASH_NUMBER = #{CASH_NUMBER},
+		</if>
+		<if test="cardSum_type != null and cardSum_type != ''">
+			cardSum_type = #{cardSum_type},
+		</if>
+		<if test="cardSum_time != null and cardSum_time != ''">
+			cardSum_time = #{cardSum_time},
+		</if>
+		<if test="card_ad != null and card_ad != ''">
+			card_ad = #{card_ad},
+		</if>
+
+		CARD_ID = CARD_ID
+		where
+		CARD_ID = #{CARD_ID}
+	</update>
+	<!-- 修改 状态 -->
+	<update id="updateState" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		STATE = #{STATE}
+		where
+		CARD_ID = #{CARD_ID}
+	</update>
+
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		A.*,
+		B.FAV_TYPE
+		from
+		<include refid="tableName"></include> A, IN_SCENE B
+		where A.SCENE_ID=B.SCENE_ID
+		AND CARD_ID = #{CARD_ID}
+		ORDER BY A.CREATE_TIME DESC
+	</select>
+
+	<!-- 通过ID获取数据(通过卡劵id获取卡劵数据) -->
+	<select id="findByCardId" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where CARD_ID = #{CARD_ID}
+	</select>
+
+	<!-- 通过AUDIT_STATE（审核状态）获取数据 -->
+	<select id="findByState" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		<if test="AUDIT_STATE != null and AUDIT_STATE != ''">
+			AUDIT_STATE = #{AUDIT_STATE}
+		</if>
+	</select>
+
+	<!-- 通过ID获取数据 ,是否有新手券和老带新 -->
+	<select id="findByInternetId" parameterType="pd" resultType="pd">
+		select
+		A.*
+		from
+		<include refid="tableName"></include> A, IN_SCENE B
+		where A.SCENE_ID = B.SCENE_ID
+		and A.INTENET_ID = #{INTERNET_ID}
+        <!-- 未删除的 -->
+        and A.D_STATE = '0'
+		<if test="FAV_TYPE != null and FAV_TYPE != ''">
+			and B.FAV_TYPE = #{FAV_TYPE}
+		</if>
+		ORDER BY A.CREATE_TIME DESC
+		limit 1
+	</select>
+
+	<!-- 通过网吧id/用户id/门店id去查询卡劵信息(列表) 0：全部，1：已失效，2：有效，3：未开始，4：已结束，5：正在抢 -->
+	<select id="list" parameterType="page" resultType="pd">
+		select
+		C.*,D.FAV_TYPE,D.RECEIVE_NUMBER,D.BLANK_NUMBER,D.RECEIVE_DETIL,
+        ( CASE TYPE
+		  WHEN 'DATE_TYPE_FIX_TERM' THEN
+            <if test="pd.cardType == 'GRAB'">
+                (CASE WHEN garbStart_time &gt;#{pd.time2} THEN '3'
+                  WHEN garbEnd_time &lt;=#{pd.time2} THEN '4'
+                  WHEN garbStart_time &lt;#{pd.time2} AND garbEnd_time &gt;=#{pd.time2}
+                  THEN '5' END
+                )
+            </if>
+            <if test="pd.cardType != 'GRAB'">
+                '2'
+            </if>
+		  ELSE
+            <if test="pd.cardType == 'GRAB'">
+                ( CASE
+                WHEN garbStart_time &gt;#{pd.time2} THEN '3'
+                WHEN garbEnd_time &lt;=#{pd.time2} THEN '4'
+                WHEN garbStart_time &lt;#{pd.time2} AND garbEnd_time &gt;=#{pd.time2} THEN '5'
+                END)
+            </if>
+            <if test="pd.cardType != 'GRAB'">
+                ( CASE WHEN END_TIMESTAMP &lt;=#{pd.time1} THEN '1'
+                WHEN END_TIMESTAMP &gt;#{pd.time1} THEN '2'
+                END)
+            </if>
+        END) AS cardState
+		from
+		CARD_STORE A,CARD C,IN_SCENE D
+		where
+		A.CARD_ID = C.CARD_ID AND
+		C.SCENE_ID = D.SCENE_ID
+		<!-- 未删除的 -->
+		and C.D_STATE = '0'
+		<if test="pd.cardType != null and pd.cardType != ''"><!-- 卡券类型 -->
+			AND D.FAV_TYPE = #{pd.cardType}
+		</if>
+		<if
+			test="pd.cardState != null and pd.cardState != '' and pd.cardState != '0'"><!-- 卡券状态 -->
+			<if test="pd.cardState == 1"><!-- 已失效(卡券过期时间<现在时间) -->
+				and c.`END_TIMESTAMP` &lt;=#{pd.time1}
+				and c.`TYPE`!=
+				'DATE_TYPE_FIX_TERM'
+			</if>
+			<if test="pd.cardState ==2"><!-- 有效(现在时间<=卡券过期时间) -->
+				and (c.`END_TIMESTAMP` &gt;#{pd.time1} or c.`TYPE`=
+				'DATE_TYPE_FIX_TERM')
+			</if>
+			<if test="pd.cardState ==3"><!-- 未开始(现在时间<卡券秒抢开始时间) -->
+				and c.`garbStart_time` &gt;#{pd.time2}
+			</if>
+			<if test="pd.cardState ==4"><!-- 已结束(现在时间>卡券秒抢结束时间) -->
+				and c.`garbEnd_time` &lt;=#{pd.time2}
+			</if>
+			<if test="pd.cardState ==5"><!-- 正在抢(卡券秒抢开始时间<=现在时间<=卡券秒抢结束时间) -->
+				and c.`garbStart_time` &lt;#{pd.time2}
+				and c.`garbEnd_time`
+				&gt;=#{pd.time2}
+			</if>
+		</if>
+		<if test="pd.intenetId!= null and pd.intenetId != ''"><!-- 操作人员所属的网店 -->
+			and C.INTENET_ID = #{pd.intenetId}
+		</if>
+		<if test="pd.list != null and pd.list !=''"><!-- 操作人员所属的分店 -->
+			AND C.CARD_ID IN (SELECT CARD_ID FROM CARD_STORE WHERE STORE_ID in
+			('${pd.list}'))
+		</if>
+		GROUP BY C.CARD_ID
+		ORDER BY C.CREATE_TIME DESC
+		LIMIT #{pd.x},#{pd.y}
+	</select>
+
+	<!-- 通过网吧id/用户id/门店id去查询卡劵信息(列表) 0：全部，1：已失效，2：有效，3：未开始，4：已结束，5：正在抢 -->
+	<select id="list1" parameterType="page" resultType="pd">
+		select
+		C.*,D.FAV_TYPE,D.RECEIVE_NUMBER,D.BLANK_NUMBER,D.RECEIVE_DETIL,(
+		CASE
+		TYPE
+		WHEN 'DATE_TYPE_FIX_TERM' THEN '2'
+		ELSE (
+		CASE WHEN END_TIMESTAMP
+		&lt;=#{pd.time1} THEN '1'
+		WHEN garbStart_time &gt;#{pd.time2} THEN '3'
+		WHEN garbEnd_time &lt;=#{pd.time2} THEN '4'
+		WHEN garbStart_time
+		&lt;#{pd.time2} AND garbEnd_time &gt;=#{pd.time2} THEN
+		'5'
+		WHEN
+		END_TIMESTAMP &gt;#{pd.time1} THEN '2' END) END) AS cardState
+		from
+		CARD_STORE A,card_cards B, CARD C,IN_SCENE D
+		where
+		A.CARD_ID = C.CARD_ID
+		AND A.CARD_ID = B.card_id
+		AND C.SCENE_ID = D.SCENE_ID
+		<!-- 未删除的 -->
+		and C.D_STATE = '0'
+		<if test="pd.cardType != null and pd.cardType != ''"><!-- 卡券类型 -->
+			AND D.FAV_TYPE = #{pd.cardType}
+		</if>
+		<if
+			test="pd.cardState != null and pd.cardState != '' and pd.cardState != '0'"><!-- 卡券状态 -->
+			<if test="pd.cardState == 1"><!-- 已失效(卡券过期时间<现在时间) -->
+				and c.`END_TIMESTAMP` &lt;=#{pd.time1}
+				and c.`TYPE`!=
+				'DATE_TYPE_FIX_TERM'
+			</if>
+			<if test="pd.cardState ==2"><!-- 有效(现在时间<=卡券过期时间) -->
+				and (c.`END_TIMESTAMP` &gt;#{pd.time1} or c.`TYPE`=
+				'DATE_TYPE_FIX_TERM')
+			</if>
+			<if test="pd.cardState ==3"><!-- 未开始(现在时间<卡券秒抢开始时间) -->
+				and c.`garbStart_time` &gt;#{pd.time2}
+			</if>
+			<if test="pd.cardState ==4"><!-- 已结束(现在时间>卡券秒抢结束时间) -->
+				and c.`garbEnd_time` &lt;=#{pd.time2}
+			</if>
+			<if test="pd.cardState ==5"><!-- 正在抢(卡券秒抢开始时间<=现在时间<=卡券秒抢结束时间) -->
+				and c.`garbStart_time` &lt;#{pd.time2}
+				and c.`garbEnd_time`
+				&gt;=#{pd.time2}
+			</if>
+		</if>
+		<if test="pd.intenetId!= null and pd.intenetId != ''"><!-- 操作人员所属的网店 -->
+			and C.INTENET_ID = #{pd.intenetId}
+		</if>
+		<if test="pd.list != null and pd.list !=''"><!-- 操作人员所属的分店 -->
+			AND C.CARD_ID IN (SELECT CARD_ID FROM CARD_STORE WHERE STORE_ID in
+			('${pd.list}'))
+		</if>
+		GROUP BY C.CARD_ID
+		ORDER BY C.CREATE_TIME DESC
+		LIMIT #{pd.x},#{pd.y}
+	</select>
+
+	<!-- 通过条件去获取卡券总和 -->
+	<select id="lists" parameterType="page" resultType="pd">
+		select count(*) as count1 from
+		(select
+		C.*,D.FAV_TYPE,D.RECEIVE_NUMBER,D.BLANK_NUMBER,D.RECEIVE_DETIL,(
+		CASE
+		TYPE
+		WHEN 'DATE_TYPE_FIX_TERM' THEN
+		<if test="pd.cardType == 'GRAB'">
+			(CASE
+			WHEN garbStart_time &gt;#{pd.time2} THEN '3'
+			WHEN
+			garbEnd_time &lt;=#{pd.time2} THEN '4'
+			WHEN garbStart_time
+			&lt;#{pd.time2} AND garbEnd_time &gt;=#{pd.time2}
+			THEN '5' END
+			)
+		</if>
+		<if test="pd.cardType != 'GRAB'">
+			'2'
+		</if>
+		ELSE (
+		CASE
+		WHEN END_TIMESTAMP &lt;=#{pd.time1} THEN '1'
+		WHEN
+		garbStart_time &gt;#{pd.time2} THEN '3'
+		WHEN garbEnd_time
+		&lt;=#{pd.time2} THEN '4'
+		WHEN garbStart_time &lt;#{pd.time2} AND
+		garbEnd_time &gt;=#{pd.time2} THEN '5'
+		WHEN END_TIMESTAMP
+		&gt;#{pd.time1} THEN '2'
+		END) END) AS cardState
+		from
+		CARD_STORE A,CARD C,IN_SCENE D
+		where
+		A.CARD_ID = C.CARD_ID AND
+		C.SCENE_ID
+		= D.SCENE_ID
+		<!-- 未删除的 -->
+		and C.D_STATE = '0'
+		<if test="pd.cardType != null and pd.cardType != ''"><!-- 卡券类型 -->
+			AND D.FAV_TYPE = #{pd.cardType}
+		</if>
+		<if
+			test="pd.cardState != null and pd.cardState != '' and pd.cardState != '0'"><!-- 卡券状态 -->
+			<if test="pd.cardState == 1"><!-- 已失效(卡券过期时间<现在时间) -->
+				and c.`END_TIMESTAMP` &lt;=#{pd.time1}
+				and c.`TYPE`!=
+				'DATE_TYPE_FIX_TERM'
+			</if>
+			<if test="pd.cardState ==2"><!-- 有效(现在时间<=卡券过期时间) -->
+				and (c.`END_TIMESTAMP` &gt;#{pd.time1} or c.`TYPE`=
+				'DATE_TYPE_FIX_TERM')
+			</if>
+			<if test="pd.cardState ==3"><!-- 未开始(现在时间<卡券秒抢开始时间) -->
+				and c.`garbStart_time` &gt;#{pd.time2}
+			</if>
+			<if test="pd.cardState ==4"><!-- 已结束(现在时间>卡券秒抢结束时间) -->
+				and c.`garbEnd_time` &lt;=#{pd.time2}
+			</if>
+			<if test="pd.cardState ==5"><!-- 正在抢(卡券秒抢开始时间<=现在时间<=卡券秒抢结束时间) -->
+				and c.`garbStart_time` &lt;#{pd.time2}
+				and c.`garbEnd_time`
+				&gt;=#{pd.time2}
+			</if>
+		</if>
+		<if test="pd.intenetId!= null and pd.intenetId != ''"><!-- 操作人员所属的网店 -->
+			and C.INTENET_ID = #{pd.intenetId}
+		</if>
+		<if test="pd.list != null and pd.list !=''"><!-- 操作人员所属的分店 -->
+			AND C.CARD_ID IN (SELECT CARD_ID FROM CARD_STORE WHERE STORE_ID in
+			('${pd.list}'))
+		</if>
+		GROUP BY C.CARD_ID
+		ORDER BY C.CREATE_TIME DESC) b where 1=1
+		<if test="pd.cardState!= null and pd.cardState != ''">
+			and cardState = #{pd.cardState}
+		</if>
+	</select>
+
+	<!-- 查询全部卡劵信息,列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<!-- 未删除的 -->
+		and D_STATE = '0'
+		ORDER BY CREATE_TIME DESC
+	</select>
+
+
+	<select id="listByInternet" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where INTENET_ID = #{INTERNET_ID}
+		<!-- 未删除的 -->
+		and D_STATE = '0'
+		ORDER BY CREATE_TIME DESC
+	</select>
+	<!-- 自定义菜单中的卡券库 -->
+	<select id="listByMenu" parameterType="pd" resultType="pd">
+		select
+		a.*
+		from
+		<include refid="tableName"></include>
+		a , in_scene b
+		where a.scene_id = b.scene_id
+		and a.INTENET_ID = #{INTERNET_ID} and b.FAV_TYPE = 'CURREN' and a.IS_ALL = '1'
+		<!-- 未删除的 -->
+		and a.D_STATE = '0'
+		ORDER BY
+		CREATE_TIME DESC
+	</select>
+
+
+	<!-- 查看属于福利券的优惠券 -->
+	<select id="listFl" parameterType="pd" resultType="pd">
+        select * from (
+            select
+                a.*,
+                b.FAV_TYPE,
+		        b.unusertime,
+                (CASE b.FAV_TYPE WHEN 'GRAB' THEN
+                  (CASE WHEN garbStart_time &gt;#{time} THEN '3'
+                      WHEN garbEnd_time &lt;=#{time} THEN '4'
+                      WHEN garbStart_time&lt;#{time} AND garbEnd_time &gt;=#{time} THEN '5'
+                      END)END) AS cardState ,
+                (CASE a.cardSum_type WHEN 1 THEN '1'
+                    ELSE '0' END) AS cardType
+            from card a left join in_scene b on a.scene_id = b.scene_id
+            where 1=1
+            <!-- 用户所在的门店 -->
+            and a.card_id in(select card_id from card_store where store_id = #{store_id})
+            <if test="cardType!= null and cardType != ''">
+                and B.BENEFIT_TYPE = #{cardType}
+            </if>
+            <if test="intenetId!= null and intenetId != ''">
+                and A.INTENET_ID =#{intenetId}
+            </if>
+            <if test="FAV_TYPE != null and FAV_TYPE != ''">
+                and b.`FAV_TYPE` =#{FAV_TYPE}
+            </if>
+            and A.QUANTITY > 0
+            <!-- 未删除的 -->
+            and a.D_STATE = '0'
+            GROUP BY A.CARD_ID
+            ORDER BY A.CREATE_TIME DESC)
+        AS e WHERE e.cardType!= '1'
+
+	</select>
+
+	<!-- 通过场景查看优惠券(查看某场景对应的优惠券) -->
+	<select id="findByCenece" parameterType="pd" resultType="pd">
+		select
+		A.INTENET_ID,
+		A.CARD_TYPE,
+		A.TITLE,
+		A.SCENE_ID,
+		A.CARD_ID,
+		A.DATE_INFO,
+		A.DESCRIPTION,
+		A.SUB_TITLE,
+		A.IS_ALL,
+		B.BENEFIT_TYPE
+		from
+		<include refid="tableName"></include>
+		A, IN_SCENE B
+		where A.SCENE_ID=B.SCENE_ID
+		<!-- 未删除的 -->
+		and A.D_STATE = '0'
+		<if test="cardType!= null and cardType != ''"><!-- 关键词检索 -->
+			and B.FAV_TYPE =#{cardType}
+		</if>
+		<if test="intenetId!= null and intenetId != ''">
+			and A.INTENET_ID =#{intenetId}
+		</if>
+		ORDER BY A.CREATE_TIME DESC
+		LIMIT 1
+	</select>
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		CARD_ID in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- 通过卡券id和时间获取卡券详细信息 -->
+	<select id="getCard" parameterType="pd" resultType="pd">
+		SELECT
+		a.*,
+		b.FAV_TYPE,
+		(CASE b.`FAV_TYPE` WHEN 'GRAB' THEN
+		(CASE WHEN
+		garbStart_time &gt;#{time} THEN '3'
+		WHEN garbEnd_time &lt;=#{time} THEN
+		'4'
+		WHEN garbStart_time&lt;#{time} AND garbEnd_time &gt;=#{time} THEN
+		'5'
+		END)END) AS cardState
+		FROM
+		card a, in_scene b
+		WHERE a.`SCENE_ID` = b.`SCENE_ID`
+		AND a.`CARD_ID` = #{card_id}
+	</select>
+
+	<!-- 通过卡券id和时间获取卡券详细信息 -->
+	<select id="getCardState" parameterType="pd" resultType="pd">
+		SELECT
+		COALESCE(SUM(a.`up_duration`),0) AS timeSum
+		FROM
+		user_down a,
+		bund_user b
+		WHERE a.`id_card` = b.`CARDED`
+		AND b.`STORE_ID` = a.`store_id`
+		AND b.`USER_ID`= #{user_id}
+		AND a.`down_time` &gt;=#{time1}
+		AND a.`down_time` &lt;=#{time2}
+	</select>
+
+	<!-- 通过卡券id获取该卡券最后被领取时的信息 -->
+	<select id="getTime" parameterType="String" resultType="pd">
+		SELECT
+		UPDATE_TIME
+		FROM
+		card_cancel
+		WHERE card_id = #{card_id}
+		ORDER BY
+		UPDATE_TIME DESC
+		LIMIT 0,1
+	</select>
+
+	<!-- 通过网吧id去获取最近的秒抢券信息 -->
+	<select id="cardGrab" parameterType="pd" resultType="pd">
+		SELECT
+			*
+		FROM
+			(SELECT
+				a.*,
+				(CASE b.`FAV_TYPE` WHEN 'GRAB' THEN
+				(CASE WHEN garbStart_time &gt;#{time} THEN '3' WHEN garbEnd_time &lt;=#{time} THEN '4'
+					WHEN garbStart_time&lt;#{time} AND garbEnd_time &gt;=#{time} THEN '5'
+				END)END) AS cardState
+			FROM
+				card a, in_scene b
+			WHERE a.`SCENE_ID` = b.`SCENE_ID` AND b.`FAV_TYPE` = 'GRAB') c
+		WHERE cardState != '4'
+			AND INTENET_ID = #{internetId}
+			<!-- 未删除的 -->
+			and c.D_STATE = '0'
+			ORDER BY c.cardState DESC,c.garbStart_time DESC
+			LIMIT 0,1
+	</select>
+
+	<!-- 通过网吧id去获取最近的连续上网满时长券信息 -->
+	<select id="cardTerm" parameterType="pd" resultType="pd">
+		SELECT
+          a.*
+		FROM card a, in_scene b
+        WHERE a.`SCENE_ID` = b.`SCENE_ID`
+            AND b.`FAV_TYPE`= 'TERM'
+            AND a.`cardSum_type` = '1'
+            AND a.`card_ad` !=''
+            AND a.INTENET_ID = #{internetId}
+        <!-- 未删除的 -->
+        and a.D_STATE = '0'
+		ORDER BY a.`CREATE_TIME` DESC
+		LIMIT 0,1
+	</select>
+
+	<!-- 每个门店，每种时长的券只能存在一张 -->
+	<select id="judgeTerm" parameterType="pd" resultType="pd">
+		select
+			a.*,
+			b.store_id
+		from card_store b left join card a on a.card_id = b.card_id
+		where 1=1
+		and a.cardSum_type = #{cardSum_type}
+        and a.scene_id in(select scene_id from in_scene where fav_type = 'TERM' and intenet_id = #{internet_id})
+		<!-- 未删除的 -->
+		and a.D_STATE = '0'
+
+	</select>
+
+	<!-- 通过卡券信息去判断连续上网满时长券的信息 -->
+	<select id="getCards" parameterType="pd" resultType="pd">
+		select
+			a.*,
+			c.FAV_TYPE,
+			c.unusertime
+		from card a left join card_store b on a.card_id = b.card_id
+		left join in_scene c on a.scene_id = c.scene_id
+		where 1=1
+		and c.fav_type = 'TERM'
+		and a.d_state = '0'
+		and a.cardSum_type = '1'
+		and b.store_id = #{store_id}
+
+		SELECT
+			*
+		FROM
+			(SELECT
+				a.*,
+				( CASE TYPE WHEN 'DATE_TYPE_FIX_TERM' THEN '2'
+			  		ELSE ( CASE WHEN END_TIMESTAMP &lt;= #{time} THEN '1'
+					WHEN END_TIMESTAMP &gt;#{time} THEN '2'
+					END)
+			  	END) AS cardState
+			FROM card a,card_store b,in_scene c
+			WHERE a.`CARD_ID` = b.`card_id`
+			AND a.`SCENE_ID` = c.`SCENE_ID`
+			AND a.`cardSum_type` = '1'
+			AND c.`FAV_TYPE` = 'TERM'
+			AND b.`store_id` = #{store_id}
+			AND a.`cardSum_time` &lt;= #{times}
+			<!-- 未删除的 -->
+			and a.D_STATE = '0'
+			) d
+		WHERE
+			d.cardState = '2'
+		ORDER BY d.cardSum_time
+	</select>
+
+	<!-- 先去查询卡券总量cardSum为空的卡券 -->
+	<select id="cardLists" parameterType="pd" resultType="pd">
+		SELECT
+			a.`CARD_ID`,a.`QUANTITY`
+		FROM card a
+		WHERE a.`cardSum` IS NULL
+		AND a.INTENET_ID = #{intenetId}
+		<!-- 未删除的 -->
+		and a.D_STATE = '0'
+	</select>
+
+	<!-- 通过卡券id获取已领取数量 -->
+	<select id="cardSum" parameterType="String" resultType="pd">
+		SELECT
+		COUNT(*) AS sum2
+		FROM
+		card_cancel a
+		WHERE a.`CARD_ID` = #{CARD_ID}
+	</select>
+
+	<!-- 补全卡券总量 -->
+	<update id="cardSumEdit" parameterType="pd">
+		UPDATE
+		card SET cardSum =
+		#{cardSum}
+		WHERE CARD_ID = #{CARD_ID}
+	</update>
+
+	<!-- 保存冲送券关联卡券信息 -->
+	<insert id="saveRush" parameterType="pd">
+		INSERT INTO card_cards
+		(card_id,card_ids, card_order) VALUES
+		(#{card_ids},#{CARD_ID},#{card_order})
+	</insert>
+
+	<!-- 根据卡券id去获取赠送金额 -->
+	<select id="getHandSel" parameterType="pd" resultType="pd">
+		SELECT
+		a.CASH_NUMBER,b.card_order, a.QUANTITY
+		FROM card a,card_cards b
+		WHERE 1=1
+		AND
+		a.card_id = b.card_ids
+		AND b.card_id = #{CARD_ID}
+		ORDER BY b.card_order
+	</select>
+
+	<!-- 根据门店id,加钱金额去获取满足要求的冲送券 -->
+	<select id="getRush" parameterType="pd" resultType="pd">
+		SELECT
+			a.card_id,a.recharge,a.handsel_sum,a.handsel
+		FROM
+			card a,
+			in_scene b,
+			card_cards c,
+			card_store d
+		WHERE
+			a.card_id = c.card_id
+			AND a.SCENE_ID = b.SCENE_ID
+			AND a.card_id = d.card_id
+			AND b.FAV_TYPE = 'RUSH'
+			AND a.QUANTITY !='0'
+			AND d.store_id = #{store_id}
+			AND a.recharge &lt;= #{amount}
+			<!-- 未删除的 -->
+			and a.D_STATE = '0'
+		GROUP
+		BY a.card_id
+		ORDER BY
+		a.`recharge` DESC
+	</select>
+
+
+	<select id="getRushCard" parameterType="String" resultType="pd">
+		SELECT
+		*
+		FROM
+		card a,
+		card_cards b
+		WHERE a.card_id = b.card_ids
+		AND
+		b.card_id = #{card_id}
+		<!-- 未删除的 -->
+		and a.D_STATE = '0'
+	</select>
+
+	<!-- 保存冲送券推送信息 -->
+	<insert id="saveCardOpen" parameterType="pd">
+		INSERT INTO card_open
+		(id,card_id,open_id,need_time,state,internet_id,card_state,type,order_id,sequence,full_term,rec_time)
+		VALUES
+		(#{id},#{card_id},#{open_id},#{need_time},#{state},#{internet_id},#{card_state},#{type},#{order_id},#{sequence},#{full_term},#{rec_time})
+	</insert>
+
+	<!-- 修改冲送券信息(修改) -->
+	<update id="editCardOpen" parameterType="pd">
+		update
+		card_open
+		set
+		real_time = #{real_time},state = #{state}
+		where id = #{id}
+	</update>
+    <update id="editByOrderIdAndCardIdAndOpenId" parameterType="pd">
+		update
+		card_open
+		set
+		rec_time = #{rec_time},card_state = #{card_state},cancel_id = #{cancel_id}
+		where
+		order_id = #{order_id}
+		and open_id = #{open_id}
+		and card_id = #{card_id}
+	</update>
+
+
+	<!-- 根据时间获取今日发送的冲送券 -->
+	<select id="selRush" parameterType="String" resultType="pd">
+        select a.* from card_open a
+        where 1=1
+        and a.type = "RUSH"
+        and a.state = 0
+        and a.need_time = #{need_time}
+	</select>
+
+	<!-- 通过卡券id查询数据 -->
+	<select id="selRushs" parameterType="String" resultType="pd">
+		SELECT
+		a.card_id
+		FROM
+		card_cards a,
+		card_open b
+		WHERE a.`card_ids` = b.`card_id`
+		AND a.`card_id`=#{card_id}
+	</select>
+
+
+	<!-- 根据冲送券卡券id获取关联信息 -->
+	<select id="selRush1" parameterType="pd" resultType="pd">
+		SELECT
+		b.`card_ids` as card_id,a.`QUANTITY`,a.`cardSum`
+		FROM
+		card a,
+		card_cards b
+		WHERE a.`CARD_ID` = b.`card_id`
+		AND a.card_id = #{CARD_ID}
+		<!-- 未删除的 -->
+		and a.D_STATE = '0'
+		ORDER BY
+		b.`card_order`
+	</select>
+
+	<!-- 通过卡劵id删除card_cards信息 -->
+	<delete id="delCards" parameterType="String">
+		delete from card_cards
+		where
+		card_id = #{CARD_ID}
+	</delete>
+
+	<!-- 通过卡劵id删除卡劵信息(删除) -->
+	<delete id="deleteRush" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		CARD_ID = #{CARD_ID}
+	</delete>
+
+	<!-- 通过id查看领取情况 -->
+	<select id="findId" parameterType="String" resultType="pd">
+		SELECT
+		card_state FROM card_open WHERE 1=1 AND id=#{id}
+	</select>
+
+	<!-- 通过id查看领取情况 -->
+	<select id="selectCard" parameterType="pd" resultType="pd">
+		SELECT
+		id
+		FROM
+		card_open
+		WHERE 1 = 1
+		AND card_state = '0'
+		AND state = '1'
+		AND card_id = #{CARD_ID}
+		AND open_id = #{OPEN_ID}
+		ORDER BY need_time
+		limit 1
+	</select>
+
+	<!-- 修改冲送券信息(修改) -->
+	<update id="editCard" parameterType="pd">
+		UPDATE
+		card_open
+		SET
+		card_state = '1',cancel_id = #{cancel_id},rec_time = #{rec_time}
+		WHERE id = #{id}
+	</update>
+
+	<update id="logicDel" parameterType="pd">
+		UPDATE
+			card
+		SET
+			D_STATE = #{D_STATE}
+		WHERE
+			CARD_ID = #{CARD_ID}
+	</update>
+
+    <select id="selCardList" parameterType="pd" resultType="pd">
+        select
+          a.*
+        from card a
+        where a.d_state = '0' and a.audit_state = '1' and a.intenet_id = #{internet_id}
+        and a.scene_id in (select scene_id from in_scene where fav_type in
+            <foreach item="item" index="index" collection="scenes" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            )
+        <if test="store_id != null and store_id != ''">
+            and a.card_id in (select card_id from card_store where store_id in
+            <foreach item="item" index="index" collection="store_ids" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            group by card_id)
+        </if>
+    </select>
+
+
+    <select id="findCardAndSceneById" parameterType="String" resultType="pd">
+        select
+            a.*,
+            b.FAV_TYPE,
+            b.BENEFIT_TYPE,
+            b.RECEIVE_NUMBER,
+            b.RECEIVE_DETIL,
+            b.SCENE_NAME,
+            b.BLANK_NUMBER,
+            b.RUSH_BUY_NUMBER,
+            b.RUSH_BUY_TIME,
+            b.RUSH_BUY_TIME_UNITS,
+            b.unusertime
+        from card a left join in_scene b on a.scene_id = b.scene_id
+        where 1=1
+        and a.card_id = #{card_id}
+        limit 1
+    </select>
+
+    <!--获取实际创建的抵用券-->
+    <select id="findValidRushByCardId" parameterType="String" resultType="pd">
+      select * from card where card_id in(select card_ids from card_cards where card_id = #{card_id} order by card_order asc)
+    </select>
+
+    <!--根据门店id和卡券场景获取卡券列表-->
+    <select id="findByStoreIdAndFavType" parameterType="String" resultType="pd">
+        select * from card where 1=1
+        and scene_id in(select scene_id from in_scene where fav_type = #{fav_type})
+        and card_id in (select card_id from card_store where store_id = #{store_id})
+        and card_id in (select card_id from card_cards group by card_id)
+        and d_state = 0
+        and quantity > 0
+        order by handsel desc
+    </select>
+
+    <select id="findByOrderIdAndCardId" parameterType="pd" resultType="pd">
+      select * from card_open
+        where 1=1
+        and order_id = #{order_id}
+        and card_id = #{card_id}
+        limit 1
+    </select>
+
+    <select id="findCardOpenById" parameterType="String" resultType="pd">
+      select * from card_open
+        where 1=1
+        and id = #{id}
+        limit 1
+    </select>
+
+
+
+</mapper>

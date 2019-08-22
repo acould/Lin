@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserDownMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		user_down
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		down_id,
+		computer_name,
+		card_id,
+		member_level,
+		id_card,
+		
+		id_type,
+		user_name,
+		pay_type,
+		card_remain,
+		consume_fee,
+		
+		up_duration,
+		up_timestamp,
+		down_timestamp,
+		up_time,
+		down_time,
+		
+		store_id,
+		guid
+
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{down_id},	
+		#{computer_name},	
+		#{card_id},	
+		#{member_level},	
+		#{id_card},
+		
+		#{id_type},
+		#{user_name},
+		#{pay_type},
+		#{card_remain},
+		#{consume_fee},
+		
+		#{up_duration},
+		#{up_timestamp},
+		#{down_timestamp},
+		#{up_time},
+		#{down_time},
+		
+		#{store_id},
+		#{guid}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+			<include refid="tableName"></include>(<include refid="Field"></include>) 
+		values 
+			(<include refid="FieldValue"></include>)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			down_id = #{down_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+			<include refid="tableName"></include>
+		set 
+			down_id = #{down_id}
+		where 
+			down_id = #{down_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			down_id = #{down_id}
+	</select>
+	<select id="findByGuid" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			guid = #{guid}
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 1=1
+			
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			down_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<select id="datalist" parameterType="page" resultType="pd">
+		select
+			a.*,
+			(select STORE_NAME from internet_store where store_id = a.store_id) as store_name
+		from 
+			user_down a
+		where 1=1 and (a.card_id = #{pd.card_id} or a.id_card = #{pd.card_id})
+			<if test="pd.up_time != null and pd.up_time != ''">
+				and a.up_time LIKE CONCAT(CONCAT('%', #{pd.up_time}),'%') 
+			</if>
+			
+			<!-- 一个网吧内的所有门店 -->
+			and a.store_id in (select store_id from internet_store where internet_id = #{pd.internet_id})
+			
+			<![CDATA[ and datediff(curdate(),a.up_time) < 90 ]]><!-- 只显示最新三个月 -->
+			order by a.up_time desc
+	</select>
+
+
+    <select id="calUserUpTime" parameterType="pd" resultType="pd">
+      select
+        IFNULL(sum(up_duration),0) as uptime
+      from user_down
+      where store_id = #{store_id} and id_card = #{card_id}
+        <if test="begin_time != null and begin_time != ''">
+            and down_time <![CDATA[>=]]> #{begin_time}
+        </if>
+        <if test="end_time != null and end_time != ''">
+            and down_time <![CDATA[<=]]> #{end_time}
+        </if>
+
+    </select>
+
+</mapper>

@@ -1,0 +1,3164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CustomerManager">
+
+    <!-- 用户管理查询 -->
+    <select id="datalistPage" parameterType="page"
+            resultType="pd">
+        select * from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1
+        and  INTENET_NAME is not null
+        and dd.state = 1
+        AND (dd.status != 1 or dd.status is null)
+        AND (dd.status2 != 1 or dd.status2 is null)
+        <if test="pd.paystatus!= null and pd.paystatus!=''"  >
+            and dd.CHOOSE_PACKAGE = ${pd.paystatus}
+        </if>
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        ORDER BY store_name ,create_time desc
+
+    </select>
+
+    <select id="datalistPage2" parameterType="page"
+            resultType="pd">
+        select * from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        y.TELEPHONE,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        v.TELEPHONE,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state,
+        l.TELEPHONE
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state,
+        h.TELEPHONE
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state,
+        g.TELEPHONE
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state,
+        e.TELEPHONE
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        c.TELEPHONE,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.TELEPHONE,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1
+        and  INTENET_NAME is not null
+        and  dd.state = 1
+        and (dd.status = 1 or dd.status2 = 1)
+        <if test="pd.paystatus!= null and pd.paystatus!=''"  >
+            and dd.CHOOSE_PACKAGE = ${pd.paystatus}
+        </if>
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        ORDER BY store_name ,create_time desc
+
+    </select>
+
+    <select id="datalistPage3" parameterType="page"
+            resultType="pd">
+        select * from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        y.TELEPHONE,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        v.TELEPHONE,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state,
+        l.TELEPHONE
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state,
+        h.TELEPHONE
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state,
+        g.TELEPHONE
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state,
+        e.TELEPHONE
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        c.TELEPHONE,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.TELEPHONE,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1
+        and  INTENET_NAME is not null
+        AND ( dd.state != 1 OR dd.state IS NULL )
+        <if test="pd.paystatus!= null and pd.paystatus!=''"  >
+            and dd.CHOOSE_PACKAGE = ${pd.paystatus}
+        </if>
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        ORDER BY store_name ,create_time desc
+    </select>
+
+
+    <select id="datalistPage5" parameterType="page"
+            resultType="pd">
+        select * from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        y.TELEPHONE,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        v.TELEPHONE,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state,
+        l.TELEPHONE
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state,
+        h.TELEPHONE
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state,
+        g.TELEPHONE
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state,
+        e.TELEPHONE
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        c.TELEPHONE,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.TELEPHONE,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        WHERE  1 = 1
+        and  INTENET_NAME is not null
+        AND (dd.state != 1  or  dd.state is null)
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        ORDER BY store_name ,create_time desc
+    </select>
+
+    <select id="datalistPage6" parameterType="page"
+            resultType="pd">
+        select * from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        y.TELEPHONE,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        v.TELEPHONE,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state,
+        l.TELEPHONE
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state,
+        h.TELEPHONE
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state,
+        g.TELEPHONE
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state,
+        e.TELEPHONE
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        c.TELEPHONE,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.TELEPHONE,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1
+        and  INTENET_NAME is not null
+        and  dd.state = 1
+        AND (dd.status != 1 or dd.status is null)
+        AND (dd.status2 != 1 or dd.status2 is null)
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        ORDER BY store_name ,create_time desc
+    </select>
+
+    <select id="datalistPage7" parameterType="page"
+            resultType="pd">
+        select * from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        y.TELEPHONE,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        v.TELEPHONE,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state,
+        l.TELEPHONE
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state,
+        h.TELEPHONE
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state,
+        g.TELEPHONE
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state,
+        e.TELEPHONE
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        c.TELEPHONE,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.TELEPHONE,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1
+        and  INTENET_NAME is not null
+        and  dd.state = 1
+        and (dd.status = 1 or dd.status2 = 1)
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        ORDER BY store_name ,create_time desc
+    </select>
+    <select id="totalNum" parameterType="page"
+            resultType="Integer">
+                         select count(*) from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1
+    </select>
+    <select id="datalistPage4" parameterType="page"
+            resultType="pd">
+        select * from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+		y.TELEPHONE,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+				v.TELEPHONE,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state,
+				l.TELEPHONE
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state,
+				h.TELEPHONE
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state,
+				g.TELEPHONE
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state,
+				e.TELEPHONE
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+				c.TELEPHONE,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+				b.TELEPHONE,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1
+        and  INTENET_NAME is not null
+        <if test="pd.paystatus!= null and pd.paystatus!=''"  >
+            and dd.CHOOSE_PACKAGE = ${pd.paystatus}
+        </if>
+
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+    </select>
+
+    <select id="findyinlianBystoreId" parameterType="String" resultType="Integer">
+                select status from tb_internetdatum
+                where store_id = #{store_id}
+    </select>
+
+
+    <select id="findjianlianBystoreId" parameterType="String" resultType="Integer">
+                select status2 from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id,
+			  aa.type	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1
+        and store_id = #{store_id}
+        and  type='1'
+    </select>
+
+
+    <select id="findjiavBystoreId" parameterType="String" resultType="Integer">
+                select state from internet_store_v
+                where store_id = #{store_id}
+    </select>
+
+    <select id="listUU" parameterType="page" resultType="pd">
+        select * from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        y.TELEPHONE,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        v.TELEPHONE,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state,
+        l.TELEPHONE
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state,
+        h.TELEPHONE
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state,
+        g.TELEPHONE
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state,
+        e.TELEPHONE
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        c.TELEPHONE,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.TELEPHONE,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1
+        and  INTENET_NAME is not null
+        <if test="pd.STORE_ID != null and pd.STORE_ID != ''">
+            and STORE_ID in ('${pd.STORE_ID}')
+        </if>
+    </select>
+
+    <select id="listSum" parameterType="page" resultType="pd">
+        select sum(storenums) as sumstore,sum(fannums) as sumfans,sum(totalprice) as sumprice  from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1
+        and  INTENET_NAME is not null
+        <!--#{pd.state}  ('${pd.status2}') -->
+
+            and  dd.state = 1
+
+
+            and dd.status !=1
+
+
+            and dd.status2 !=1
+
+        <if test="pd.paystatus!= null and pd.paystatus!=''"  >
+            and dd.CHOOSE_PACKAGE = ${pd.paystatus}
+        </if>
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+    </select>
+    <select id="listSum11" parameterType="page" resultType="pd">
+        select  fannums ,INTENET_ID from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1 and
+        INTENET_NAME is not null
+        <!--#{pd.state}  ('${pd.status2}') -->
+        and  dd.state = 1
+        and dd.status !=1
+        and dd.status2 !=1
+        <if test="pd.paystatus!= null and pd.paystatus!=''"  >
+            and dd.CHOOSE_PACKAGE = ${pd.paystatus}
+        </if>
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        GROUP BY INTENET_ID
+    </select>
+
+    <select id="listSum2" parameterType="page" resultType="pd">
+        select sum(storenums) as sumstore,sum(fannums) as sumfans,sum(totalprice) as sumprice  from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1
+        and  INTENET_NAME is not null
+        and  dd.state = 1
+        and (dd.status = 1 or dd.status2 = 1)
+        <if test="pd.paystatus!= null and pd.paystatus!=''"  >
+            and dd.CHOOSE_PACKAGE = ${pd.paystatus}
+        </if>
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+
+    </select>
+
+    <select id="listSum22" parameterType="page" resultType="pd">
+        select  fannums ,INTENET_ID from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1 and
+        INTENET_NAME is not null
+        and  dd.state = 1
+        and (dd.status = 1 or dd.status2 = 1)
+        <if test="pd.paystatus!= null and pd.paystatus!=''"  >
+            and dd.CHOOSE_PACKAGE = ${pd.paystatus}
+        </if>
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        GROUP BY INTENET_ID
+    </select>
+
+    <select id="listSum3" parameterType="page" resultType="pd">
+        select sum(storenums) as sumstore,sum(fannums) as sumfans,sum(totalprice) as sumprice  from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1
+        and (dd.state != 1  or  dd.state is null)
+        <if test="pd.paystatus!= null and pd.paystatus!=''"  >
+            and dd.CHOOSE_PACKAGE = ${pd.paystatus}
+        </if>
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+
+    </select>
+
+
+    <select id="listSum33" parameterType="page" resultType="pd">
+        select  fannums ,INTENET_ID from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1 and
+        INTENET_ID is not null
+        and (dd.state != 1  or  dd.state is null)
+        <if test="pd.paystatus!= null and pd.paystatus!=''"  >
+            and dd.CHOOSE_PACKAGE = ${pd.paystatus}
+        </if>
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        GROUP BY INTENET_ID
+    </select>
+
+    <select id="listSum4" parameterType="page" resultType="pd">
+        select sum(storenums) as sumstore,sum(fannums) as sumfans,sum(totalprice) as sumprice  from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1
+        and  INTENET_NAME is not null
+        <if test="pd.paystatus!= null and pd.paystatus!=''"  >
+            and dd.CHOOSE_PACKAGE = ${pd.paystatus}
+        </if>
+
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+
+    </select>
+
+    <select id="listSum44" parameterType="page" resultType="pd">
+        select  fannums ,INTENET_ID from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1 and
+        INTENET_ID is not null
+        <if test="pd.paystatus!= null and pd.paystatus!=''"  >
+            and dd.CHOOSE_PACKAGE = ${pd.paystatus}
+        </if>
+
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        GROUP BY INTENET_ID
+    </select>
+
+    <select id="listSum5" parameterType="page" resultType="pd">
+        select sum(storenums) as sumstore,sum(fannums) as sumfans,sum(totalprice) as sumprice  from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1
+        and  INTENET_NAME is not null
+        AND (dd.state != 1  or  dd.state is null)
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        ORDER BY store_name ,create_time desc
+    </select>
+
+
+
+    <select id="listSum55" parameterType="page" resultType="pd">
+        select  fannums ,INTENET_ID from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1 and
+        INTENET_ID is not null
+        AND (dd.state != 1  or  dd.state is null)
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        GROUP BY INTENET_ID
+        ORDER BY store_name ,create_time desc
+    </select>
+
+    <select id="listSum6" parameterType="page" resultType="pd">
+        select sum(storenums) as sumstore,sum(fannums) as sumfans,sum(totalprice) as sumprice  from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1
+        and  INTENET_NAME is not null
+        and  dd.state = 1
+        AND (dd.status != 1 or dd.status is null)
+        AND (dd.status2 != 1 or dd.status2 is null)
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        ORDER BY store_name ,create_time desc
+    </select>
+
+    <select id="listSum66" parameterType="page" resultType="pd">
+        select  fannums ,INTENET_ID from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1 and
+        INTENET_ID is not null
+        and  dd.state = 1
+        AND (dd.status != 1 or dd.status is null)
+        AND (dd.status2 != 1 or dd.status2 is null)
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        GROUP BY INTENET_ID
+        ORDER BY store_name ,create_time desc
+    </select>
+
+    <select id="listSum7" parameterType="page" resultType="pd">
+        select sum(storenums) as sumstore,sum(fannums) as sumfans,sum(totalprice) as sumprice  from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1
+        and  INTENET_NAME is not null
+        and  dd.state = 1
+        and (dd.status = 1 or dd.status2 = 1)
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        ORDER BY store_name ,create_time desc
+    </select>
+
+    <select id="listSum77" parameterType="page" resultType="pd">
+        select  fannums ,INTENET_ID from (select bb.*,cc.id,cc.status as status2 from (select y.totalprice,
+        y.storenums,
+        y.fannums,
+        y.INTENET_NAME,
+        y.CREATE_TIME,
+        y.INTENET_ID,
+        y.STORE_NAME,
+        y.STORE_ID,
+        y.EXPIRATION_TIME,
+        y.CHOOSE_PACKAGE,
+        y.status,
+        y.state,
+        aa.foreign_id	from (select v.totalprice,
+        v.storenums,
+        v.fannums,
+        v.INTENET_NAME,
+        v.CREATE_TIME,
+        v.INTENET_ID,
+        v.STORE_NAME,
+        v.STORE_ID,
+        v.EXPIRATION_TIME,
+        v.CHOOSE_PACKAGE,
+        v.state,
+        x.status	from (SELECT
+        sum( rincipal_balance ) AS totalprice,
+        l.storenums,
+        l.fannums,
+        l.INTENET_NAME,
+        l.CREATE_TIME,
+        l.INTENET_ID,
+        l.STORE_NAME,
+        l.STORE_ID,
+        l.EXPIRATION_TIME,
+        l.CHOOSE_PACKAGE,
+        l.state
+        FROM
+        (
+        SELECT
+        count( * ) AS storenums,
+        h.fannums,
+        h.INTENET_NAME,
+        h.CREATE_TIME,
+        h.INTENET_ID,
+        h.STORE_NAME,
+        h.STORE_ID,
+        h.EXPIRATION_TIME,
+        h.CHOOSE_PACKAGE,
+        h.state
+        FROM
+        (
+        SELECT
+        count( * ) AS fannums,
+        g.INTENET_NAME,
+        g.CREATE_TIME,
+        g.INTENET_ID,
+        g.STORE_NAME,
+        g.STORE_ID,
+        g.EXPIRATION_TIME,
+        g.CHOOSE_PACKAGE,
+        g.state
+        FROM
+        (
+        SELECT
+        e.INTENET_NAME,
+        e.CREATE_TIME,
+        e.INTENET_ID,
+        e.STORE_NAME,
+        e.STORE_ID,
+        e.EXPIRATION_TIME,
+        e.CHOOSE_PACKAGE,
+        e.state
+        FROM
+        (
+        SELECT
+        c.INTENET_NAME,
+        c.CREATE_TIME,
+        c.INTENET_ID,
+        c.STORE_NAME,
+        c.STORE_ID,
+        d.EXPIRATION_TIME,
+        d.CHOOSE_PACKAGE,
+        d.state
+        FROM
+        (
+        SELECT
+        a.INTENET_NAME,
+        a.CREATE_TIME,
+        a.INTENET_ID,
+        b.STORE_NAME,
+        b.STORE_ID AS STORE_ID
+        FROM
+        sys_intenet a
+        RIGHT JOIN internet_store b ON a.INTENET_ID = b.INTERNET_ID
+        ) c
+        LEFT JOIN internet_store_v d ON c.STORE_ID = d.STORE_ID
+        ) e
+        LEFT JOIN wechat_user f ON e.INTENET_ID = f.INTENET_ID
+        ) g
+        GROUP BY
+        g.STORE_ID
+        ) h
+        LEFT JOIN bund_user j ON h.STORE_ID = j.STORE_ID
+        GROUP BY
+        h.STORE_ID
+        ) l
+        LEFT JOIN tb_rechargehistory m ON l.STORE_ID = m.STORE_ID
+        GROUP BY
+        l.STORE_ID) v left join tb_internetdatum x on v.store_id=x.store_id GROUP BY v.STORE_ID) y
+        left join internet_match_store aa on y.store_id = aa.store_id GROUP BY y.STORE_ID) bb
+        left join internet_store_jialian cc on bb.foreign_id=cc.id GROUP BY bb.STORE_ID) dd
+        where 1=1 and
+        INTENET_ID is not null
+        and  dd.state = 1
+        and (dd.status = 1 or dd.status2 = 1)
+        <if test="pd.keywords != null and pd.keywords != ''">
+            and (
+            dd.storenums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.store_name LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.fannums LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.INTENET_NAME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.CREATE_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            or dd.EXPIRATION_TIME LIKE CONCAT(CONCAT('%',#{pd.keywords}),'%')
+            )
+        </if>
+        GROUP BY INTENET_ID
+        ORDER BY store_name ,create_time desc
+    </select>
+
+</mapper>

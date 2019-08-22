@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MessageMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		tb_message
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		message_id,
+		internet_id,
+		user_id,
+		title,
+		type,
+		content,
+		announce_time,
+		read_time,
+		state
+
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{message_id},
+		#{internet_id},
+		#{user_id},
+		#{title},
+		#{type},
+		#{content},
+		#{announce_time},
+		#{read_time},
+		#{state}
+		
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+			<include refid="tableName"></include>(<include refid="Field"></include>) 
+		values 
+			(<include refid="FieldValue"></include>)
+	</insert>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findByMessageIdAndType" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			message_id = #{message_id} and type = #{type}
+	</select>
+	
+	<update id="edit" parameterType="pd">
+		update 
+			<include refid="tableName"></include>
+		set
+			<if test="read_time != null and read_time != ''">
+				read_time = #{read_time},
+			</if>
+			<if test="state != null and state != ''">
+				state = #{state},
+			</if>
+			<if test="user_id != null and user_id != ''">
+				user_id = #{user_id},
+			</if>
+			message_id = #{message_id}
+		where 
+			message_id = #{message_id} and state = '0'
+	</update>
+	
+	
+	<select id="findByStateOrType" parameterType="pd" resultType="pd">
+		select 
+			* 
+		from
+			<include refid="tableName"></include>
+		where 1=1 and internet_id = #{internet_id}
+			<if test="state != null and state != ''">
+				and state = #{state}
+			</if>
+			<if test="type != null and type != ''">
+				and type = #{type}
+			</if>
+		order by announce_time desc
+	</select>
+	
+	<select id="datalistPage" parameterType="pd" resultType="pd">
+		select 
+			*
+		from
+			<include refid="tableName"></include>
+		where 1=1 and internet_id = #{pd.internet_id}
+		<!-- 搜索条件 -->
+			<if test="pd.keywords != null and pd.keywords != ''">
+				and title LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			</if>
+		<!-- 筛选条件 -->
+			<if test="pd.type != null and pd.type != ''">
+				and type = #{pd.type}
+			</if>
+			<if test="pd.state != null and pd.state != ''">
+				and state = #{pd.state}
+			</if>
+			<if test="pd.state == 0 or pd.state == '0'">
+				order by announce_time desc
+			</if>
+			<if test="pd.state == 1 or pd.state == '1'">
+				order by read_time desc
+			</if>
+	</select>
+	
+	<select id="totalNum" parameterType="pd" resultType="Integer">
+		select count(*) as number from <include refid="tableName"></include>
+		where 1=1 and internet_id = #{internet_id}
+		<!-- 搜索条件 -->
+			<if test="keywords != null and keywords != ''">
+				and title LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+			</if>
+		<!-- 筛选条件 -->
+			<if test="type != null and type != ''">
+				and type = #{type}
+			</if>
+			<if test="state != null and state != ''">
+				and state = #{state}
+			</if>
+	</select>
+	<select id="notReadNum" parameterType="pd" resultType="Integer">
+		select (
+			(select count(*) from tb_message where state = '0' and internet_id = #{internet_id})
+			-
+			(select count(*) from tb_message where message_id = #{message_id} and state = '0')
+		) as number
+	</select>
+	
+	
+</mapper>

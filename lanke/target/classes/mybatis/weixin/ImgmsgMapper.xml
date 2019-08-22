@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ImgmsgMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		weixin_imgmsg
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		IMGMSG_ID,	
+		INTERNET_ID,	
+		KEYWORD,
+		CREATETIME,
+		STATUS,
+		REMARKS,
+		
+		TITLE,
+		DESCRIPTION,	
+		CONTENT,
+		AUTHOR,	
+		IMG_URL,	<!-- 图片的media_id，可修改 -->
+		SOURCE_URL,	<!-- 阅读原文的链接，可修改 -->
+		PIC_URL,	<!-- 图片的链接地址，可修改 -->
+		URL,		<!-- 图文信息的链接地址，不可修改 -->
+		MEDIA_ID	<!-- 图文信息的media_id，不可修改 -->
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{IMGMSG_ID},	
+		#{INTERNET_ID},	
+		#{KEYWORD},
+		#{CREATETIME},
+		#{STATUS},
+		#{REMARKS},
+		
+		#{TITLE},
+		#{DESCRIPTION},
+		#{CONTENT},
+		#{AUTHOR},
+		#{IMG_URL},
+		#{SOURCE_URL},
+		#{PIC_URL},
+		#{URL},
+		#{MEDIA_ID}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+			<include refid="tableName"></include>(<include refid="Field"></include>) 
+		values (<include refid="FieldValue"></include>)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			IMGMSG_ID = #{IMGMSG_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update  
+			<include refid="tableName"></include>
+		set 
+			KEYWORD = #{KEYWORD},	
+			STATUS = #{STATUS},	
+			REMARKS = #{REMARKS},
+				
+			TITLE = #{TITLE},	
+			DESCRIPTION = #{DESCRIPTION},	
+			IMG_URL = #{IMG_URL},	
+			CONTENT = #{CONTENT},	
+			SOURCE_URL = #{SOURCE_URL},
+			PIC_URL = #{PIC_URL},
+			AUTHOR = #{AUTHOR}
+		where 
+			IMGMSG_ID = #{IMGMSG_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			IMGMSG_ID = #{IMGMSG_ID}
+	</select>
+	
+	<!-- 匹配关键词 -->
+	<select id="findByKw" parameterType="pd" resultType="pd" useCache="false">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			KEYWORD = #{KEYWORD} AND INTERNET_ID = #{INTERNET_ID}
+			AND STATUS = 1 <!-- 有效的关键字 -->
+	</select>
+	
+	<!-- 匹配关键词 -->
+	<select id="listByKw" parameterType="pd" resultType="pd" useCache="false">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			KEYWORD = #{KEYWORD} AND INTERNET_ID = #{INTERNET_ID}
+			AND STATUS = 1 <!-- 有效的关键字 -->
+		order by remarks asc
+	</select>
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			INTERNET_ID = #{pd.INTERNET_ID}
+			<if test="pd.KEYWORD != null and pd.KEYWORD != ''"><!-- 关键词检索 -->
+				and 
+				(
+					KEYWORD LIKE CONCAT(CONCAT('%', #{pd.KEYWORD}),'%')
+				)
+			</if>
+			<if test="pd.STATUS != null and pd.STATUS != ''">
+				and STATUS = #{pd.STATUS} 
+			</if>
+		order by CREATETIME desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from 
+			<include refid="tableName"></include>
+		where 
+			IMGMSG_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+</mapper>

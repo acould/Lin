@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BundUserMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+		BUND_USER
+	</sql>
+
+    <!-- 字段 -->
+    <sql id="Field">
+		USER_ID,	
+		CARDED,
+		NAME,
+		PHONE,
+		STORE_ID,	
+		CREATE_TIME,	
+		BUNDUSER_ID,
+		MEMBER_LEVEL,
+		USABLE_INTEGRAL,
+		OVERAGE,
+		PSD,
+		IS_SW,
+		CARDID,
+		REWARD
+	</sql>
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
+		#{USER_ID},	
+		#{CARDED},
+		#{NAME},
+		#{PHONE},	
+		#{STORE_ID},	
+		#{CREATE_TIME},	
+		#{BUNDUSER_ID},
+		#{MEMBER_LEVEL},
+		#{USABLE_INTEGRAL},
+		#{OVERAGE},
+		#{PSD},
+		#{IS_SW},
+		#{CARDID},
+		#{REWARD}
+	</sql>
+
+    <!-- 新增-->
+    <insert id="save" parameterType="pd">
+        insert into
+        <include refid="tableName"></include>
+        (
+        <include refid="Field"></include>
+        ) values (
+        <include refid="FieldValue"></include>
+        )
+    </insert>
+
+    <!-- 删除-->
+    <delete id="delete" parameterType="pd">
+        delete from
+        <include refid="tableName"></include>
+        where
+        BUNDUSER_ID = #{BUNDUSER_ID}
+    </delete>
+
+    <delete id="delByUserId" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        user_id = #{user_id}
+    </delete>
+
+    <!-- 修改(充值成功，修改用户余额) -->
+    <update id="edit" parameterType="pd">
+        update
+        	<include refid="tableName"></include>
+        set
+	        <if test="NAME != null and NAME != ''">
+		        NAME = #{NAME},        	
+        	</if>
+        	<if test="CARDED != null and CARDED != ''">
+		        CARDED = #{CARDED},        	
+        	</if>
+        	
+	        <if test="PHONE != null and PHONE != ''">
+		        PHONE = #{PHONE},        	
+        	</if>
+        	<if test="STORE_ID != null and STORE_ID != ''">
+		         STORE_ID = #{STORE_ID},      	
+        	</if>
+        	<if test="CREATE_TIME != null and CREATE_TIME != ''">
+		        CREATE_TIME=#{CREATE_TIME},        	
+        	</if>
+        	
+	        <if test="MEMBER_LEVEL != null and MEMBER_LEVEL != ''">
+		        MEMBER_LEVEL = #{MEMBER_LEVEL},       	
+        	</if>
+        	<if test="USABLE_INTEGRAL != null and USABLE_INTEGRAL != ''">
+		       USABLE_INTEGRAL = #{USABLE_INTEGRAL},      	
+        	</if>
+        	<if test="OVERAGE != null and OVERAGE != ''">
+		        OVERAGE = #{OVERAGE},       	
+        	</if>
+        	<if test="REWARD != null and REWARD != ''">
+		        REWARD = #{REWARD},  	
+        	</if>
+            <if test="PSD != null and PSD != ''">
+                PSD = #{PSD},
+            </if>
+            <if test="IS_SW != null and IS_SW != ''">
+              IS_SW = #{IS_SW},
+            </if>
+            <if test="CARDID != null and CARDID != ''">
+                CARDID = #{CARDID},
+            </if>
+        	BUNDUSER_ID = #{BUNDUSER_ID}
+        where
+        	BUNDUSER_ID = #{BUNDUSER_ID}
+    </update>
+   <!-- 通过userid修改 -->
+    <update id="editUser" parameterType="pd">
+        update
+        	<include refid="tableName"></include>
+        set
+        	<if test="PHONE != null and PHONE != ''">
+		        PHONE = #{PHONE},        	
+        	</if>
+        	<if test="STORE_ID != null and STORE_ID != ''">
+		         STORE_ID = #{STORE_ID},      	
+        	</if>
+        	<if test="CREATE_TIME != null and CREATE_TIME != ''">
+		        CREATE_TIME=#{CREATE_TIME},        	
+        	</if>
+        
+        	<if test="MEMBER_LEVEL != null and MEMBER_LEVEL != ''">
+		        MEMBER_LEVEL = #{MEMBER_LEVEL},       	
+        	</if>
+        	<if test="USABLE_INTEGRAL != null and USABLE_INTEGRAL != ''">
+		       USABLE_INTEGRAL = #{USABLE_INTEGRAL},      	
+        	</if>
+        	<if test="OVERAGE != null and OVERAGE != ''">
+		        OVERAGE = #{OVERAGE},       	
+        	</if>
+        	<if test="REWARD != null and REWARD != ''">
+		        REWARD = #{REWARD},  	
+        	</if>
+            <if test="PSD != null and PSD != ''">
+                PSD = #{PSD},
+            </if>
+            <if test="IS_SW != null and IS_SW != ''">
+                IS_SW = #{IS_SW},
+            </if>
+            <if test="CARDID != null and CARDID != ''">
+                CARDID = #{CARDID},
+            </if>
+	        USER_ID = #{USER_ID}
+        where
+        	USER_ID = #{USER_ID}
+    </update>
+
+    <!-- 通过ID获取数据 -->
+    <select id="findById" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        BUNDUSER_ID = #{BUNDUSER_ID}
+    </select>
+    <!-- 通过ID获取数据 -->
+    <select id="findByUser" parameterType="pd" resultType="pd">
+        select
+        	a.*,
+        	(select IMGURL from wechat_user where user_id = a.user_id) as IMGURL,
+        	(select STORE_NAME from internet_store where store_id = a.store_id) as STORE_NAME
+        from
+        	bund_user a
+        where
+        	a.USER_ID = #{userId}
+    </select>
+    <!-- 通过ID和storeId获取数据 -->
+    <select id="findByUserIdAndStoreId" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        USER_ID = #{userId} AND STORE_ID = #{STORE_ID}
+    </select>
+    <!-- 通过OPEN_ID和storeId获取数据 -->
+    <select id="findByOpenIdAndStoreId" parameterType="pd" resultType="pd">
+        select
+        A.*
+        from
+        <include refid="tableName"></include>
+        A , wechat_user B
+        where A.USER_ID = B.USER_ID
+        AND B.OPEN_ID = #{OPEN_ID} AND A.STORE_ID = #{STORE_ID}
+    </select>
+    
+    <!-- 根据卡卷号来判断是否为绑定用户获取的(通过优惠券code来判断用户是否绑定获取数据) -->
+    <select id="findByCode" parameterType="pd" resultType="pd">
+        select
+        A.USER_ID,
+        A.CARDED,
+        A.CARDID,
+        A.NAME,
+        A.PHONE,
+        A.STORE_ID,
+        A.CREATE_TIME,
+        A.BUNDUSER_ID,
+        A.MEMBER_LEVEL,
+        A.USABLE_INTEGRAL,
+        A.OVERAGE,
+        A.REWARD
+        from bund_user A  left join WECHAT_USER C on A.USER_ID=C.USER_ID
+        left join CARD_CANCEL B on C.OPEN_ID=B.OPEN_ID
+        where B.CARD=#{CARD}
+
+        <!--select
+        A.USER_ID,
+        A.CARDED,
+        A.NAME,
+        A.PHONE,
+        A.STORE_ID,
+        A.CREATE_TIME,
+        A.BUNDUSER_ID,
+        A.MEMBER_LEVEL,
+        A.USABLE_INTEGRAL,
+        A.OVERAGE,
+        A.REWARD
+        from
+        <include refid="tableName"></include>
+        A,CARD_CANCEL B,WECHAT_USER C
+        where
+        A.USER_ID=C.USER_ID
+        AND C.OPEN_ID=B.OPEN_ID
+        AND B.CARD=#{CARD}-->
+    </select>
+
+
+    <select id="findByCard" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where 1=1
+        and (CARDED = #{CARDED} or CARDID = #{CARDED})
+        and STORE_ID= #{STORE_ID}
+        limit 1
+    </select>
+
+    <!-- 列表 -->
+    <select id="datalistPage" parameterType="page" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where 1=1
+        <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+            and
+            (
+            <!--	根据需求自己加检索条件
+                字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+                 or
+                字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            -->
+            )
+        </if>
+    </select>
+
+    <!-- 列表(全部) -->
+    <select id="listAll" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+    </select>
+
+    <!-- 批量删除 -->
+    <delete id="deleteAll" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        BUNDUSER_ID in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="findByOpenId" parameterType="String" resultType="pd">
+        select
+          a.*,
+          b.state as v_state
+        from
+          <include refid="tableName"></include> a left join internet_store_v b on a.store_id = b.store_id
+        where a.user_id = (select user_id from wechat_user where open_id = #{openid})
+    </select>
+
+    <select id="findUserByOpenId" parameterType="String" resultType="pd">
+        select
+          a.user_id,
+          a.open_id,
+          a.intenet_id,
+          a.neck_name,
+          a.sex,
+          a.state,
+          a.imgurl,
+          b.carded,
+          b.cardid,
+          b.name,
+          b.phone,
+          b.store_id,
+          b.psd,
+          c.store_name
+        from wechat_user a left join <include refid="tableName"></include> b on a.user_id = b.user_id
+          left join internet_store c on b.store_id = c.store_id
+        where a.open_id = #{openid}
+    </select>
+    <select id="findUserByUserId" parameterType="String" resultType="pd">
+        select
+        a.user_id,
+        a.open_id,
+        a.intenet_id,
+        a.neck_name,
+        a.sex,
+        a.state,
+        a.imgurl,
+        b.carded,
+        b.cardid,
+        b.name,
+        b.phone,
+        b.store_id,
+        b.psd,
+        c.store_name
+        from wechat_user a left join <include refid="tableName"></include> b on a.user_id = b.user_id
+        left join internet_store c on b.store_id = c.store_id
+        where a.user_id = #{user_id}
+    </select>
+
+    <select id="getBundUserByUserId" parameterType="String" resultType="com.lk.entity.system.BundUser">
+        select
+            a.bunduser_id,
+            a.user_id,
+            a.carded,
+            a.cardid,
+            a.name,
+            a.phone,
+            a.store_id,
+            a.member_level,
+            a.usable_integral,
+            a.overage,
+            a.reward,
+            a.create_time,
+            a.psd,
+            a.is_sw,
+            b.open_id,
+            b.neck_name,
+            b.imgurl,
+            c.store_name
+        from
+            bund_user a left join wechat_user b on a.user_id = b.user_id
+            left join internet_store c on a.store_id = c.store_id
+        where a.user_id = #{user_id}
+
+    </select>
+    <select id="getBundUserByOpenId" parameterType="String" resultType="com.lk.entity.system.BundUser">
+        select
+            a.bunduser_id,
+            a.user_id,
+            a.carded,
+            a.cardid,
+            a.name,
+            a.phone,
+            a.store_id,
+            a.member_level,
+            a.usable_integral,
+            a.overage,
+            a.reward,
+            a.create_time,
+            a.psd,
+            a.is_sw,
+            b.open_id,
+            b.neck_name,
+            b.imgurl,
+            c.store_name
+        from
+            bund_user a left join wechat_user b on a.user_id = b.user_id
+            left join internet_store c on a.store_id = c.store_id
+        where b.open_id = #{openid}
+
+    </select>
+
+
+    <select id="findByCardedAndStoreId" parameterType="pd" resultType="pd">
+    select
+      *
+    from bund_user where CARDED = #{CARDED} and STORE_ID = #{STORE_ID}
+    LIMIT 1
+    </select>
+
+
+
+    <select id="listByStoreId" parameterType="String" resultType="pd">
+        select
+          *
+        from bund_user
+        where store_id = #{store_id}
+    </select>
+    <select id="listByStoreIds" parameterType="pd" resultType="pd">
+        select
+          a.*,
+        (a.OVERAGE - a.REWARD) as PRINCIPAL,
+        (select OPEN_ID from wechat_user where user_id = a.user_id) as OPEN_ID,
+        (select STORE_NAME from internet_store where store_id = a.store_id) as STORE_NAME,
+        (select down_time from user_down where id_card = a.carded limit 1) as DOWN_TIME
+
+        from bund_user a
+        where 1=1
+        <if test="store_ids != null and store_ids != ''">
+            and a.store_id in
+            <foreach item="item" index="index" collection="store_ids" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <!-- 姓名-->
+        <if test="mem_name != null and mem_name != ''">
+            and a.name = #{mem_name}
+        </if>
+        <!-- 卡号-->
+        <if test="mem_card != null and mem_card != ''">
+            and (a.carded = #{mem_card} or a.cardid = #{mem_card})
+        </if>
+        <!-- 等级-->
+        <if test="mem_level != null and mem_level != ''">
+            and a.member_level = #{mem_level}
+        </if>
+        <!-- 性别-->
+        <if test="mem_sex != null and mem_sex != ''">
+            and a.user_id in (select user_id from wechat_user where sex = #{mem_sex} and intenet_id = #{internet_id})
+        </if>
+
+        <!-- 卡余额-->
+        <if test="mem_overage1 != null and mem_overage1 != ''">
+            and a.overage <![CDATA[>=]]> #{mem_overage1}
+        </if>
+        <if test="mem_overage2 != null and mem_overage2 != ''">
+            and a.overage <![CDATA[<=]]> #{mem_overage2}
+        </if>
+        <!-- 本金-->
+        <if test="mem_principal1 != null and mem_principal1 != ''">
+            and (a.overage - a.reward) <![CDATA[>=]]> #{mem_principal1}
+        </if>
+        <if test="mem_principal2 != null and mem_principal2 != ''">
+            and (a.overage - a.reward) <![CDATA[<=]]> #{mem_principal2}
+        </if>
+
+
+
+        order by a.create_time desc
+    </select>
+
+</mapper>

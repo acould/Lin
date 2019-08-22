@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserFlowHistoryMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		user_flow_history
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		flow_id,
+		pubwin_store_id,
+		store_id,
+		card_id,
+		flow_type,
+		flow_desc,
+		flow_time,
+		flow_timestamp,
+		pay_type,
+		amount,
+		reward,
+		order_id,
+		order_from,
+		memo
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{flow_id},	
+		#{pubwin_store_id},	
+		#{store_id},	
+		#{card_id},	
+		#{flow_type},	
+		#{flow_desc},
+		#{flow_time},
+		#{flow_timestamp},
+		#{pay_type},
+		#{amount},
+		#{reward},
+		#{order_id},
+		#{order_from},
+		#{memo}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+			<include refid="tableName"></include>(<include refid="Field"></include>) 
+		values 
+			(<include refid="FieldValue"></include>)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			flow_id = #{flow_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+			<include refid="tableName"></include>
+		set 
+			<if test="flow_type != null and flow_type != ''">
+				flow_type = #{flow_type},
+			</if>
+			<if test="flow_desc != null and flow_desc != ''">
+				flow_desc = #{flow_desc},
+			</if>
+			<if test="flow_time != null and flow_time != ''">
+				flow_time = #{flow_time},
+			</if>
+			<if test="flow_timestamp != null and flow_timestamp != ''">
+				flow_timestamp = #{flow_timestamp},
+			</if>
+			<if test="pay_type != null and pay_type != ''">
+				pay_type = #{pay_type},
+			</if>
+			<if test="amount != null and amount != ''">
+				amount = #{amount},
+			</if>
+			<if test="reward != null and reward != ''">
+				reward = #{reward},
+			</if>
+			<if test="order_from != null and order_from != ''">
+				order_from = #{order_from},
+			</if>
+			<if test="memo != null and memo != ''">
+				memo = #{memo},
+			</if>
+			flow_id = #{flow_id}
+		where 
+			flow_id = #{flow_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			flow_id = #{flow_id}
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 1=1
+			
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			flow_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+
+
+    <select id="findByStoreIdAndCardIdAndFlowTime" parameterType="pd" resultType="pd">
+		select
+		 *
+		from
+		user_flow_history
+		where
+		card_id = #{card_id} and flow_time = #{flow_time} and store_id = #{store_id}
+		order by flow_time desc
+		limit 1
+	</select>
+
+    <select id="findByStoreIdAndCardId" parameterType="pd" resultType="pd">
+		select
+		 *
+		from
+		user_flow_history
+		where
+		card_id = #{card_id}  and store_id = #{store_id}
+		order by flow_time desc
+	</select>
+
+    <select id="calMoney" parameterType="pd" resultType="pd">
+		select
+        IFNULL(sum(amount),0) as amount,
+        IFNULL(sum(reward),0) as reward
+		from
+		user_flow_history
+		where
+		card_id = #{card_id}  and store_id = #{store_id}
+
+        <if test="flow_types != null and flow_types != ''">
+            and flow_type in
+            <foreach item="item" index="index" collection="flow_types" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="money_type != null and money_type != ''">
+            <if test="money_type == 1 ">
+                <!-- 加钱 -->
+              and (amount <![CDATA[>]]> 0 or reward <![CDATA[>]]> 0)
+            </if>
+            <if test="money_type == 2 ">
+                <!-- 减钱 -->
+              and (amount <![CDATA[<]]> 0 or reward <![CDATA[<]]> 0)
+            </if>
+        </if>
+		<if test="begin_time != null and begin_time != ''">
+            and flow_time <![CDATA[>=]]> #{begin_time}
+        </if>
+        <if test="end_time != null and end_time != ''">
+            and flow_time <![CDATA[<=]]> #{end_time}
+        </if>
+
+		order by flow_time desc
+	</select>
+	
+</mapper>

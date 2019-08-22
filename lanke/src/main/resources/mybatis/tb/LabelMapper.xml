@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LabelMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		tb_label
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		label_name,
+		label_color,
+		status,
+		internet_id
+
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{label_name},
+		#{label_color},
+		#{status},
+		#{internet_id}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+			<include refid="tableName"></include>(<include refid="Field"></include>) 
+		values 
+			(<include refid="FieldValue"></include>)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+	<delete id="deleteByName" parameterType="String">
+		delete from
+			<include refid="tableName"></include>
+		where 
+			label_name = #{label_name} 
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+			<include refid="tableName"></include>
+		set 
+			<if test="label_name != null and label_name != ''">
+				label_name = #{label_name},
+			</if>
+			<if test="label_color != null and label_color != ''">
+				label_color = #{label_color},
+			</if>
+			<if test="status != null and status != ''">
+				status = #{status},
+			</if>
+			id = #{id}
+		where 
+			id = #{id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</select>
+
+	<select id="findByName" parameterType="pd" resultType="pd">
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			label_name = #{label_name} and internet_id = #{internet_id}
+	</select>
+	
+	<select id="labelList" parameterType="pd" resultType="pd">
+		
+		select 
+			* 
+		from 
+			tb_label 
+		where 
+		<!-- 未删除 -->
+			status = '0' 
+			and internet_id = #{internet_id}
+		order by field(label_name,'特惠','HOT') desc
+	</select>
+	
+	
+	
+</mapper>

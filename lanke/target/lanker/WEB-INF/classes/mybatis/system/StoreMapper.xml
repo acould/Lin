@@ -1,0 +1,1589 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StoreMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		INTERNET_STORE
+	</sql>
+
+	<sql id="tableName_v">
+		INTERNET_STORE
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		STORE_NAME,
+		PROVINCE,
+		CITY,
+		COUNTY,
+		ADDRESS,
+		TELEPHONE,
+		INTERNET_ID,
+		USER_ID,
+		USER_NAME,
+		POSSWARD,
+		INSERT_TIME,
+		UPDATE_TIME,
+		STORE_ID,
+		member_level,
+		STATE
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field_v">
+		STORE_NAME,
+		PROVINCE,
+		CITY,
+		ADDRESS,
+		TELEPHONE,
+		INTERNET_ID,
+		USER_ID,
+		USER_NAME,
+		POSSWARD,
+		INSERT_TIME,
+		UPDATE_TIME,
+		INTERNET_STORE.STORE_ID,
+		COUNTY,
+		INTERNET_STORE.STATE,
+		internet_store_v.STATE AS v_state
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+	</sql>
+	<!--列表（全部） -->
+	<select id="listUU" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.internet_id != null and pd.internet_id != ''">
+			and INTERNET_ID= #{pd.internet_id}
+		</if>
+		<if test="pd.STORE_IDS != null and pd.STORE_IDS != ''">
+			and STORE_ID in ('${pd.STORE_IDS}')
+		</if>
+	</select>
+
+	<!-- 新增门店 (保存门店信息到store表) -->
+	<insert id="save" parameterType="pd">
+		INSERT INTO INTERNET_STORE (
+		STORE_NAME,
+		PROVINCE,
+		CITY,
+		COUNTY,
+		ADDRESS,
+		TELEPHONE,
+		INTERNET_ID,
+		USER_ID,
+		INSERT_TIME,
+		UPDATE_TIME,
+		STORE_ID,
+		member_level,
+		STATE
+		)
+		VALUES(
+		#{STORE_NAME},
+		#{PROVINCE},
+		#{CITY},
+		#{COUNTY},
+		#{ADDRESS},
+		#{TELEPHONE},
+		#{INTERNET_ID},
+		#{USER_ID},
+		#{INSERT_TIME},
+		#{UPDATE_TIME},
+		#{STORE_ID},
+		#{member_level},
+		'1')
+	</insert>
+
+	<!-- 新增门店同时加入加V表(保存门店基础信息到加V表/判断后去添加store_v缺失信息) -->
+	<insert id="saveaddv" parameterType="pd">
+		INSERT INTO internet_store_v
+		(STORE_ID,STATE,ODDS) VALUES
+		(#{STORE_ID},'0',#{ODDS})
+	</insert>
+
+	<!-- 新增门店同时加入store_user_tips表 -->
+	<insert id="saveaddTips" parameterType="pd">
+		INSERT INTO
+		store_user_tips
+		(STORE_ID,create_time,update_time) VALUES
+		(#{STORE_ID},#{INSERT_TIME},#{UPDATE_TIME})
+	</insert>
+
+	<!-- 查到有门店没新标签的,保存门店会员标签信息至tips表 -->
+	<insert id="addTips" parameterType="pd">
+		INSERT INTO
+		store_user_tips
+		(STORE_ID,create_time,update_time) VALUES
+		(#{STORE_ID},#{create_time},#{update_time})
+	</insert>
+
+	<!-- 删除 -->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		STORE_ID = #{STORE_ID}
+	</delete>
+
+	<!-- 保存修改后的门店信息(修改) -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="STORE_NAME != null and STORE_NAME != ''">
+			STORE_NAME = #{STORE_NAME},
+		</if>
+		<if test="PROVINCE != null and PROVINCE != ''">
+			PROVINCE = #{PROVINCE},
+		</if>
+		<if test="CITY != null and CITY != ''">
+			CITY = #{CITY},
+		</if>
+		<if test="COUNTY != null and COUNTY != ''">
+			COUNTY =#{COUNTY},
+		</if>
+		<if test="ADDRESS != null and ADDRESS != ''">
+			ADDRESS = #{ADDRESS},
+		</if>
+		<if test="TELEPHONE != null and TELEPHONE != ''">
+			TELEPHONE = #{TELEPHONE},
+		</if>
+		<if test="UPDATE_TIME != null and UPDATE_TIME != ''">
+			UPDATE_TIME = #{UPDATE_TIME},
+		</if>
+		<if test="member_level != null and member_level != ''">
+			member_level = #{member_level},
+		</if>
+		STORE_ID = #{STORE_ID}
+		where
+		STORE_ID = #{STORE_ID}
+	</update>
+
+	<!-- 修改门店名称 -->
+	<update id="editStore" parameterType="pd">
+		UPDATE
+		<include refid="tableName"></include>
+		SET
+		STORE_NAME = #{STORE_NAME}
+		WHERE
+		STORE_ID = #{STORE_ID}
+	</update>
+
+	<!-- 修改门店状态 -->
+	<update id="statebt">
+		update
+		<include refid="tableName"></include>
+		set
+		STATE=#{STATE}
+		WHERE
+		STORE_ID = #{STORE_ID}
+	</update>
+
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		STORE_ID = #{STORE_ID}
+	</select>
+
+	<select id="findNotBan" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		STORE_ID != #{STORE_ID} and state = '1' and INTERNET_ID =
+		#{INTERNET_ID} and CITY != ''
+	</select>
+
+	<select id="findStoreV" parameterType="pd" resultType="pd">
+		select
+		a.*,
+		(select STORE_NAME from internet_store where store_id =
+		a.store_id) as
+		STORE_NAME
+		from
+		internet_store_v a
+		where
+		a.store_id in
+		(select store_id from internet_store where internet_id =
+		#{internet_id})
+		and a.STATE = #{state}
+	</select>
+
+
+	<!-- 通过网吧ID获取数据 -->
+	<select id="findCityByInternetId" parameterType="pd"
+		resultType="pd">
+		select
+		CITY
+		from
+		<include refid="tableName"></include>
+		where
+		INTERNET_ID = #{INTERNET_ID} and CITY != ''
+		AND STATE = 1
+		GROUP BY
+		CITY
+	</select>
+
+	<!-- 通过网吧ID和城市获取数据 -->
+	<select id="findAreaByCity" parameterType="pd" resultType="pd">
+		select
+		COUNTY
+		from
+		<include refid="tableName"></include>
+		where
+		INTERNET_ID = #{INTERNET_ID} and CITY = #{CITY} and STATE = 1
+		GROUP BY COUNTY
+	</select>
+
+	<!-- 通过网吧ID和城市和区域获取数据 -->
+	<select id="findStoreByArea" parameterType="pd" resultType="pd">
+		select
+		STORE_ID,
+		STORE_NAME
+		from
+		<include refid="tableName"></include>
+		where
+		INTERNET_ID = #{INTERNET_ID} and CITY = #{CITY} and STATE = 1
+		<if test="COUNTY != null and COUNTY != ''">
+			and COUNTY = #{COUNTY}
+		</if>
+	</select>
+
+	<select id="findByUserId" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		USER_ID = #{USER_ID}
+
+	</select>
+
+	<!-- 通过name去判断门店名称是否存在 -->
+	<select id="findByStoreName" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="INTERNET_ID != null and INTERNET_ID != ''">
+			and INTERNET_ID = #{INTERNET_ID}
+		</if>
+		<if test="STORE_NAME != null and STORE_NAME != ''">
+			and STORE_NAME = #{STORE_NAME}
+		</if>
+	</select>
+
+	<!-- 通过USER_ID和INTENET_ID获取数据 -->
+	<select id="findByStore" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="USER_ID != null and USER_ID != ''">
+			and USER_ID = #{USER_ID}
+		</if>
+		<if test="INTENET_ID != null and INTENET_ID != ''">
+			and INTERNET_ID = #{INTERNET_ID}
+		</if>
+	</select>
+
+	<!--通过STORE_NAME和INTENET_ID判断门店是否存在 -->
+	<select id="findByStoreName_Intenet" parameterType="pd"
+		resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="STORE_NAME != null and STORE_NAME != ''">
+			and STORE_NAME = #{STORE_NAME}
+		</if>
+		<if test="INTERNET_ID != null and INTERNET_ID != ''">
+			and INTERNET_ID = #{INTERNET_ID}
+		</if>
+	</select>
+
+	<select id="listByInternetId" parameterType="String" resultType="pd">
+		select
+			*
+		from
+			internet_store
+		where 1=1 and internet_id = #{internet_id}
+	</select>
+
+	<!--通过STORE_ID判断门店原名称 -->
+	<select id="findByStoreId" parameterType="pd" resultType="pd">
+		select
+		STORE_NAME
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="STORE_ID != null and STORE_ID != ''">
+			and STORE_ID = #{STORE_ID}
+		</if>
+	</select>
+
+	<!-- 门店管理(登陆展示,只展示启用的) -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		STORE_NAME,
+		STORE_ID
+		from
+		<include refid="tableName"></include>
+		where STATE!='2' and STATE!='3'
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and
+			(
+			STORE_NAME LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			)
+		</if>
+		<if test="pd.internetId != null and pd.internetId != ''">
+			and INTERNET_ID= #{pd.internetId}
+		</if>
+		order by UPDATE_TIME DESC,INSERT_TIME DESC
+	</select>
+
+	<!-- 通过网吧id,门店id,关键字keywords去查询用户相关门店信息(列表门店展示) -->
+	<select id="datalistPages" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and
+			(
+			STORE_NAME LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or ADDRESS LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or TELEPHONE LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or USER_NAME LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or STORE_NAME LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			)
+		</if>
+		<if test="pd.internetId != null and pd.internetId != ''">
+			and INTERNET_ID= #{pd.internetId}
+		</if>
+		<if test="pd.province != null and pd.province != ''">
+			and PROVINCE= #{pd.province}
+		</if>
+		<if test="pd.city != null and pd.city != ''">
+			and CITY= #{pd.city}
+		</if>
+		<if test="pd.county != null and pd.county != ''">
+			and COUNTY= #{pd.county}
+		</if>
+		<if test="pd.STORE_ID != null and pd.STORE_ID != ''">
+			and STORE_ID in ('${pd.STORE_ID}')
+		</if>
+		order by UPDATE_TIME DESC,INSERT_TIME DESC
+	</select>
+
+	<!-- 查询全部门店信息(全部列表) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		order by INSERT_TIME DESC
+	</select>
+
+	<!-- 卡券中用的(通过网吧id获取门店信息) -->
+	<select id="listByCard" parameterType="pd" resultType="pd">
+		SELECT
+		a.*
+		FROM
+		INTERNET_STORE a,internet_store_v b
+		WHERE a.`STORE_ID`=b.`STORE_ID`
+		<if test="internetId != null and internetId != ''">
+			and a.INTERNET_ID= #{internetId}
+		</if>
+		<if test="store_id != null and store_id != ''">
+			and a.STORE_ID in ('${store_id}')
+		</if>
+		<if test="state != null and state != ''">
+			AND b.`STATE`=#{state}
+		</if>
+		<!-- 1表示已启用；2表示已禁用 -->
+		AND a.STATE = 1
+		order by a.INSERT_TIME DESC
+	</select>
+
+	<!--查询网吧分店(通过网吧id查询现有门店(没有被禁用的)) -->
+	<select id="listByIntenet" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field_v"></include>
+		,
+		(select url from tb_branch where store_id = INTERNET_STORE.store_id
+		order by BRANCH_ID asc limit 1) as url
+		from
+		INTERNET_STORE left join
+		internet_store_v ON INTERNET_STORE.STORE_ID =
+		internet_store_v.STORE_ID
+		where
+		1=1
+		<if test="internetId != null and internetId != ''">
+			and INTERNET_ID= #{internetId}
+		</if>
+		<if test="keywords != null and keywords != ''">
+			and (STORE_NAME LIKE CONCAT(CONCAT('%', #{keywords}),'%'))
+		</if>
+		AND INTERNET_STORE.STATE = 1
+		order by INSERT_TIME DESC
+	</select>
+
+	<!-- 获取绑定的门店信息 -->
+	<select id="findByVId" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field_v"></include>
+		from
+		INTERNET_STORE left join internet_store_v ON
+		INTERNET_STORE.STORE_ID =
+		internet_store_v.STORE_ID
+		where
+		INTERNET_STORE.STORE_ID = #{STORE_ID}
+		order by INSERT_TIME DESC
+	</select>
+
+	<!--根据STORE_ID获取门店数据(查询自己所在的分店) -->
+	<select id="listByStore" parameterType="pd" resultType="pd">
+		select
+		a.*
+		from
+		<include refid="tableName"></include> a,internet_store_v b
+		where a.`STORE_ID`=b.`STORE_ID` 
+		<if test="STORE_ID != null and STORE_ID != ''">
+			and a.STORE_ID in ('${STORE_ID}')
+		</if>
+		<if test="state != null and state != ''">
+			and b.state = #{state}
+		</if>
+		order by a.INSERT_TIME DESC
+	</select>
+
+	<!-- 通过门店id批量删除相关门店信息(批量删除) -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		STORE_ID in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- 通过卡劵id获取信息 -->
+	<select id="listByCardId" parameterType="pd" resultType="pd">
+		SELECT
+		B.*,
+        d.state as STATE_V
+		FROM
+		CARD_STORE A,
+		internet_store B,
+		CARD C,
+		internet_store_v D
+		WHERE A.CARD_ID = C.CARD_ID
+		AND A.STORE_ID = B.STORE_ID
+		AND A.STORE_ID =
+		D.STORE_ID
+		<if test="CARD_ID != null and CARD_ID != ''">
+			and C.CARD_ID = #{CARD_ID}
+		</if>
+		<if test="state != null and state != ''">
+			and D.`STATE` = #{state}
+		</if>
+	</select>
+
+	<select id="sList" parameterType="page" resultType="pd">
+		select
+		Company_Name,
+		STORE_NAME,
+		c.`INTENET_NAME` AS INTENET_NAME,
+		EXPIRATION_TIME,
+		a.STATE AS ASTATE,
+		b.STATE AS BSTATE
+		from
+		<include refid="tableName"></include>
+		a,internet_store_v b,sys_intenet c
+		WHERE
+		a.`STORE_ID`=b.`STORE_ID` AND
+		a.`INTERNET_ID`=c.`INTENET_ID` AND
+		a.`STORE_ID`=#{pd.STORE_ID}
+		GROUP BY
+		a.`STORE_ID`
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and
+			(
+			Company_Name LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or STORE_NAME LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or NAME LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or EXPIRATION_TIME LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			)
+		</if>
+		<if test="pd.STATE != null and pd.STATE != ''"><!-- 用户状态 -->
+			and STATE=#{pd.STATE}
+		</if>
+		<if test="pd.ASTATE != null and pd.ASTATE != ''"><!-- 有无门店 -->
+			and STATE=#{pd.STATE}
+		</if>
+		order by a.`UPDATE_TIME` DESC,a.`INSERT_TIME` desc
+	</select>
+
+	<!-- 门店详情列表 -->
+	<select id="storeDetails" parameterType="pd" resultType="pd">
+		select
+		a.STORE_NAME,
+		a.PROVINCE,
+		a.CITY,
+		a.COUNTY,
+		a.ADDRESS,
+		a.TELEPHONE,
+		b.STATE,
+		b.EXPIRATION_TIME,
+		c.status,
+		c.updatetime
+		from
+		internet_store a
+		left join internet_store_v b on a.store_id = b.store_id
+		left join
+		tb_internetdatum c on a.store_id = c.store_id
+		where 1=1
+		and a.store_id =
+		#{STORE_ID}
+	</select>
+
+	<!-- 停用指定门店 -->
+	<update id="disableUsers">
+		update
+		<include refid="tableName"></include>
+		set
+		STATE='3'
+		WHERE
+		STORE_ID = #{STORE_ID}
+	</update>
+
+	<!-- 启用指定门店 -->
+	<update id="enableUser">
+		update
+		<include refid="tableName"></include>
+		set
+		STATE='1'
+		WHERE
+		STORE_ID = #{STORE_ID}
+	</update>
+
+	<!-- 查询门店信息(管理禁用不显示) -->
+	<select id="listPagev" parameterType="page" resultType="pd">
+		select
+		a.STORE_NAME,
+		b.STATE as STATE,
+		a.STORE_ID as STORE_ID,
+		c.STATUS AS YH_STATUS,
+		c.STATE AS YH_STATE,
+		c.SEND_STATE AS YH_SEND_STATE,
+		c.ID AS YH_ID,
+		d.id as QR_STATE
+		from internet_store a left join internet_store_v b on a.store_id = b.store_id
+			left join tb_internetdatum c on a.store_id = c.store_id
+			left join internet_qrcode d on a.store_id = d.store_id
+		where 1=1
+		<!-- 网吧管理员，门店管理员 -->
+		<if test="pd.internet_id != null and pd.internet_id != ''">
+			and a.INTERNET_ID = #{pd.internet_id}
+		</if>
+		<if test="pd.STORE_ID != null and pd.STORE_ID != ''">
+			and a.STORE_ID in ('${pd.STORE_ID}')
+		</if>
+		<!-- 搜索条件 -->
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and (A.STORE_NAME LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%'))
+		</if>
+		<!-- 筛选条件 -->
+		<if test="pd.STATE != null and pd.STATE != ''">
+			and b.STATE = #{pd.STATE}
+		</if>
+
+		<if test="pd.YH_STATUS != null and pd.YH_STATUS != ''">
+			<if test="pd.YH_STATUS == 0 or pd.YH_STATUS == 2">
+				and c.STATE = #{pd.YH_STATUS}
+			</if>
+			<!-- 资料审核通过 -->
+			<if test="pd.YH_STATUS == 1">
+				and c.STATE = '1' and c.status is null
+			</if>
+			<!-- 等待快递 -->
+			<if test="pd.YH_STATUS == 3">
+				and c.STATE = '1' and c.status = '2'
+			</if>
+			<!-- 待开通 -->
+			<if test="pd.YH_STATUS == 4">
+				and c.STATE = '1' and c.status = '0'
+			</if>
+			<!-- 已开通 -->
+			<if test="pd.YH_STATUS == 5">
+				and c.STATE = '1' and c.status = '1'
+			</if>
+			<!-- 未开通 -->
+			<if test="pd.YH_STATUS == 6">
+				and (c.state is null and c.status is null)
+			</if>
+		</if>
+
+		<!-- a.state=3，表示被后台管理禁用 -->
+		and a.STATE != '3'
+		group by a.STORE_ID
+		order by b.STATE
+		ASC,A.UPDATE_TIME DESC
+
+	</select>
+
+	<select id="listPagev2" parameterType="page" resultType="pd">
+        select
+            a.STORE_NAME,
+            b.STATE as STATE,
+            a.STORE_ID as STORE_ID,
+            d.id as QR_STATE,
+            f.id as JL_ID,
+            f.status as JL_STATUS
+        from internet_store a left join internet_store_v b on a.store_id = b.store_id
+            left join internet_qrcode d on a.store_id = d.store_id
+            left join internet_match_store e on a.store_id = e.store_id
+            left join internet_store_jialian f on e.foreign_id = f.id
+        where 1=1
+            <!-- 网吧管理员，门店管理员 -->
+            <if test="pd.internet_id != null and pd.internet_id != ''">
+                and a.INTERNET_ID = #{pd.internet_id}
+            </if>
+            <if test="pd.STORE_ID != null and pd.STORE_ID != ''">
+                and a.STORE_ID in ('${pd.STORE_ID}')
+            </if>
+            <!-- 搜索条件 -->
+            <if test="pd.keywords != null and pd.keywords != ''">
+                and (A.STORE_NAME LIKE CONCAT(CONCAT('%',
+                #{pd.keywords}),'%'))
+            </if>
+            <!-- 筛选条件 -->
+            <if test="pd.STATE != null and pd.STATE != ''">
+                and b.STATE = #{pd.STATE}
+            </if>
+
+        <!-- 嘉联支付 -->
+            <if test="pd.JL_STATUS != null and pd.JL_STATUS != ''">
+                <if test="pd.JL_STATUS == 2">
+                    and (f.status is null or f.status = 2)
+                </if>
+                <if test="pd.JL_STATUS != 2">
+                    and f.status = #{pd.JL_STATUS}
+                </if>
+            </if>
+
+        <!-- a.state=3，表示被后台管理禁用 -->
+        and a.STATE != '3'
+        group by a.STORE_ID
+        order by b.STATE
+        ASC,A.UPDATE_TIME DESC
+    </select>
+
+
+	<select id="listPagevOld" parameterType="page" resultType="pd">
+		SELECT STORE_NAME,b.`STATE` AS STATE,a.`STORE_ID` AS STORE_ID
+		FROM
+		<include refid="tableName"></include>
+		a,internet_store_v b,sys_user c WHERE
+		a.`STORE_ID`=b.`STORE_ID` AND
+		a.`INTERNET_ID`=c.`INTENET_ID`
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and
+			(
+			STORE_NAME LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			)
+		</if>
+		<if test="pd.STATE != null and pd.STATE != ''"><!-- 用户状态 -->
+			and b.STATE=#{pd.STATE}
+		</if>
+		<if test="pd.internetId != null and pd.internetId != ''">
+			and c.`INTENET_ID`= #{pd.internetId}
+		</if>
+		<if test="pd.STORE_ID != null and pd.STORE_ID != ''">
+			and a.`STORE_ID`= #{pd.STORE_ID}
+		</if>
+		AND a.`STATE`!='3'
+		GROUP BY a.`STORE_ID`
+		ORDER BY b.`STATE`
+		ASC,a.`UPDATE_TIME` DESC
+	</select>
+
+	<!-- 门店加V审核列表(查询门店加V申请/改IP申请的门店及其信息) -->
+	<select id="listPageaddv" parameterType="page" resultType="pd">
+		select
+			a.Company_Name,
+			b.STORE_NAME,
+			c.INTENET_NAME,
+			a.STATE,
+			a.ADDTIME,
+			a.EXPIRATION_TIME,
+			b.STORE_ID,
+			a.SERVICE_ID,
+			a.CHOOSE_PACKAGE
+		from
+			internet_store_v a left join internet_store b on a.store_id = b.store_id
+			left join sys_intenet c on b.internet_id = c.intenet_id
+		where 1=1 and a.state != '0'
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and (
+				b.STORE_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or a.Company_Name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or c.INTENET_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			)
+		</if>
+		<if test="pd.internetId != null and pd.internetId != ''">
+			and b.`INTERNET_ID`= #{pd.internetId}
+		</if>
+		<if test="pd.STATE != null and pd.STATE != ''">
+			and a.STATE= #{pd.STATE}
+		</if>
+		order by field(a.state,'2','3','1') asc, a.addtime asc, a.updatetime desc
+	</select>
+
+	<select id="listPageaddv2" parameterType="page" resultType="pd">
+		select
+		a.Company_Name,
+		b.STORE_NAME,
+		c.INTENET_NAME,
+		a.STATE,
+		a.ADDTIME,
+		a.EXPIRATION_TIME,
+		b.STORE_ID,
+		a.SERVICE_ID,
+		a.CHOOSE_PACKAGE
+		from
+		internet_store_v a left join internet_store b on a.store_id = b.store_id
+		left join sys_intenet c on b.internet_id = c.intenet_id
+		where 1=1 and a.state != '0'
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and (
+			b.STORE_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or a.Company_Name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or c.INTENET_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			)
+		</if>
+		<if test="pd.internetId != null and pd.internetId != ''">
+			and b.`INTERNET_ID`= #{pd.internetId}
+		</if>
+		<if test="pd.STATE != null and pd.STATE != ''">
+			and a.STATE= #{pd.STATE}
+		</if>
+		<if test="pd.DATED != null and pd.DATED != ''">
+			<![CDATA[ AND a.EXPIRATION_TIME < now()]]>
+		</if>
+		order by field(a.state,'2','3','1') asc, a.addtime asc, a.updatetime desc
+	</select>
+
+	<select id="listPageaddv3" parameterType="page" resultType="pd">
+		select
+		a.Company_Name,
+		b.STORE_NAME,
+		c.INTENET_NAME,
+		a.STATE,
+		a.ADDTIME,
+		a.EXPIRATION_TIME,
+		b.STORE_ID,
+		a.SERVICE_ID,
+		a.CHOOSE_PACKAGE
+		from
+		internet_store_v a left join internet_store b on a.store_id = b.store_id
+		left join sys_intenet c on b.internet_id = c.intenet_id
+		where 1=1 and a.state != '0'
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and (
+			b.STORE_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or a.Company_Name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or c.INTENET_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			)
+		</if>
+		<if test="pd.internetId != null and pd.internetId != ''">
+			and b.`INTERNET_ID`= #{pd.internetId}
+		</if>
+		<if test="pd.STATE != null and pd.STATE != ''">
+			and a.STATE= #{pd.STATE}
+		</if>
+		<if test="pd.DATED != null and pd.DATED != ''">
+			<![CDATA[ AND a.EXPIRATION_TIME > now()]]>
+		</if>
+		order by field(a.state,'2','3','1') asc, a.addtime asc, a.updatetime desc
+	</select>
+
+	<!-- 揽客用户门店列表 (门店展示) -->
+	<select id="listshow" parameterType="page" resultType="pd">
+		select
+		STORE_NAME,
+		PROVINCE,
+		CITY,
+		COUNTY,
+		ADDRESS,
+		TELEPHONE,
+		a.STORE_ID
+		from
+		<include refid="tableName"></include>
+		a,sys_user b
+		WHERE a.`INTERNET_ID`=b.`INTENET_ID`
+		<if test="pd.keywords != null and pd.keywords != ''">
+			and
+			(
+			STORE_NAME LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or PROVINCE LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or CITY LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or COUNTY LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or ADDRESS LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or TELEPHONE LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or USER_NAME LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			or STORE_NAME LIKE CONCAT(CONCAT('%',
+			#{pd.keywords}),'%')
+			)
+		</if>
+		<if test="pd.internetId != null and pd.internetId != ''">
+			and a.`INTERNET_ID`= #{pd.internetId}
+		</if>
+		<if test="pd.province != null and pd.province != ''">
+			and PROVINCE= #{pd.province}
+		</if>
+		<if test="pd.city != null and pd.city != ''">
+			and CITY= #{pd.city}
+		</if>
+		<if test="pd.county != null and pd.county != ''">
+			and COUNTY= #{pd.county}
+		</if>
+		GROUP BY a.`STORE_ID`
+		order by UPDATE_TIME DESC,INSERT_TIME DESC
+	</select>
+
+	<!-- 保存加V信息 (去绑定) -->
+	<update id="saveV" parameterType="pd">
+		update
+		INTERNET_STORE_V
+		set
+		STATE='2',
+		Company_Name = #{Company_Name},
+		pubwin_store_id=#{pubwin_store_id},
+		pubwin_ip=#{pubwin_ip},
+		STORE_PHONE=#{STORE_PHONE},
+		ADD_USERNAME=#{ADD_USERNAME},
+		ADDTIME
+		=#{ADDTIME},
+		UPDATE_USERNAME=#{UPDATE_USERNAME},
+		UPDATETIME
+		=#{UPDATETIME},
+		msg_from=#{msg_from},
+		SERVICE_ID=#{SERVICE_ID},
+		CHOOSE_PACKAGE=#{CHOOSE_PACKAGE},
+		ODDS=#{ODDS},
+		chargingtype=#{chargingtype},
+		producttype=#{producttype}
+		where
+		STORE_ID
+		=#{STORE_ID}
+	</update>
+
+	<!-- 修改加V信息(修改) -->
+	<update id="updateIP" parameterType="pd">
+		update
+		INTERNET_STORE_V
+		set
+		pubwin_ip=#{pubwin_ip},
+		UPDATE_USERNAME=#{UPDATE_USERNAME},
+		UPDATETIME=#{UPDATETIME},
+		STATE=#{STATE}
+		where
+		STORE_ID =#{STORE_ID}
+	</update>
+
+	<!-- 修改加V信息(重新提交) -->
+	<update id="updateV" parameterType="pd">
+		update
+		INTERNET_STORE_V
+		set
+		STATE
+		='2',
+		Company_Name = #{Company_Name},
+		pubwin_store_id =
+		#{pubwin_store_id},
+		pubwin_ip
+		=#{pubwin_ip},
+		STORE_PHONE =
+		#{STORE_PHONE},
+		UPDATE_USERNAME
+		=#{UPDATE_USERNAME},
+		UPDATETIME
+		=#{UPDATETIME}
+		where
+		STORE_ID =
+		#{STORE_ID}
+	</update>
+
+	<!--查询指定门店加V信息 (审核) -->
+	<select id="listshowv" parameterType="page" resultType="pd">
+		SELECT
+		Company_Name,
+		STORE_NAME,
+		pubwin_store_id,
+		pubwin_ip,
+		STORE_PHONE,
+		b.internet_id AS internet_id,
+		a.STORE_ID AS STORE_ID,
+		UPDATE_USERNAME,
+		UPDATETIME,
+		SERVICE_ID,
+		CHOOSE_PACKAGE,
+		ODDS,
+		EXPIRATION_TIME,
+		chargingtype,
+		producttype
+		FROM
+		internet_store_v a,
+		internet_store b
+		WHERE a.STORE_ID = b.STORE_ID
+		AND
+		a.STORE_ID = #{pd.STORE_ID}
+	</select>
+
+	<!--查询指定门店加V日志(查看门店加V日志) -->
+	<select id="addvLog" parameterType="page" resultType="pd">
+		SELECT
+		b.`STATE` AS ASTATE,
+		b.`ADDTIME`,
+		TIME,
+		a.`EXPIRATION_TIME`,
+		B.`Note`,
+		a.`STORE_ID` AS STORE_ID
+		FROM
+		internet_store_v a,
+		internet_store_v_log b
+		WHERE a.`STORE_ID` = b.`STORE_ID`
+		AND a.`STORE_ID` = #{pd.STORE_ID}
+		ORDER BY TIME DESC
+	</select>
+
+
+	<!-- 添加加V日志 -->
+	<insert id="addVlog" parameterType="pd">
+		insert into
+		internet_store_v_log
+		(
+		STORE_ID,STATE,ADD_USERNAME,ADDTIME,TIME,Note
+		)
+		values (
+		#{STORE_ID},#{STATE},#{ADD_USERNAME},#{ADDTIME},#{TIME},#{Note}
+		)
+	</insert>
+
+	<!-- 改变加V状态 -->
+	<update id="updateVstate" parameterType="pd">
+		update
+		INTERNET_STORE_V
+		set
+		STATE=#{STATE},Through_Time= #{Through_Time},
+		EXPIRATION_TIME=#{EXPIRATION_TIME},UPDATETIME=#{UPDATETIME}
+		<if test="ODDS != null and ODDS != ''">
+			, ODDS=#{ODDS}
+		</if>
+		WHERE
+		STORE_ID =#{STORE_ID}
+	</update>
+
+	<!--加V信息导出为excel -->
+	<select id="listExcel" parameterType="page" resultType="pd">
+		SELECT
+		Company_Name,STORE_NAME,pubwin_store_id,pubwin_ip,STORE_PHONE,UPDATE_USERNAME,UPDATETIME,b.STATE
+		as STATE
+		FROM
+		<include refid="tableName"></include>
+		a,internet_store_v b WHERE
+		b.`STORE_ID`=a.`STORE_ID`
+		<if test="pd.STATE != null and pd.STATE != ''">
+			and b.`STATE`= #{pd.STATE}
+		</if>
+		<if test="pd.STORE_ID != null and pd.STORE_ID != ''">
+			and b.`STORE_ID`= #{pd.STORE_ID}
+		</if>
+		and b.`STATE` !='0'
+	</select>
+
+	<!--门店管理(后台)查全部门店信息 -->
+	<select id="listPageALL" parameterType="page" resultType="pd">
+		select
+		a.STORE_ID AS STORE_ID,
+		a.STORE_NAME AS STORE_NAME,
+		a.STATE AS
+		ASTATE,
+		b.Company_Name,
+		b.EXPIRATION_TIME,
+		b.STATE AS BSTATE,
+		c.status AS
+		CSTATUS,
+		c.state AS CSTATE,
+		d.INTENET_NAME as INTENET_NAME
+		from
+		<include refid="tableName"></include>
+		a left join internet_store_v b on a.store_id = b.store_id
+		left join tb_internetdatum c on a.store_id = c.store_id
+		left join sys_intenet d on a.internet_id = d.intenet_id
+		where 1=1
+		<!-- 关键词检索 -->
+		<if test="pd.keywords!= null and pd.keywords != ''">
+			and(
+			Company_Name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or d.`INTENET_NAME` LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or STORE_NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			)
+		</if>
+		<!-- 筛选条件 -->
+		<if test="pd.ASTATE != null and pd.ASTATE != ''">
+			and a.STATE = #{pd.ASTATE}
+		</if>
+		<if test="pd.BSTATE != null and pd.BSTATE != ''">
+			and b.STATE = #{pd.BSTATE}
+		</if>
+		<if test="pd.CSTATE != null and pd.CSTATE != ''">
+			<if test="pd.CSTATE == 0 or pd.CSTATE == 2">
+				and c.STATE = #{pd.CSTATE}
+			</if>
+			<!-- 资料审核通过 -->
+			<if test="pd.CSTATE == 1">
+				and c.STATE = '1' and c.status is null
+			</if>
+			<!-- 等待快递 -->
+			<if test="pd.CSTATE == 3">
+				and c.STATE = '1' and c.status = '2'
+			</if>
+			<!-- 待开通 -->
+			<if test="pd.CSTATE == 4">
+				and c.STATE = '1' and c.status = '0'
+			</if>
+			<!-- 已开通 -->
+			<if test="pd.CSTATE == 5">
+				and c.STATE = '1' and c.status = '1'
+			</if>
+			<!-- 未开通 -->
+			<if test="pd.CSTATE == 6">
+				and (c.state is null and c.status is null)
+			</if>
+		</if>
+		group by a.store_id
+		order by b.updatetime desc, c.updatetime desc,
+		a.insert_time desc
+	</select>
+
+	<!--通过门店id查询手机号 -->
+	<select id="listPhone" parameterType="page" resultType="pd">
+		SELECT
+		a.PHONE
+		FROM
+		sys_user a,
+		<include refid="tableName"></include>
+		b
+		WHERE a.INTENET_ID = b.INTERNET_ID
+		<if test="pd.ROLE_ID!= null and pd.ROLE_ID != ''">
+			and ROLE_ID = #{pd.ROLE_ID}
+		</if>
+		<if test="pd.STORE_ID!= null and pd.STORE_ID != ''">
+			and b.`STORE_ID`= #{pd.STORE_ID}
+		</if>
+	</select>
+
+	<!--通过门店id查询网吧名称 -->
+	<select id="queryName" parameterType="page" resultType="pd">
+		SELECT
+		INTENET_NAME,
+		STORE_NAME
+		FROM
+		sys_intenet a, internet_store b
+		WHERE
+		a.INTENET_ID = b.INTERNET_ID
+		<if test="pd.STORE_ID!= null and pd.STORE_ID != ''">
+			and b.`STORE_ID`= #{pd.STORE_ID}
+		</if>
+	</select>
+
+	<!--通过网吧id查询网吧用户状态 -->
+	<select id="usercheck" parameterType="pd" resultType="pd">
+		SELECT
+		STATE,PHONE
+		FROM
+		sys_intenet
+		WHERE intenet_id = #{internetId}
+	</select>
+
+	<!--查询指定门店加V信息(审核,加V特权展示页) -->
+	<select id="findStoreOpenInfo" parameterType="pd"
+		resultType="pd">
+		select
+		a.STORE_ID,
+		a.STORE_NAME as store_name,
+		b.STATE as
+		bstate,
+		b.Through_Time,
+		b.EXPIRATION_TIME,
+		c.id as cid,
+		IFNULL(c.status,'') as cstatus,
+		IFNULL(c.state,'') as cstate,
+		c.updatetime as updatetime
+		from
+		internet_store a left join
+		internet_store_v b on a.store_id = b.store_id
+		left join
+		tb_internetdatum c on a.store_id = c.store_id
+		where 1=1
+		and a.store_id =
+		#{STORE_ID}
+
+	</select>
+
+
+
+
+	<!--通过网吧id查询该用户所有门店信息 -->
+	<select id="listStore" parameterType="page" resultType="pd">
+		SELECT
+		store_id, store_name,intenet_name,b.`INSERT_TIME` AS INSERT_TIME
+		FROM
+		sys_intenet a,
+		internet_store b
+		WHERE a.intenet_id = b.internet_id
+		<if test="pd.internetId!= null and pd.internetId != ''">
+			and a.intenet_id= #{pd.internetId}
+		</if>
+		<if test="pd.STORE_ID!= null and pd.STORE_ID != ''">
+			and b.STORE_ID in ('${pd.STORE_ID}')
+		</if>
+		<!-- 列出不被系统管理员禁用的门店 -->
+		AND b.state != '3'
+		order by INSERT_TIME DESC
+	</select>
+
+	<!--通过id查询加V数据 -->
+	<select id="hasName" parameterType="pd" resultType="pd">
+		SELECT
+		store_id
+		FROM
+		internet_store_v
+		WHERE Company_Name = #{Company_Name}
+	</select>
+
+	<!--通过id查询加V数据 -->
+	<select id="hasID" parameterType="pd" resultType="pd">
+		SELECT
+		store_id
+		FROM
+		internet_store_v
+		WHERE pubwin_store_id = #{pubwin_store_id}
+	</select>
+
+	<!--通过SERVICE_ID查询加V数据 -->
+	<select id="hasSERVICE_ID" parameterType="pd" resultType="pd">
+		SELECT
+		id
+		FROM
+		tb_agent
+		WHERE agent_number = #{SERVICE_ID}
+	</select>
+
+	<!--通过id查询加V数据 -->
+	<select id="hasIP" parameterType="pd" resultType="pd">
+		SELECT
+		store_id
+		FROM
+		internet_store_v
+		WHERE pubwin_ip = #{pubwin_ip}
+	</select>
+
+	<!--查询网吧分店(lzh) -->
+	<select id="getStore" parameterType="pd" resultType="pd">
+		SELECT
+		STORE_NAME,a.`STORE_ID` AS STORE_ID
+		FROM
+		INTERNET_STORE
+		a,internet_store_v b
+		WHERE a.`STORE_ID`=b.`STORE_ID`
+		AND INTERNET_ID =
+		#{internetId}
+		AND a.`STATE` = 1
+		ORDER BY INSERT_TIME DESC
+	</select>
+
+	<!--通过user_id去找关联门店id和name的集合 -->
+	<select id="getStoreList" parameterType="String" resultType="pd">
+		SELECT
+		STORE_NAME,
+		b.`STORE_ID` AS STORE_ID ,
+		d.`STATE` AS STATE
+		FROM
+		sys_user a,
+		internet_store b,
+		store_user c,
+		internet_store_v d
+		WHERE
+		a.`USER_ID` = c.`USER_ID`
+		AND b.`STORE_ID` = c.`STORE_ID`
+		AND
+		b.`STORE_ID` = d.`STORE_ID`
+		AND a.`USER_ID`=#{USER_ID}
+	</select>
+
+	<!--通过user_id去找关联门店id和name的集合 -->
+	<select id="getStoreList1" parameterType="String"
+		resultType="pd">
+		SELECT
+		STORE_NAME AS store_name,
+		b.`STORE_ID` AS store_id ,
+		d.`STATE` AS state
+		FROM
+		sys_user a,
+		internet_store b,
+		store_user c,
+		internet_store_v d
+		WHERE a.`USER_ID` = c.`USER_ID`
+		AND b.`STORE_ID` =
+		c.`STORE_ID`
+		AND b.`STORE_ID` = d.`STORE_ID`
+		AND a.`USER_ID`=#{USER_ID}
+	</select>
+
+	<!--查询加V缺失门店(查询在store表中有store_v表中没有的门店(完善数据库)) -->
+	<select id="getStoreAll" parameterType="page" resultType="pd">
+		SELECT
+		a.STORE_ID AS STORE_ID
+		FROM
+		internet_store a
+		LEFT JOIN internet_store_v b
+		ON a.STORE_ID = b.STORE_ID
+		WHERE b.STATE IS NULL
+	</select>
+
+	<!--查询加V缺失门店(查询在store表中有store_user_tips表中没有的门店(完善数据库)) -->
+	<select id="getStoreTips" parameterType="page" resultType="pd">
+		SELECT
+		a.STORE_ID AS STORE_ID,
+		a.`INSERT_TIME` AS create_time
+		FROM
+		internet_store a
+		LEFT JOIN store_user_tips b
+		ON a.STORE_ID = b.STORE_ID
+		WHERE b.STORE_ID IS NULL
+	</select>
+
+	<select id="findByPubwinIP" parameterType="pd" resultType="pd">
+		select * from internet_store_v where pubwin_ip = #{pubwin_ip}
+	</select>
+	<select id="findByStoreIdAndState" parameterType="pd"
+		resultType="pd">
+		select * from internet_store_v where store_id = #{store_id}
+		<if test="state != null and state != ''">
+			and state = #{state}
+		</if>
+	</select>
+	<select id="listStoreV" parameterType="pd" resultType="pd">
+		select
+		a.*,(select STORE_NAME from internet_store where STORE_ID =
+		a.STORE_ID) as STORE_NAME
+		from internet_store_v a where state =
+		#{state}
+	</select>
+
+	<!--查询已加v未查看的门店信息 -->
+	<select id="selAddV" parameterType="page" resultType="pd">
+		SELECT
+		a.`STORE_NAME` AS STORE_NAME,
+		b.`STORE_ID` AS STORE_ID
+		FROM
+		internet_store a,
+		internet_store_v b
+		WHERE a.`STORE_ID` = b.`STORE_ID`
+		AND b.`STATE` = '1'
+		AND b.`msg_from` = 'lanker'
+		AND a.`INTERNET_ID` =
+		#{pd.internetId}
+	</select>
+
+	<!-- 查看信息时去修改加V表标识 -->
+	<update id="editV" parameterType="pd">
+		UPDATE
+		internet_store_v
+		SET
+		msg_from = 'lanke8'
+		WHERE STORE_ID = #{STORE_ID}
+	</update>
+
+	<!--查询已加v未查看的门店信息 -->
+	<select id="selV" parameterType="pd" resultType="pd">
+		SELECT
+		a.`STORE_ID`,
+		a.`EXPIRATION_TIME`,
+		a.`CHOOSE_PACKAGE`,
+		a.`STORE_PHONE`
+		FROM
+		internet_store_v a
+		WHERE a.`STATE` = '1'
+	</select>
+
+	<!--查看已加V门店的信息 -->
+	<select id="selectV" parameterType="pd" resultType="pd">
+		SELECT
+		a.`STORE_ID`,
+		b.`STORE_NAME`,
+		a.`EXPIRATION_TIME`,
+		a.`STORE_PHONE` ,
+		a.`notice`,
+		b.`INTERNET_ID`
+		FROM
+		internet_store_v a,
+		internet_store b
+		WHERE a.`STORE_ID` = b.`STORE_ID`
+		AND a.`STATE` = '1'
+	</select>
+
+	<!--查看已加V门店的id集合 -->
+	<select id="selectAddV" parameterType="pd" resultType="pd">
+		SELECT
+		STORE_ID,STATE
+		FROM
+		internet_store_v
+		WHERE 1=1
+	</select>
+
+	<!-- 修改过期门店状态 -->
+	<update id="updV" parameterType="pd">
+		UPDATE
+		internet_store_v
+		SET
+		STATE =
+		'0'
+		WHERE STORE_ID = #{STORE_ID}
+	</update>
+
+	<!-- 通过门店id修改标识状态 -->
+	<update id="editStoreV" parameterType="pd">
+		UPDATE
+		internet_store_v
+		SET
+		notice =
+		'1'
+		WHERE STORE_ID = #{store_id}
+	</update>
+
+	<!-- 去查询指定门店加V状态 -->
+	<select id="selState" parameterType="pd" resultType="pd">
+		select
+		STATE
+		from
+		internet_store_v
+		where
+		STORE_ID = #{STORE_ID}
+	</select>
+
+	<select id="findStoreInfo" parameterType="pd" resultType="pd">
+		select
+		a.store_id,
+		a.store_name,
+		b.intenet_id,
+		b.intenet_name,
+		b.phone,
+		b.head_img
+		from
+		internet_store a left join sys_intenet b on
+		a.internet_id =
+		b.intenet_id
+		where
+		a.store_id = #{store_id}
+	</select>
+
+	<!-- 查询门店计费系统和在线支付开通情况 -->
+	<select id="openStoreList" parameterType="pd" resultType="pd">
+		select
+		a.store_id,
+		a.store_name,
+		b.state as v_state,
+		c.status as pay_state
+		from
+		internet_store a left join internet_store_v b on a.store_id = b.store_id
+		left join tb_internetdatum c on a.store_id = c.store_id
+		left join internet_match_store d on a.store_id = d.store_id
+		left join internet_store_jialian e on d.foreign_id = e.id
+		where 1=1 and
+		a.internet_id = #{internet_id}
+		<if test="flag == 'open'">
+			<if test="v_state != null and v_state != ''">
+				and b.state = #{v_state}
+			</if>
+			<if test="pay_state != null and pay_state != ''">
+				and (c.status = #{pay_state} or e.status = #{pay_state})
+			</if>
+		</if>
+		<if test="store_id != null and store_id != ''">
+			and b.store_id in ('${store_id}')
+		</if>
+		<!-- 启用的门店 -->
+		and a.state = '1'
+	</select>
+	<select id="notOpenStoreList" parameterType="pd" resultType="pd">
+		select
+		a.store_id,
+		a.store_name,
+		b.state as v_state,
+		c.status as pay_state
+		from
+		internet_store a left join internet_store_v b on a.store_id =
+		b.store_id
+		left join tb_internetdatum c on a.store_id = c.store_id
+		where 1=1 and
+		a.internet_id = #{internet_id}
+		<!-- 启用的门店 -->
+		and a.state = '1'
+		<if test="storeList != null and storeList != ''">
+			and a.store_id not in
+			<foreach item="item" index="index" collection="storeList"
+				open="(" separator="," close=")">
+				#{item}
+			</foreach>
+
+		</if>
+	</select>
+
+	<!--通过门店id获取门店加V状态 -->
+	<select id="selectState" parameterType="pd" resultType="pd">
+		SELECT state FROM internet_store_v WHERE 1=1
+		<if test="pd.STORE_ID != null and pd.STORE_ID != ''">
+			and store_id = #{pd.STORE_ID}
+		</if>
+	</select>
+
+	<!--通过卡券id获取加V门店信息 -->
+	<select id="listFindCardId" parameterType="pd" resultType="pd">
+		SELECT
+		b.`store_id`
+		FROM
+		card a,
+		card_store b,
+		internet_store_v c
+		WHERE
+		a.`CARD_ID` = b.`card_id`
+		AND b.`store_id` = c.`STORE_ID`
+		AND c.`STATE`
+		= '1'
+		AND
+		a.`CARD_ID`=#{CARD_ID}
+	</select>
+
+	<!-- 查询 多家门店id -->
+	<select id="listfindstoreId" parameterType="String"
+		resultType="String">
+		select STORE_ID from store_user where USER_ID = #{USER_ID}
+	</select>
+
+	<select id="findStoreByOthers" parameterType="pd"
+		resultType="pd">
+		select
+		<include refid="Field"></include>
+		from internet_store where 1=1
+		<if test="state != null and state != ''">
+			and state = #{state}
+		</if>
+		<if test="internet_id != null and internet_id != ''">
+			and internet_id = #{internet_id}
+		</if>
+
+	</select>
+
+	<select id="findStoreVById" parameterType="pd" resultType="pd">
+		select * from internet_store_v where 1=1
+		<if test="store_id != null and store_id != ''">
+			and store_id = #{store_id}
+		</if>
+	</select>
+
+	<select id="findByPubwinStoreId" parameterType="pd"
+		resultType="pd">
+		select
+		b.*,
+		a.state as state_v,
+		a.pubwin_store_id,
+		a.company_name
+		from internet_store_v a left join internet_store b on
+		a.store_id =
+		b.store_id
+		where a.pubwin_store_id = #{pubwin_store_id}
+
+	</select>
+
+	<select id="findInternetInfo" parameterType="String"
+		resultType="pd">
+		select
+		b.*,
+		a.store_name,
+		a.state as store_state
+		from
+		internet_store a left join sys_intenet b on
+		a.internet_id =
+		b.intenet_id
+		where a.store_id = #{store_id}
+
+	</select>
+
+	<!-- 接下来通过卡券id,用户id去判断,该卡券是否适用于该用户的门店 -->
+	<select id="judgeStore" parameterType="pd" resultType="pd">
+		SELECT
+		a.`STORE_ID`
+		FROM
+		bund_user a,
+		card_store b
+		WHERE a.`STORE_ID` =
+		b.`store_id`
+		AND b.`card_id` = #{card_id}
+		AND a.`USER_ID` = #{user_id}
+		GROUP BY b.`card_store_id`
+	</select>
+
+	<update id="editTimeByStoreId" parameterType="pd">
+		update
+			internet_store_v
+		set
+			<if test="CHOOSE_PACKAGE != null and CHOOSE_PACKAGE != ''">
+				CHOOSE_PACKAGE = '1',
+			</if>
+			EXPIRATION_TIME = #{time}
+		where
+			store_id = #{store_id}
+	</update>
+
+</mapper>
